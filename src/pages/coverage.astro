@@ -198,13 +198,14 @@ const locations = [
       return isNaN(d.getTime()) ? str : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    // Fetch RSS via allorigins CORS proxy, parse to items
+    // Fetch RSS via corsproxy.io — returns raw XML, no JSON wrapper
     async function fetchRSS(url: string): Promise<{ title: string; link: string; pubDate: string; description: string }[]> {
-      const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-      const res = await fetch(proxy);
-      const json = await res.json();
+      const proxy = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+      const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
       const parser = new DOMParser();
-      const doc = parser.parseFromString(json.contents, 'text/xml');
+      const doc = parser.parseFromString(text, 'text/xml');
       return Array.from(doc.querySelectorAll('item')).map(item => ({
         title: item.querySelector('title')?.textContent?.trim() ?? '',
         link: item.querySelector('link')?.textContent?.trim() ?? '#',
