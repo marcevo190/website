@@ -1,5 +1,44 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import 'leaflet/dist/leaflet.css';
+
+const locations = [
+  {
+    name: 'Autodromo Nazionale Monza',
+    city: 'Monza, Italy',
+    lat: 45.6156,
+    lng: 9.2811,
+    events: ['Formula 1', 'Formula 2'],
+  },
+  {
+    name: 'Hungaroring',
+    city: 'Budapest, Hungary',
+    lat: 47.5789,
+    lng: 19.2486,
+    events: ['Formula 1', 'Formula 2'],
+  },
+  {
+    name: 'Circuit Zandvoort',
+    city: 'Zandvoort, Netherlands',
+    lat: 52.3888,
+    lng: 4.5409,
+    events: ['Formula 1', 'Formula 2'],
+  },
+  {
+    name: 'Circuit de la Sarthe',
+    city: 'Le Mans, France',
+    lat: 47.9497,
+    lng: 0.2117,
+    events: ['Le Mans 24 Hours'],
+  },
+  {
+    name: 'Herbert Park',
+    city: 'Dublin, Ireland',
+    lat: 53.3264,
+    lng: -6.2343,
+    events: ['Herbert Park Car Show'],
+  },
+];
 ---
 
 <Layout
@@ -7,6 +46,40 @@ import Layout from '../layouts/Layout.astro';
   description="Live motorsport calendar — F1, WEC, WRC, GT and Irish events automatically updated."
 >
   <div style="padding-top: var(--nav-height);">
+
+    <!-- WHERE I'VE SHOT MAP -->
+    <div class="section" style="padding-bottom: 0;">
+      <div class="section-header">
+        <p class="section-eyebrow">Where I've Shot</p>
+        <h2 class="section-title">Venues</h2>
+        <p class="section-subtitle">Click a marker to see what was shot there.</p>
+      </div>
+    </div>
+    <div id="map" style="width:100%; height:55vh; background:var(--surface);"></div>
+
+    <!-- VENUE LIST -->
+    <div class="section" style="padding-top: 2rem; padding-bottom: 3rem;">
+      <div class="events-grid">
+        {locations.map(loc => (
+          <div class="event-card">
+            <div class="event-name">{loc.name}</div>
+            <div class="event-detail">{loc.city}</div>
+            <ul style="margin-top:0.75rem;list-style:none;display:flex;flex-direction:column;gap:0.3rem;">
+              {loc.events.map(ev => (
+                <li style="font-size:0.78rem;color:var(--text-muted);display:flex;align-items:center;gap:0.5rem;">
+                  <span style="display:block;width:0.35rem;height:0.35rem;background:var(--accent);flex-shrink:0;"></span>
+                  {ev}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--border);"></div>
+
+    <!-- UPCOMING EVENTS -->
     <div class="section">
 
       <div class="section-header">
@@ -80,8 +153,43 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
     </div>
+    </div><!-- close upcoming section -->
   </div>
 
+  <!-- MAP SCRIPT -->
+  <script define:vars={{ locations }}>
+    import('leaflet').then(({ default: L }) => {
+      const map = L.map('map', { scrollWheelZoom: false });
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map);
+
+      const colour = '#00d2be';
+      const icon = L.divIcon({
+        className: '',
+        html: `<div style="width:14px;height:14px;background:${colour};border-radius:50%;border:2px solid rgba(255,255,255,0.25);box-shadow:0 0 0 4px ${colour}33,0 0 12px ${colour}66;"></div>`,
+        iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -14],
+      });
+
+      const bounds = [];
+      locations.forEach(loc => {
+        const evList = loc.events.map(e => `<li style="margin:0.2rem 0;font-size:0.8rem;color:#8a9ba8;">&#x25AA; ${e}</li>`).join('');
+        const popup = `
+          <div style="font-family:sans-serif;min-width:180px;">
+            <div style="font-size:1rem;font-weight:700;color:#f0f0f0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;">${loc.name}</div>
+            <div style="font-size:0.75rem;color:#8a9ba8;margin-bottom:0.6rem;">${loc.city}</div>
+            <ul style="list-style:none;padding:0;margin:0;border-top:1px solid #243038;padding-top:0.5rem;">${evList}</ul>
+          </div>`;
+        L.marker([loc.lat, loc.lng], { icon }).addTo(map).bindPopup(popup, { className: 'tm-popup', maxWidth: 260 });
+        bounds.push([loc.lat, loc.lng]);
+      });
+      map.fitBounds(bounds, { padding: [60, 60] });
+    });
+  </script>
+
+  <!-- RSS + F1 SCRIPT -->
   <script>
     // ── helpers ──────────────────────────────────────────────────────────────
 
