@@ -1,0 +1,244 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Motorsport — TrackMarc Motorsport Photography"
+  description="Live F1 race calendar and latest news from WEC, WRC, GT World Challenge and Irish motorsport."
+>
+  <div style="padding-top: var(--nav-height);">
+    <div class="section">
+
+      <div class="section-header">
+        <p class="section-eyebrow">The Sport</p>
+        <h1 class="section-title">Motorsport</h1>
+        <p class="section-subtitle">
+          Live F1 race calendar and latest news from across the motorsport world — automatically updated.
+        </p>
+      </div>
+
+      <!-- F1 CALENDAR -->
+      <div class="feed-section" id="f1-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>
+          Formula 1
+          <span class="series-badge" id="f1-badge"></span>
+        </h2>
+        <div class="events-grid" id="f1-races">
+          <div class="event-card loading-card"><div class="event-series">Loading F1 calendar…</div></div>
+        </div>
+      </div>
+
+      <!-- WEC -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>FIA World Endurance Championship
+        </h2>
+        <div class="news-grid" id="wec-news">
+          <div class="news-card loading-card"><div class="news-title">Loading WEC news…</div></div>
+        </div>
+      </div>
+
+      <!-- WRC -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>FIA World Rally Championship
+        </h2>
+        <div class="news-grid" id="wrc-news">
+          <div class="news-card loading-card"><div class="news-title">Loading WRC news…</div></div>
+        </div>
+      </div>
+
+      <!-- GT WORLD CHALLENGE -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>GT World Challenge Europe
+        </h2>
+        <div class="news-grid" id="gt-news">
+          <div class="news-card loading-card"><div class="news-title">Loading GT news…</div></div>
+        </div>
+      </div>
+
+      <!-- IRISH MOTORSPORT -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>Irish Motorsport
+        </h2>
+        <div class="news-grid" id="irish-news">
+          <div class="news-card loading-card"><div class="news-title">Loading Irish motorsport news…</div></div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);padding:2.5rem;margin-top:3rem;">
+        <p style="font-family:var(--font-heading);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Accreditation</p>
+        <h3 style="font-size:1.5rem;margin-bottom:0.75rem;">Seeking Media Access</h3>
+        <p style="color:var(--text-muted);font-weight:300;max-width:600px;">
+          If you're a press officer or series coordinator and you'd like to discuss media credentials, get in touch.
+        </p>
+        <a href="/contact" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">Contact Me &rarr;</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function fmtDate(str: string) {
+      const d = new Date(str);
+      return isNaN(d.getTime()) ? str : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    async function fetchRSS(url: string): Promise<{ title: string; link: string; pubDate: string; description: string }[]> {
+      const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=6`;
+      const res = await fetch(api, { signal: AbortSignal.timeout(12000) });
+      const json = await res.json();
+      if (json.status !== 'ok') throw new Error(json.message ?? 'feed error');
+      return (json.items ?? []).map((item: any) => ({
+        title: item.title ?? '',
+        link: item.link ?? '#',
+        pubDate: item.pubDate ?? '',
+        description: (item.description ?? '').replace(/<[^>]+>/g, '').slice(0, 120).trim(),
+      }));
+    }
+
+    function renderNewsCards(containerId: string, items: { title: string; link: string; pubDate: string; description: string }[]) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      if (!items.length) {
+        el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">No recent news found</div></div>`;
+        return;
+      }
+      el.innerHTML = items.map(item => `
+        <a href="${item.link}" target="_blank" rel="noopener" class="news-card">
+          <div class="news-meta">${fmtDate(item.pubDate)}</div>
+          <div class="news-title">${item.title}</div>
+          ${item.description ? `<div class="news-desc">${item.description}…</div>` : ''}
+        </a>`).join('');
+    }
+
+    function renderError(containerId: string, label: string) {
+      const el = document.getElementById(containerId);
+      if (el) el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">Couldn't load ${label} feed.</div></div>`;
+    }
+
+    // ── F1 Race Calendar ──────────────────────────────────────────────────────
+    (async () => {
+      const year = new Date().getFullYear();
+      const badge = document.getElementById('f1-badge');
+      const container = document.getElementById('f1-races');
+      if (badge) badge.textContent = `${year}`;
+      try {
+        const res = await fetch(`https://api.jolpi.ca/ergast/f1/${year}/races/?format=json&limit=30`);
+        const data = await res.json();
+        const races = (data?.MRData?.RaceTable?.Races ?? []) as any[];
+        const now = new Date();
+        const upcoming = races.filter(r => new Date(`${r.date}T${r.time ?? '12:00:00Z'}`) >= now);
+        if (!container) return;
+        if (!upcoming.length) {
+          container.innerHTML = `<div class="event-card"><div class="event-series">Season complete — check back next year.</div></div>`;
+          return;
+        }
+        container.innerHTML = upcoming.map(r => `
+          <div class="event-card">
+            <div class="event-series">Round ${r.round}</div>
+            <div class="event-name">${r.raceName}</div>
+            <div class="event-detail">${r.Circuit.circuitName}</div>
+            <div class="event-detail" style="margin-top:0.2rem;">${r.Circuit.Location.locality}, ${r.Circuit.Location.country}</div>
+            <div class="event-date">${fmtDate(r.date)}</div>
+          </div>`).join('');
+      } catch {
+        renderError('f1-races', 'F1');
+      }
+    })();
+
+    // ── RSS Feeds — staggered to avoid rate-limiting ──────────────────────────
+    const feeds = [
+      { id: 'wec-news',   url: 'https://www.autosport.com/rss/wec/news/',    label: 'WEC' },
+      { id: 'wrc-news',   url: 'https://www.autosport.com/rss/wrc/news/',    label: 'WRC' },
+      { id: 'gt-news',    url: 'https://www.autosport.com/rss/gt/news/',     label: 'GT' },
+      { id: 'irish-news', url: 'https://motorsportireland.ie/feed/',          label: 'Irish motorsport' },
+    ];
+
+    feeds.forEach(({ id, url, label }, i) => {
+      setTimeout(() => {
+        fetchRSS(url)
+          .then(items => renderNewsCards(id, items))
+          .catch(() => renderError(id, label));
+      }, i * 700);
+    });
+  </script>
+
+  <style>
+    .feed-section { margin-bottom: 4rem; }
+    .series-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .series-dot {
+      display: block;
+      width: 0.45rem; height: 0.45rem;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .series-badge {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+    .event-date {
+      margin-top: 0.75rem;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .news-card {
+      background: var(--bg);
+      padding: 1.25rem 1.5rem;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s;
+    }
+    a.news-card:hover { background: var(--surface); }
+    .news-meta {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .news-title {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .news-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      line-height: 1.5;
+    }
+    .loading-card { opacity: 0.4; }
+  </style>
+</Layout>

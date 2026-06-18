@@ -50,6 +50,7 @@ const currentPath = Astro.url.pathname;
         <li><a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a></li>
         <li><a href="/gallery" class:list={[{ active: currentPath.startsWith('/gallery') }]}>Gallery</a></li>
         <li><a href="/coverage" class:list={[{ active: currentPath.startsWith('/coverage') }]}>Coverage</a></li>
+        <li><a href="/motorsport" class:list={[{ active: currentPath.startsWith('/motorsport') }]}>Motorsport</a></li>
         <li><a href="/about" class:list={[{ active: currentPath.startsWith('/about') }]}>About</a></li>
         <li><a href="/contact" class:list={[{ active: currentPath.startsWith('/contact') }]}>Contact</a></li>
       </ul>
@@ -63,6 +64,7 @@ const currentPath = Astro.url.pathname;
       <a href="/" onclick="closeMobileMenu()">Home</a>
       <a href="/gallery" onclick="closeMobileMenu()">Gallery</a>
       <a href="/coverage" onclick="closeMobileMenu()">Coverage</a>
+      <a href="/motorsport" onclick="closeMobileMenu()">Motorsport</a>
       <a href="/about" onclick="closeMobileMenu()">About</a>
       <a href="/contact" onclick="closeMobileMenu()">Contact</a>
       <a href="/contact" class="mobile-cta" onclick="closeMobileMenu()">Press Inquiry</a>
