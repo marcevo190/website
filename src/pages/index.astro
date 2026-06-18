@@ -17,14 +17,6 @@ const featuredShots = [
   { title: 'Last Light Lap', event: 'Spa-Francorchamps 2024', category: 'Formula' },
 ];
 
-const recentCoverage = [
-  { series: 'FIA Formula 2', event: 'Silverstone Feature Race', date: 'July 2024', location: 'UK' },
-  { series: 'WEC', event: 'Le Mans 24 Hours', date: 'June 2024', location: 'France' },
-  { series: 'WRC', event: 'Rally Catalunya', date: 'Oct 2024', location: 'Spain' },
-  { series: 'GT World Challenge', event: 'Spa Sprint Cup', date: 'Sep 2024', location: 'Belgium' },
-  { series: 'Radical Cup', event: 'Mondello Park', date: 'Aug 2024', location: 'Ireland' },
-  { series: 'Porsche Carrera Cup', event: 'Knockhill', date: 'Aug 2024', location: 'Scotland' },
-];
 ---
 
 <Layout title="TrackMarc — Motorsport Photography">
@@ -109,54 +101,9 @@ const recentCoverage = [
         <div class="about-strip-content">
           <p class="section-eyebrow">The Photographer</p>
           <h2>Chasing the <em>Story</em><br />Behind the Speed</h2>
-          <p>
-            Trackside since 2019, I've been documenting the sport that most people only see
-            through barriers or on screens — getting close enough to feel the heat off the
-            exhaust and hear the gravel kick up under tyres.
-          </p>
-          <p>
-            My work focuses on narrative and emotion over pure technical capture: the engineer
-            staring at a timing screen, the driver's visor reflecting the circuit at golden
-            hour, the mechanic sprinting with a wheel.
-          </p>
-          <div class="stats-row">
-            <div class="stat">
-              <div class="stat-number">30<span>+</span></div>
-              <div class="stat-label">Events</div>
-            </div>
-            <div class="stat">
-              <div class="stat-number">8</div>
-              <div class="stat-label">Countries</div>
-            </div>
-            <div class="stat">
-              <div class="stat-number">6<span>+</span></div>
-              <div class="stat-label">Series</div>
-            </div>
-          </div>
           <a href="/about" class="btn btn-outline">More About Me &rarr;</a>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- RECENT COVERAGE -->
-  <div class="section">
-    <div class="section-header">
-      <p class="section-eyebrow">Coverage</p>
-      <h2 class="section-title">Recent Events</h2>
-      <p class="section-subtitle">Circuits and stages covered in the last 12 months.</p>
-    </div>
-    <div class="events-grid">
-      {recentCoverage.map((ev) => (
-        <div class="event-card">
-          <div class="event-series">{ev.series}</div>
-          <div class="event-name">{ev.event}</div>
-          <div class="event-detail">{ev.date} &middot; {ev.location}</div>
-        </div>
-      ))}
-    </div>
-    <div style="text-align: center; margin-top: 2.5rem;">
-      <a href="/coverage" class="btn btn-outline">All Coverage &rarr;</a>
     </div>
   </div>
 
