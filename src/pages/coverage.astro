@@ -55,7 +55,7 @@ const locations = [
         <p class="section-subtitle">Click a marker to see what was shot there.</p>
       </div>
     </div>
-    <div id="map" style="width:100%; height:55vh; background:var(--surface);"></div>
+    <div id="map" data-locations={JSON.stringify(locations)} style="width:100%; height:55vh; background:var(--surface);"></div>
 
     <!-- VENUE LIST -->
     <div class="section" style="padding-top: 2rem; padding-bottom: 3rem;">
@@ -157,36 +157,39 @@ const locations = [
   </div>
 
   <!-- MAP SCRIPT -->
-  <script define:vars={{ locations }}>
-    import('leaflet').then(({ default: L }) => {
-      const map = L.map('map', { scrollWheelZoom: false });
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19,
-      }).addTo(map);
+  <script>
+    import L from 'leaflet';
 
-      const colour = '#00d2be';
-      const icon = L.divIcon({
-        className: '',
-        html: `<div style="width:14px;height:14px;background:${colour};border-radius:50%;border:2px solid rgba(255,255,255,0.25);box-shadow:0 0 0 4px ${colour}33,0 0 12px ${colour}66;"></div>`,
-        iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -14],
-      });
+    const mapEl = document.getElementById('map');
+    const locations = JSON.parse(mapEl?.dataset.locations ?? '[]');
 
-      const bounds = [];
-      locations.forEach(loc => {
-        const evList = loc.events.map(e => `<li style="margin:0.2rem 0;font-size:0.8rem;color:#8a9ba8;">&#x25AA; ${e}</li>`).join('');
-        const popup = `
-          <div style="font-family:sans-serif;min-width:180px;">
-            <div style="font-size:1rem;font-weight:700;color:#f0f0f0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;">${loc.name}</div>
-            <div style="font-size:0.75rem;color:#8a9ba8;margin-bottom:0.6rem;">${loc.city}</div>
-            <ul style="list-style:none;padding:0;margin:0;border-top:1px solid #243038;padding-top:0.5rem;">${evList}</ul>
-          </div>`;
-        L.marker([loc.lat, loc.lng], { icon }).addTo(map).bindPopup(popup, { className: 'tm-popup', maxWidth: 260 });
-        bounds.push([loc.lat, loc.lng]);
-      });
-      map.fitBounds(bounds, { padding: [60, 60] });
+    const map = L.map('map', { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19,
+    }).addTo(map);
+
+    const colour = '#00d2be';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="width:14px;height:14px;background:${colour};border-radius:50%;border:2px solid rgba(255,255,255,0.25);box-shadow:0 0 0 4px ${colour}33,0 0 12px ${colour}66;"></div>`,
+      iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -14],
     });
+
+    const bounds: [number, number][] = [];
+    locations.forEach((loc: { name: string; city: string; lat: number; lng: number; events: string[] }) => {
+      const evList = loc.events.map(e => `<li style="margin:0.2rem 0;font-size:0.8rem;color:#8a9ba8;">&#x25AA; ${e}</li>`).join('');
+      const popup = `
+        <div style="font-family:sans-serif;min-width:180px;">
+          <div style="font-size:1rem;font-weight:700;color:#f0f0f0;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;">${loc.name}</div>
+          <div style="font-size:0.75rem;color:#8a9ba8;margin-bottom:0.6rem;">${loc.city}</div>
+          <ul style="list-style:none;padding:0;margin:0;border-top:1px solid #243038;padding-top:0.5rem;">${evList}</ul>
+        </div>`;
+      L.marker([loc.lat, loc.lng], { icon }).addTo(map).bindPopup(popup, { className: 'tm-popup', maxWidth: 260 });
+      bounds.push([loc.lat, loc.lng]);
+    });
+    map.fitBounds(bounds, { padding: [60, 60] });
   </script>
 
   <!-- RSS + F1 SCRIPT -->
