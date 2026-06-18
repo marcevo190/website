@@ -1,178 +1,248 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import 'leaflet/dist/leaflet.css';
-
-const locations = [
-  {
-    name: 'Autodromo Nazionale Monza',
-    city: 'Monza, Italy',
-    lat: 45.6156,
-    lng: 9.2811,
-    category: 'formula',
-    events: ['FIA Formula 2 — Sep 2024'],
-  },
-  {
-    name: 'Hungaroring',
-    city: 'Budapest, Hungary',
-    lat: 47.5789,
-    lng: 19.2486,
-    category: 'formula',
-    events: ['FIA Formula 2 — 2024'],
-  },
-  {
-    name: 'Circuit Zandvoort',
-    city: 'Zandvoort, Netherlands',
-    lat: 52.3888,
-    lng: 4.5409,
-    category: 'formula',
-    events: ['Dutch GP weekend — 2024'],
-  },
-  {
-    name: 'Circuit de la Sarthe',
-    city: 'Le Mans, France',
-    lat: 47.9497,
-    lng: 0.2117,
-    category: 'endurance',
-    events: ['Le Mans 24 Hours — 2022', 'Le Mans 24 Hours — 2023', 'Le Mans 24 Hours — 2024'],
-  },
-  {
-    name: 'Dublin',
-    city: 'Dublin, Ireland',
-    lat: 53.3498,
-    lng: -6.2603,
-    category: 'car-shows',
-    events: ['Car Shows — 2023', 'Car Shows — 2024'],
-  },
-];
-
-const stats = [
-  { number: locations.length, label: 'Circuits & Venues' },
-  { number: new Set(locations.map(l => l.city.split(', ')[1])).size, label: 'Countries' },
-  { number: locations.reduce((n, l) => n + l.events.length, 0), label: 'Events Shot' },
-];
 ---
 
 <Layout
-  title="Coverage — TrackMarc Motorsport Photography"
-  description="World map of motorsport venues and events covered by TrackMarc."
+  title="Upcoming Events — TrackMarc Motorsport Photography"
+  description="Live motorsport calendar — F1, WEC, WRC, GT and Irish events automatically updated."
 >
   <div style="padding-top: var(--nav-height);">
+    <div class="section">
 
-    <!-- HEADER -->
-    <div style="padding: 3rem 2rem 0; max-width: var(--max-width); margin: 0 auto;">
-      <p class="section-eyebrow">Where I've Shot</p>
-      <h1 class="section-title">Coverage Map</h1>
-      <p class="section-subtitle">Click any marker to see events covered at that venue.</p>
-    </div>
-
-    <!-- STATS BAR -->
-    <div style="display: flex; gap: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 2rem 0;">
-      {stats.map((s, i) => (
-        <div style={`flex: 1; padding: 1.5rem 2rem; text-align: center; ${i > 0 ? 'border-left: 1px solid var(--border);' : ''}`}>
-          <div style="font-family: var(--font-heading); font-size: 2rem; font-weight: 700; color: var(--accent);">{s.number}</div>
-          <div style="font-family: var(--font-heading); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.25rem;">{s.label}</div>
-        </div>
-      ))}
-    </div>
-
-    <!-- MAP -->
-    <div id="map" style="width: 100%; height: 65vh; background: var(--surface);"></div>
-
-    <!-- EVENT LIST -->
-    <div style="padding: 4rem 2rem; max-width: var(--max-width); margin: 0 auto;">
       <div class="section-header">
-        <p class="section-eyebrow">Venues</p>
-        <h2 class="section-title">All Locations</h2>
-      </div>
-      <div class="events-grid">
-        {locations.map(loc => (
-          <div class="event-card">
-            <div class="event-series" style="text-transform: capitalize;">{loc.category.replace('-', ' ')}</div>
-            <div class="event-name">{loc.name}</div>
-            <div class="event-detail">{loc.city}</div>
-            <ul style="margin-top: 0.75rem; list-style: none; display: flex; flex-direction: column; gap: 0.3rem;">
-              {loc.events.map(ev => (
-                <li style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
-                  <span style="display:block; width:0.35rem; height:0.35rem; background: var(--accent); flex-shrink:0;"></span>
-                  {ev}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <!-- Accreditation goal -->
-      <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 2.5rem; margin-top: 3rem;">
-        <p style="font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;">Goal for 2025</p>
-        <h3 style="font-size: 1.5rem; margin-bottom: 0.75rem;">Targeting FIA Formula 1 Accreditation</h3>
-        <p style="color: var(--text-muted); font-weight: 300; max-width: 600px;">
-          Building toward a full FIA Formula 1 media pass application through demonstrated
-          experience in FIA Formula 2, WEC, and WRC. Open to conversations with team media
-          managers and FIA press officers.
+        <p class="section-eyebrow">On The Radar</p>
+        <h1 class="section-title">Upcoming Events</h1>
+        <p class="section-subtitle">
+          Live motorsport calendar — F1 race schedule and latest news from WEC, WRC, GT and Irish motorsport, automatically updated.
         </p>
       </div>
+
+      <!-- F1 CALENDAR -->
+      <div class="feed-section" id="f1-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>
+          Formula 1
+          <span class="series-badge" id="f1-badge"></span>
+        </h2>
+        <div class="events-grid" id="f1-races">
+          <div class="event-card loading-card"><div class="event-series">Loading F1 calendar…</div></div>
+        </div>
+      </div>
+
+      <!-- WEC -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>FIA World Endurance Championship
+        </h2>
+        <div class="news-grid" id="wec-news">
+          <div class="news-card loading-card"><div class="news-title">Loading WEC news…</div></div>
+        </div>
+      </div>
+
+      <!-- WRC -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>FIA World Rally Championship
+        </h2>
+        <div class="news-grid" id="wrc-news">
+          <div class="news-card loading-card"><div class="news-title">Loading WRC news…</div></div>
+        </div>
+      </div>
+
+      <!-- GT WORLD CHALLENGE -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>GT World Challenge Europe
+        </h2>
+        <div class="news-grid" id="gt-news">
+          <div class="news-card loading-card"><div class="news-title">Loading GT news…</div></div>
+        </div>
+      </div>
+
+      <!-- IRISH MOTORSPORT -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>Irish Motorsport
+        </h2>
+        <div class="news-grid" id="irish-news">
+          <div class="news-card loading-card"><div class="news-title">Loading Irish motorsport news…</div></div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);padding:2.5rem;margin-top:3rem;">
+        <p style="font-family:var(--font-heading);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Accreditation</p>
+        <h3 style="font-size:1.5rem;margin-bottom:0.75rem;">Seeking Media Access</h3>
+        <p style="color:var(--text-muted);font-weight:300;max-width:600px;">
+          If you're a press officer or series coordinator and you'd like to discuss media credentials, get in touch.
+        </p>
+        <a href="/contact" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">Contact Me &rarr;</a>
+      </div>
+
     </div>
   </div>
 
-  <script define:vars={{ locations }}>
-    import('leaflet').then(({ default: L }) => {
+  <script>
+    // ── helpers ──────────────────────────────────────────────────────────────
 
-      const map = L.map('map', { scrollWheelZoom: false });
+    function fmtDate(str: string) {
+      const d = new Date(str);
+      return isNaN(d.getTime()) ? str : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19,
-      }).addTo(map);
+    // Fetch RSS via allorigins CORS proxy, parse to items
+    async function fetchRSS(url: string): Promise<{ title: string; link: string; pubDate: string; description: string }[]> {
+      const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+      const res = await fetch(proxy);
+      const json = await res.json();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(json.contents, 'text/xml');
+      return Array.from(doc.querySelectorAll('item')).map(item => ({
+        title: item.querySelector('title')?.textContent?.trim() ?? '',
+        link: item.querySelector('link')?.textContent?.trim() ?? '#',
+        pubDate: item.querySelector('pubDate')?.textContent?.trim() ?? '',
+        description: item.querySelector('description')?.textContent?.replace(/<[^>]+>/g, '').slice(0, 120).trim() ?? '',
+      }));
+    }
 
-      const colour = '#00d2be';
-
-      function makeIcon() {
-        return L.divIcon({
-          className: '',
-          html: `<div style="width:14px;height:14px;background:${colour};border-radius:50%;border:2px solid rgba(255,255,255,0.3);box-shadow:0 0 0 4px ${colour}33,0 0 12px ${colour}66;"></div>`,
-          iconSize: [14, 14],
-          iconAnchor: [7, 7],
-          popupAnchor: [0, -14],
-        });
+    function renderNewsCards(containerId: string, items: { title: string; link: string; pubDate: string; description: string }[], count = 6) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      if (!items.length) {
+        el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">No recent news found</div></div>`;
+        return;
       }
+      el.innerHTML = items.slice(0, count).map(item => `
+        <a href="${item.link}" target="_blank" rel="noopener" class="news-card">
+          <div class="news-meta">${fmtDate(item.pubDate)}</div>
+          <div class="news-title">${item.title}</div>
+          ${item.description ? `<div class="news-desc">${item.description}…</div>` : ''}
+        </a>`).join('');
+    }
 
-      const bounds = [];
-      locations.forEach((loc) => {
-        const evList = loc.events
-          .map(e => `<li style="margin:0.25rem 0;font-size:0.8rem;color:#8a9ba8;">&#x25AA; ${e}</li>`)
-          .join('');
-        const popup = `
-          <div style="font-family:sans-serif;min-width:200px;">
-            <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:${colour};margin-bottom:0.3rem;">${loc.category.replace('-', ' ')}</div>
-            <div style="font-size:1rem;font-weight:700;color:#f0f0f0;text-transform:uppercase;letter-spacing:0.05em;">${loc.name}</div>
-            <div style="font-size:0.75rem;color:#8a9ba8;margin-bottom:0.6rem;">${loc.city}</div>
-            <ul style="list-style:none;padding:0;margin:0;border-top:1px solid #243038;padding-top:0.5rem;">${evList}</ul>
-          </div>`;
-        L.marker([loc.lat, loc.lng], { icon: makeIcon() })
-          .addTo(map)
-          .bindPopup(popup, { className: 'tm-popup', maxWidth: 280 });
-        bounds.push([loc.lat, loc.lng]);
-      });
+    function renderError(containerId: string, label: string) {
+      const el = document.getElementById(containerId);
+      if (el) el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">Couldn't load ${label} feed — try refreshing.</div></div>`;
+    }
 
-      map.fitBounds(bounds, { padding: [60, 60] });
+    // ── F1 Race Calendar (Jolpica API) ────────────────────────────────────────
+    (async () => {
+      const year = new Date().getFullYear();
+      const badge = document.getElementById('f1-badge');
+      const container = document.getElementById('f1-races');
+      if (badge) badge.textContent = `${year}`;
+      try {
+        const res = await fetch(`https://api.jolpi.ca/ergast/f1/${year}/races/?format=json&limit=30`);
+        const data = await res.json();
+        const races = (data?.MRData?.RaceTable?.Races ?? []) as any[];
+        const now = new Date();
+        const upcoming = races.filter(r => new Date(`${r.date}T${r.time ?? '12:00:00Z'}`) >= now);
+
+        if (!container) return;
+        if (!upcoming.length) {
+          container.innerHTML = `<div class="event-card"><div class="event-series">Season complete — check back next year.</div></div>`;
+          return;
+        }
+        container.innerHTML = upcoming.map(r => `
+          <div class="event-card">
+            <div class="event-series">Round ${r.round}</div>
+            <div class="event-name">${r.raceName}</div>
+            <div class="event-detail">${r.Circuit.circuitName}</div>
+            <div class="event-detail" style="margin-top:0.2rem;">${r.Circuit.Location.locality}, ${r.Circuit.Location.country}</div>
+            <div class="event-date">${fmtDate(r.date)}</div>
+          </div>`).join('');
+      } catch {
+        renderError('f1-races', 'F1');
+      }
+    })();
+
+    // ── RSS Feeds ─────────────────────────────────────────────────────────────
+    const feeds = [
+      { id: 'wec-news',   url: 'https://www.motorsport.com/rss/wec/news/',                   label: 'WEC' },
+      { id: 'wrc-news',   url: 'https://www.motorsport.com/rss/wrc/news/',                   label: 'WRC' },
+      { id: 'gt-news',    url: 'https://www.motorsport.com/rss/gt-world-challenge-europe/news/', label: 'GT' },
+      { id: 'irish-news', url: 'https://www.motorsportireland.com/feed/',                    label: 'Irish motorsport' },
+    ];
+
+    feeds.forEach(({ id, url, label }) => {
+      fetchRSS(url)
+        .then(items => renderNewsCards(id, items))
+        .catch(() => renderError(id, label));
     });
   </script>
 
-  <style is:global>
-    .tm-popup .leaflet-popup-content-wrapper {
-      background: #141a1e;
-      border: 1px solid #243038;
-      border-radius: 0;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
-      color: #f0f0f0;
+  <style>
+    .feed-section { margin-bottom: 4rem; }
+    .series-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
     }
-    .tm-popup .leaflet-popup-tip { background: #141a1e; }
-    .tm-popup .leaflet-popup-close-button { color: #8a9ba8 !important; }
-    .leaflet-control-zoom a { background: #141a1e !important; border-color: #243038 !important; color: #f0f0f0 !important; }
-    .leaflet-control-zoom a:hover { background: #243038 !important; }
-    .leaflet-control-attribution { background: rgba(13,17,20,0.8) !important; color: #4a5a65 !important; font-size: 0.65rem; }
-    .leaflet-control-attribution a { color: #4a5a65 !important; }
+    .series-dot {
+      display: block;
+      width: 0.45rem; height: 0.45rem;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .series-badge {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+    .event-date {
+      margin-top: 0.75rem;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    /* News grid — wider cards, horizontal scroll on mobile */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .news-card {
+      background: var(--bg);
+      padding: 1.25rem 1.5rem;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s;
+    }
+    a.news-card:hover { background: var(--surface); }
+    .news-meta {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .news-title {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .news-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      line-height: 1.5;
+    }
+    .loading-card { opacity: 0.4; }
   </style>
 </Layout>
