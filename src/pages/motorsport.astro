@@ -1,37 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-const series = [
-  {
-    id: 'wec',
-    label: 'FIA World Endurance Championship',
-    calendarUrl: 'https://www.fiawec.com/en/season/',
-    siteLabel: 'fiawec.com',
-  },
-  {
-    id: 'wrc',
-    label: 'FIA World Rally Championship',
-    calendarUrl: 'https://www.wrc.com/en/calendar/',
-    siteLabel: 'wrc.com',
-  },
-  {
-    id: 'gt',
-    label: 'GT World Challenge Europe',
-    calendarUrl: 'https://www.gt-world-challenge-europe.com/calendar/',
-    siteLabel: 'gt-world-challenge-europe.com',
-  },
-  {
-    id: 'irish',
-    label: 'Irish Motorsport',
-    calendarUrl: 'https://motorsportireland.ie/events/',
-    siteLabel: 'motorsportireland.ie',
-  },
-];
 ---
 
 <Layout
   title="Motorsport — TrackMarc Motorsport Photography"
-  description="Live F1 race calendar plus official WEC, WRC, GT and Irish motorsport calendars."
+  description="Live F1 race calendar and latest motorsport news from WEC, WRC, GT and Irish motorsport."
 >
   <div style="padding-top: var(--nav-height);">
     <div class="section">
@@ -40,42 +13,65 @@ const series = [
         <p class="section-eyebrow">The Sport</p>
         <h1 class="section-title">Motorsport</h1>
         <p class="section-subtitle">
-          Live race calendars — F1 via live API, WEC, WRC, GT and Irish motorsport direct from the official sites.
+          Live F1 race calendar and latest news across the major series — automatically updated.
         </p>
       </div>
 
       <!-- F1 CALENDAR -->
-      <div class="feed-section" id="f1-section">
+      <div class="feed-section">
         <h2 class="series-heading">
           <span class="series-dot"></span>
           Formula 1
           <span class="series-badge" id="f1-badge"></span>
         </h2>
         <div class="events-grid" id="f1-races">
-          <div class="event-card loading-card"><div class="event-series">Loading F1 calendar…</div></div>
+          <div class="event-card loading-card"><div class="event-series">Loading…</div></div>
         </div>
       </div>
 
-      <!-- EMBEDDED SERIES CALENDARS -->
-      {series.map(s => (
-        <div class="feed-section">
-          <h2 class="series-heading">
-            <span class="series-dot"></span>{s.label}
-          </h2>
-          <div class="embed-wrap">
-            <iframe
-              src={s.calendarUrl}
-              title={`${s.label} calendar`}
-              class="embed-frame"
-              loading="lazy"
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-            ></iframe>
-            <a href={s.calendarUrl} target="_blank" rel="noopener" class="embed-link">
-              Open {s.siteLabel} &rarr;
-            </a>
-          </div>
+      <!-- WEC -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>FIA World Endurance Championship
+          <a href="https://www.fiawec.com/en/season/" target="_blank" rel="noopener" class="series-ext">Calendar ↗</a>
+        </h2>
+        <div class="news-grid" id="wec-news">
+          <div class="news-card loading-card"><div class="news-title">Loading…</div></div>
         </div>
-      ))}
+      </div>
+
+      <!-- WRC -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>FIA World Rally Championship
+          <a href="https://www.wrc.com/en/calendar/" target="_blank" rel="noopener" class="series-ext">Calendar ↗</a>
+        </h2>
+        <div class="news-grid" id="wrc-news">
+          <div class="news-card loading-card"><div class="news-title">Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- GT WORLD CHALLENGE -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>GT World Challenge Europe
+          <a href="https://www.gt-world-challenge-europe.com/calendar/" target="_blank" rel="noopener" class="series-ext">Calendar ↗</a>
+        </h2>
+        <div class="news-grid" id="gt-news">
+          <div class="news-card loading-card"><div class="news-title">Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- IRISH MOTORSPORT -->
+      <div class="feed-section">
+        <h2 class="series-heading">
+          <span class="series-dot"></span>Irish Motorsport
+          <a href="https://motorsportireland.ie/events/" target="_blank" rel="noopener" class="series-ext">Events ↗</a>
+        </h2>
+        <div class="news-grid" id="irish-news">
+          <div class="news-card loading-card"><div class="news-title">Loading…</div></div>
+        </div>
+      </div>
 
       <!-- CTA -->
       <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);padding:2.5rem;margin-top:3rem;">
@@ -96,22 +92,56 @@ const series = [
       return isNaN(d.getTime()) ? str : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
+    async function fetchFeed(url: string, attempt = 1): Promise<{ title: string; link: string; pubDate: string; description: string }[]> {
+      const res = await fetch(`/api/rss?url=${encodeURIComponent(url)}`, { signal: AbortSignal.timeout(15000) });
+      if (!res.ok) {
+        if (attempt < 3) {
+          await new Promise(r => setTimeout(r, 1500 * attempt));
+          return fetchFeed(url, attempt + 1);
+        }
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const text = await res.text();
+      const doc = new DOMParser().parseFromString(text, 'text/xml');
+      if (doc.querySelector('parsererror')) throw new Error('parse error');
+      return Array.from(doc.querySelectorAll('item, entry')).slice(0, 6).map(el => {
+        const get = (tag: string) => el.querySelector(tag)?.textContent?.trim() ?? '';
+        const linkEl = el.querySelector('link');
+        const link = linkEl?.getAttribute('href') ?? linkEl?.textContent?.trim() ?? '#';
+        const desc = (get('description') || get('summary') || get('content'))
+          .replace(/<[^>]+>/g, '').slice(0, 120).trim();
+        return { title: get('title'), link, pubDate: get('pubDate') || get('published') || get('updated'), description: desc };
+      });
+    }
+
+    function renderCards(id: string, items: { title: string; link: string; pubDate: string; description: string }[]) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!items.length) { el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">No recent news found</div></div>`; return; }
+      el.innerHTML = items.map(item => `
+        <a href="${item.link}" target="_blank" rel="noopener" class="news-card">
+          <div class="news-meta">${fmtDate(item.pubDate)}</div>
+          <div class="news-title">${item.title}</div>
+          ${item.description ? `<div class="news-desc">${item.description}…</div>` : ''}
+        </a>`).join('');
+    }
+
+    function renderErr(id: string) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">No recent news available.</div></div>`;
+    }
+
+    // ── F1 ────────────────────────────────────────────────────────────────────
     (async () => {
       const year = new Date().getFullYear();
-      const badge = document.getElementById('f1-badge');
-      const container = document.getElementById('f1-races');
-      if (badge) badge.textContent = `${year}`;
+      document.getElementById('f1-badge')!.textContent = `${year}`;
       try {
         const res = await fetch(`https://api.jolpi.ca/ergast/f1/${year}/races/?format=json&limit=30`);
         const data = await res.json();
         const races = (data?.MRData?.RaceTable?.Races ?? []) as any[];
-        const now = new Date();
-        const upcoming = races.filter(r => new Date(`${r.date}T${r.time ?? '12:00:00Z'}`) >= now);
-        if (!container) return;
-        if (!upcoming.length) {
-          container.innerHTML = `<div class="event-card"><div class="event-series">Season complete — check back next year.</div></div>`;
-          return;
-        }
+        const upcoming = races.filter(r => new Date(`${r.date}T${r.time ?? '12:00:00Z'}`) >= new Date());
+        const container = document.getElementById('f1-races')!;
+        if (!upcoming.length) { container.innerHTML = `<div class="event-card"><div class="event-series">Season complete.</div></div>`; return; }
         container.innerHTML = upcoming.map(r => `
           <div class="event-card">
             <div class="event-series">Round ${r.round}</div>
@@ -120,9 +150,22 @@ const series = [
             <div class="event-detail" style="margin-top:0.2rem;">${r.Circuit.Location.locality}, ${r.Circuit.Location.country}</div>
             <div class="event-date">${fmtDate(r.date)}</div>
           </div>`).join('');
-      } catch {
-        const el = document.getElementById('f1-races');
-        if (el) el.innerHTML = `<div class="event-card"><div class="event-series" style="opacity:0.4;">Couldn't load F1 calendar.</div></div>`;
+      } catch { renderErr('f1-races'); }
+    })();
+
+    // ── News feeds — sequential to avoid rate limits ──────────────────────────
+    const feeds = [
+      { id: 'wec-news',   url: 'https://news.google.com/rss/search?q=World+Endurance+Championship+WEC&hl=en&gl=US&ceid=US:en' },
+      { id: 'wrc-news',   url: 'https://news.google.com/rss/search?q=World+Rally+Championship+WRC&hl=en&gl=US&ceid=US:en' },
+      { id: 'gt-news',    url: 'https://news.google.com/rss/search?q=GT+World+Challenge+Europe&hl=en&gl=US&ceid=US:en' },
+      { id: 'irish-news', url: 'https://news.google.com/rss/search?q=motorsport+ireland+racing&hl=en&gl=IE&ceid=IE:en' },
+    ];
+
+    // Load sequentially — wait for each to finish before starting next
+    (async () => {
+      for (const { id, url } of feeds) {
+        try { renderCards(id, await fetchFeed(url)); }
+        catch { renderErr(id); }
       }
     })();
   </script>
@@ -141,17 +184,19 @@ const series = [
       border-bottom: 1px solid var(--border);
     }
     .series-dot {
-      display: block;
-      width: 0.45rem; height: 0.45rem;
-      background: var(--accent);
-      border-radius: 50%;
-      flex-shrink: 0;
+      display: block; width: 0.45rem; height: 0.45rem;
+      background: var(--accent); border-radius: 50%; flex-shrink: 0;
     }
-    .series-badge {
+    .series-badge { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; }
+    .series-ext {
+      margin-left: auto;
       font-size: 0.65rem;
-      color: var(--text-dim);
-      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      opacity: 0.7;
     }
+    .series-ext:hover { opacity: 1; }
     .event-date {
       margin-top: 0.75rem;
       font-family: var(--font-heading);
@@ -160,32 +205,39 @@ const series = [
       text-transform: uppercase;
       color: var(--accent);
     }
-    .loading-card { opacity: 0.4; }
-    .embed-wrap {
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
       border: 1px solid var(--border);
-      overflow: hidden;
     }
-    .embed-frame {
-      width: 100%;
-      height: 520px;
-      border: none;
+    .news-card {
+      background: var(--bg);
+      padding: 1.25rem 1.5rem;
       display: block;
-      background: #fff;
-      color-scheme: light;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s;
     }
-    .embed-link {
-      display: block;
-      padding: 0.6rem 1rem;
+    a.news-card:hover { background: var(--surface); }
+    .news-meta {
       font-family: var(--font-heading);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--accent);
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      text-decoration: none;
-      text-align: right;
+      margin-bottom: 0.5rem;
     }
-    .embed-link:hover { color: var(--text); }
+    .news-title {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .news-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5; }
+    .loading-card { opacity: 0.4; }
   </style>
 </Layout>
