@@ -1,10 +1,37 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const series = [
+  {
+    id: 'wec',
+    label: 'FIA World Endurance Championship',
+    calendarUrl: 'https://www.fiawec.com/en/season/',
+    siteLabel: 'fiawec.com',
+  },
+  {
+    id: 'wrc',
+    label: 'FIA World Rally Championship',
+    calendarUrl: 'https://www.wrc.com/en/calendar/',
+    siteLabel: 'wrc.com',
+  },
+  {
+    id: 'gt',
+    label: 'GT World Challenge Europe',
+    calendarUrl: 'https://www.gt-world-challenge-europe.com/calendar/',
+    siteLabel: 'gt-world-challenge-europe.com',
+  },
+  {
+    id: 'irish',
+    label: 'Irish Motorsport',
+    calendarUrl: 'https://motorsportireland.ie/events/',
+    siteLabel: 'motorsportireland.ie',
+  },
+];
 ---
 
 <Layout
   title="Motorsport — TrackMarc Motorsport Photography"
-  description="Live F1 race calendar and latest news from WEC, WRC, GT World Challenge and Irish motorsport."
+  description="Live F1 race calendar plus official WEC, WRC, GT and Irish motorsport calendars."
 >
   <div style="padding-top: var(--nav-height);">
     <div class="section">
@@ -13,7 +40,7 @@ import Layout from '../layouts/Layout.astro';
         <p class="section-eyebrow">The Sport</p>
         <h1 class="section-title">Motorsport</h1>
         <p class="section-subtitle">
-          Live F1 race calendar and latest news from across the motorsport world — automatically updated.
+          Live race calendars — F1 via live API, WEC, WRC, GT and Irish motorsport direct from the official sites.
         </p>
       </div>
 
@@ -29,45 +56,26 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
 
-      <!-- WEC -->
-      <div class="feed-section">
-        <h2 class="series-heading">
-          <span class="series-dot"></span>FIA World Endurance Championship
-        </h2>
-        <div class="news-grid" id="wec-news">
-          <div class="news-card loading-card"><div class="news-title">Loading WEC news…</div></div>
+      <!-- EMBEDDED SERIES CALENDARS -->
+      {series.map(s => (
+        <div class="feed-section">
+          <h2 class="series-heading">
+            <span class="series-dot"></span>{s.label}
+          </h2>
+          <div class="embed-wrap">
+            <iframe
+              src={s.calendarUrl}
+              title={`${s.label} calendar`}
+              class="embed-frame"
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+            ></iframe>
+            <a href={s.calendarUrl} target="_blank" rel="noopener" class="embed-link">
+              Open {s.siteLabel} &rarr;
+            </a>
+          </div>
         </div>
-      </div>
-
-      <!-- WRC -->
-      <div class="feed-section">
-        <h2 class="series-heading">
-          <span class="series-dot"></span>FIA World Rally Championship
-        </h2>
-        <div class="news-grid" id="wrc-news">
-          <div class="news-card loading-card"><div class="news-title">Loading WRC news…</div></div>
-        </div>
-      </div>
-
-      <!-- GT WORLD CHALLENGE -->
-      <div class="feed-section">
-        <h2 class="series-heading">
-          <span class="series-dot"></span>GT World Challenge Europe
-        </h2>
-        <div class="news-grid" id="gt-news">
-          <div class="news-card loading-card"><div class="news-title">Loading GT news…</div></div>
-        </div>
-      </div>
-
-      <!-- IRISH MOTORSPORT -->
-      <div class="feed-section">
-        <h2 class="series-heading">
-          <span class="series-dot"></span>Irish Motorsport
-        </h2>
-        <div class="news-grid" id="irish-news">
-          <div class="news-card loading-card"><div class="news-title">Loading Irish motorsport news…</div></div>
-        </div>
-      </div>
+      ))}
 
       <!-- CTA -->
       <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);padding:2.5rem;margin-top:3rem;">
@@ -88,43 +96,6 @@ import Layout from '../layouts/Layout.astro';
       return isNaN(d.getTime()) ? str : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    async function fetchRSS(url: string): Promise<{ title: string; link: string; pubDate: string; description: string }[]> {
-      const res = await fetch(`/api/rss?url=${encodeURIComponent(url)}`, { signal: AbortSignal.timeout(12000) });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const text = await res.text();
-      const doc = new DOMParser().parseFromString(text, 'text/xml');
-      if (doc.querySelector('parsererror')) throw new Error('XML parse error');
-      return Array.from(doc.querySelectorAll('item, entry')).slice(0, 6).map(el => {
-        const get = (tag: string) => el.querySelector(tag)?.textContent?.trim() ?? '';
-        const linkEl = el.querySelector('link');
-        const link = linkEl?.getAttribute('href') ?? linkEl?.textContent?.trim() ?? '#';
-        const desc = (get('description') || get('summary') || get('content'))
-          .replace(/<[^>]+>/g, '').slice(0, 120).trim();
-        return { title: get('title'), link, pubDate: get('pubDate') || get('published') || get('updated'), description: desc };
-      });
-    }
-
-    function renderNewsCards(containerId: string, items: { title: string; link: string; pubDate: string; description: string }[]) {
-      const el = document.getElementById(containerId);
-      if (!el) return;
-      if (!items.length) {
-        el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">No recent news found</div></div>`;
-        return;
-      }
-      el.innerHTML = items.map(item => `
-        <a href="${item.link}" target="_blank" rel="noopener" class="news-card">
-          <div class="news-meta">${fmtDate(item.pubDate)}</div>
-          <div class="news-title">${item.title}</div>
-          ${item.description ? `<div class="news-desc">${item.description}…</div>` : ''}
-        </a>`).join('');
-    }
-
-    function renderError(containerId: string, label: string) {
-      const el = document.getElementById(containerId);
-      if (el) el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">Couldn't load ${label} feed.</div></div>`;
-    }
-
-    // ── F1 Race Calendar ──────────────────────────────────────────────────────
     (async () => {
       const year = new Date().getFullYear();
       const badge = document.getElementById('f1-badge');
@@ -150,25 +121,10 @@ import Layout from '../layouts/Layout.astro';
             <div class="event-date">${fmtDate(r.date)}</div>
           </div>`).join('');
       } catch {
-        renderError('f1-races', 'F1');
+        const el = document.getElementById('f1-races');
+        if (el) el.innerHTML = `<div class="event-card"><div class="event-series" style="opacity:0.4;">Couldn't load F1 calendar.</div></div>`;
       }
     })();
-
-    // ── RSS Feeds — staggered to avoid rate-limiting ──────────────────────────
-    const feeds = [
-      { id: 'wec-news',   url: 'https://news.google.com/rss/search?q=World+Endurance+Championship+WEC&hl=en&gl=US&ceid=US:en',  label: 'WEC' },
-      { id: 'wrc-news',   url: 'https://news.google.com/rss/search?q=World+Rally+Championship+WRC&hl=en&gl=US&ceid=US:en',      label: 'WRC' },
-      { id: 'gt-news',    url: 'https://news.google.com/rss/search?q=GT+World+Challenge+Europe+racing&hl=en&gl=US&ceid=US:en',  label: 'GT' },
-      { id: 'irish-news', url: 'https://news.google.com/rss/search?q=motorsport+ireland&hl=en&gl=IE&ceid=IE:en',                label: 'Irish motorsport' },
-    ];
-
-    feeds.forEach(({ id, url, label }, i) => {
-      setTimeout(() => {
-        fetchRSS(url)
-          .then(items => renderNewsCards(id, items))
-          .catch(() => renderError(id, label));
-      }, i * 1200);
-    });
   </script>
 
   <style>
@@ -204,44 +160,32 @@ import Layout from '../layouts/Layout.astro';
       text-transform: uppercase;
       color: var(--accent);
     }
-    .news-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1px;
-      background: var(--border);
+    .loading-card { opacity: 0.4; }
+    .embed-wrap {
       border: 1px solid var(--border);
+      overflow: hidden;
     }
-    .news-card {
-      background: var(--bg);
-      padding: 1.25rem 1.5rem;
+    .embed-frame {
+      width: 100%;
+      height: 520px;
+      border: none;
       display: block;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.2s;
+      background: #fff;
+      color-scheme: light;
     }
-    a.news-card:hover { background: var(--surface); }
-    .news-meta {
+    .embed-link {
+      display: block;
+      padding: 0.6rem 1rem;
       font-family: var(--font-heading);
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 0.5rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-decoration: none;
+      text-align: right;
     }
-    .news-title {
-      font-family: var(--font-heading);
-      font-size: 0.9rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      line-height: 1.3;
-      color: var(--text);
-    }
-    .news-desc {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-top: 0.5rem;
-      line-height: 1.5;
-    }
-    .loading-card { opacity: 0.4; }
+    .embed-link:hover { color: var(--text); }
   </style>
 </Layout>
