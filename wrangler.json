@@ -1,7 +1,9 @@
 {
   "name": "website",
   "compatibility_date": "2026-06-18",
+  "main": "src/worker.js",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS"
   }
 }
