@@ -8,12 +8,23 @@ export default {
 
       try {
         const upstream = await fetch(feedUrl, {
-          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TrackMarc/1.0)' },
-          cf: { cacheTtl: 1800, cacheEverything: true },
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; TrackMarc/1.0)',
+            'Accept': 'application/rss+xml, application/xml, text/xml, */*;q=0.1',
+          },
         });
         const body = await upstream.text();
+        // Google News sometimes returns an HTML consent page instead of RSS —
+        // surface this as 422 so the client's retry logic can attempt again.
+        const trimmed = body.trimStart().toLowerCase();
+        if (trimmed.startsWith('<!') || trimmed.startsWith('<html')) {
+          return new Response('upstream returned HTML instead of RSS', { status: 422 });
+        }
+        if (!upstream.ok) {
+          return new Response(`upstream error ${upstream.status}`, { status: upstream.status });
+        }
         return new Response(body, {
-          status: upstream.status,
+          status: 200,
           headers: {
             'Content-Type': 'text/xml; charset=utf-8',
             'Access-Control-Allow-Origin': '*',
