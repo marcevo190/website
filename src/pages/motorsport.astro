@@ -89,16 +89,24 @@ import Layout from '../layouts/Layout.astro';
     }
 
     async function fetchRSS(url: string): Promise<{ title: string; link: string; pubDate: string; description: string }[]> {
-      const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=6`;
-      const res = await fetch(api, { signal: AbortSignal.timeout(12000) });
-      const json = await res.json();
-      if (json.status !== 'ok') throw new Error(json.message ?? 'feed error');
-      return (json.items ?? []).map((item: any) => ({
-        title: item.title ?? '',
-        link: item.link ?? '#',
-        pubDate: item.pubDate ?? '',
-        description: (item.description ?? '').replace(/<[^>]+>/g, '').slice(0, 120).trim(),
-      }));
+      const proxy = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+      const res = await fetch(proxy, { signal: AbortSignal.timeout(12000) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      const doc = new DOMParser().parseFromString(text, 'text/xml');
+      if (doc.querySelector('parsererror')) throw new Error('XML parse error');
+      // Support RSS 2.0 (<item>) and Atom (<entry>)
+      return Array.from(doc.querySelectorAll('item, entry')).slice(0, 6).map(el => {
+        const get = (tag: string) => el.querySelector(tag)?.textContent?.trim() ?? '';
+        const linkEl = el.querySelector('link');
+        const link = linkEl?.getAttribute('href') ?? linkEl?.textContent?.trim() ?? '#';
+        return {
+          title: get('title'),
+          link,
+          pubDate: get('pubDate') || get('published') || get('updated'),
+          description: get('description') || get('summary') || get('content'),
+        };
+      }).map(item => ({ ...item, description: item.description.replace(/<[^>]+>/g, '').slice(0, 120).trim() }));
     }
 
     function renderNewsCards(containerId: string, items: { title: string; link: string; pubDate: string; description: string }[]) {
@@ -153,9 +161,9 @@ import Layout from '../layouts/Layout.astro';
 
     // ── RSS Feeds — staggered to avoid rate-limiting ──────────────────────────
     const feeds = [
-      { id: 'wec-news',   url: 'https://www.autosport.com/rss/wec/news/',    label: 'WEC' },
-      { id: 'wrc-news',   url: 'https://www.autosport.com/rss/wrc/news/',    label: 'WRC' },
-      { id: 'gt-news',    url: 'https://www.autosport.com/rss/gt/news/',     label: 'GT' },
+      { id: 'wec-news',   url: 'https://www.motorsport.com/rss/news/wec/',   label: 'WEC' },
+      { id: 'wrc-news',   url: 'https://www.motorsport.com/rss/news/wrc/',   label: 'WRC' },
+      { id: 'gt-news',    url: 'https://www.motorsport.com/rss/news/gt-world-challenge/', label: 'GT' },
       { id: 'irish-news', url: 'https://motorsportireland.ie/feed/',          label: 'Irish motorsport' },
     ];
 
