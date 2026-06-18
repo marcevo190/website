@@ -9,7 +9,14 @@ const imageModules = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true }
 );
 
-const categories = ['formula', 'endurance', 'rally', 'gt'] as const;
+const categories = ['formula', 'endurance', 'rally', 'gt', 'car-shows'] as const;
+const categoryLabels: Record<string, string> = {
+  'formula': 'Formula',
+  'endurance': 'Endurance',
+  'rally': 'Rally',
+  'gt': 'GT',
+  'car-shows': 'Car Shows',
+};
 
 const photos = Object.entries(imageModules).map(([path, mod]) => {
   const parts = path.split('/');
@@ -54,7 +61,7 @@ const hasPhotos = photos.length > 0;
               class:list={['filter-btn', { active: cat === 'all' }]}
               data-filter={cat}
             >
-              {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+              {cat === 'all' ? 'All' : (categoryLabels[cat] ?? cat)}
             </button>
           ))}
         </div>
@@ -77,7 +84,7 @@ const hasPhotos = photos.length > 0;
               <div class="photo-card-overlay">
                 <div class="photo-card-meta">
                   <div class="photo-card-title">{photo.title}</div>
-                  <div class="photo-card-event" style="text-transform: capitalize;">{photo.category}</div>
+                  <div class="photo-card-event">{categoryLabels[photo.category] ?? photo.category}</div>
                 </div>
               </div>
             </div>
