@@ -156,10 +156,10 @@ import Layout from '../layouts/Layout.astro';
 
     // ── RSS Feeds — staggered to avoid rate-limiting ──────────────────────────
     const feeds = [
-      { id: 'wec-news',   url: 'https://news.google.com/rss/search?q=FIA+World+Endurance+Championship&hl=en&gl=US&ceid=US:en',   label: 'WEC' },
-      { id: 'wrc-news',   url: 'https://news.google.com/rss/search?q=FIA+World+Rally+Championship+WRC&hl=en&gl=US&ceid=US:en',   label: 'WRC' },
-      { id: 'gt-news',    url: 'https://news.google.com/rss/search?q=GT+World+Challenge+Europe&hl=en&gl=US&ceid=US:en',          label: 'GT' },
-      { id: 'irish-news', url: 'https://motorsportireland.ie/feed/',                                                              label: 'Irish motorsport' },
+      { id: 'wec-news',   url: 'https://news.google.com/rss/search?q=World+Endurance+Championship+WEC&hl=en&gl=US&ceid=US:en',  label: 'WEC' },
+      { id: 'wrc-news',   url: 'https://news.google.com/rss/search?q=World+Rally+Championship+WRC&hl=en&gl=US&ceid=US:en',      label: 'WRC' },
+      { id: 'gt-news',    url: 'https://news.google.com/rss/search?q=GT+World+Challenge+Europe+racing&hl=en&gl=US&ceid=US:en',  label: 'GT' },
+      { id: 'irish-news', url: 'https://news.google.com/rss/search?q=motorsport+ireland&hl=en&gl=IE&ceid=IE:en',                label: 'Irish motorsport' },
     ];
 
     feeds.forEach(({ id, url, label }, i) => {
@@ -167,7 +167,7 @@ import Layout from '../layouts/Layout.astro';
         fetchRSS(url)
           .then(items => renderNewsCards(id, items))
           .catch(() => renderError(id, label));
-      }, i * 700);
+      }, i * 1200);
     });
   </script>
 
