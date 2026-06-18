@@ -13,74 +13,89 @@ import Layout from '../layouts/Layout.astro';
         <p class="section-eyebrow">The Sport</p>
         <h1 class="section-title">Motorsport</h1>
         <p class="section-subtitle">
-          Live F1 race calendar and latest news across the major series — automatically updated.
+          Live F1 race calendar and the latest news across the major series — automatically updated.
         </p>
       </div>
 
       <!-- F1 CALENDAR -->
       <div class="feed-section">
-        <h2 class="series-heading">
+        <div class="series-heading">
           <span class="series-dot"></span>
-          Formula 1
+          <span class="series-name">Formula 1</span>
           <span class="series-badge" id="f1-badge"></span>
-        </h2>
+          <a href="https://www.formula1.com/en/racing/2026" target="_blank" rel="noopener" class="series-link">Calendar ↗</a>
+        </div>
         <div class="events-grid" id="f1-races">
-          <div class="event-card loading-card"><div class="event-series">Loading…</div></div>
+          <div class="event-card"><div class="skel" style="width:3.5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:72%;height:1rem;margin-bottom:0.5rem;"></div><div class="skel" style="width:50%;height:0.75rem;"></div></div>
+          <div class="event-card"><div class="skel" style="width:3.5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:65%;height:1rem;margin-bottom:0.5rem;"></div><div class="skel" style="width:55%;height:0.75rem;"></div></div>
+          <div class="event-card"><div class="skel" style="width:3.5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:78%;height:1rem;margin-bottom:0.5rem;"></div><div class="skel" style="width:45%;height:0.75rem;"></div></div>
         </div>
       </div>
 
       <!-- WEC -->
       <div class="feed-section">
-        <h2 class="series-heading">
-          <span class="series-dot"></span>FIA World Endurance Championship
-          <a href="https://www.fiawec.com/en/season/" target="_blank" rel="noopener" class="series-ext">Calendar ↗</a>
-        </h2>
+        <div class="series-heading">
+          <span class="series-dot"></span>
+          <span class="series-name">FIA World Endurance Championship</span>
+          <a href="https://www.fiawec.com/en/season/" target="_blank" rel="noopener" class="series-link">Calendar ↗</a>
+        </div>
         <div class="news-grid" id="wec-news">
-          <div class="news-card loading-card"><div class="news-title">Loading…</div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:85%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:70%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:90%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:60%;height:0.7rem;"></div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:75%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:90%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:80%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:65%;height:0.7rem;"></div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:80%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:60%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:70%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:85%;height:0.7rem;"></div></div>
         </div>
       </div>
 
       <!-- WRC -->
       <div class="feed-section">
-        <h2 class="series-heading">
-          <span class="series-dot"></span>FIA World Rally Championship
-          <a href="https://www.wrc.com/en/calendar/" target="_blank" rel="noopener" class="series-ext">Calendar ↗</a>
-        </h2>
+        <div class="series-heading">
+          <span class="series-dot"></span>
+          <span class="series-name">FIA World Rally Championship</span>
+          <a href="https://www.wrc.com/en/calendar/" target="_blank" rel="noopener" class="series-link">Calendar ↗</a>
+        </div>
         <div class="news-grid" id="wrc-news">
-          <div class="news-card loading-card"><div class="news-title">Loading…</div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:80%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:65%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:85%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:55%;height:0.7rem;"></div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:90%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:75%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:60%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:80%;height:0.7rem;"></div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:70%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:85%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:75%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:50%;height:0.7rem;"></div></div>
         </div>
       </div>
 
       <!-- GT WORLD CHALLENGE -->
       <div class="feed-section">
-        <h2 class="series-heading">
-          <span class="series-dot"></span>GT World Challenge Europe
-          <a href="https://www.gt-world-challenge-europe.com/calendar/" target="_blank" rel="noopener" class="series-ext">Calendar ↗</a>
-        </h2>
+        <div class="series-heading">
+          <span class="series-dot"></span>
+          <span class="series-name">GT World Challenge Europe</span>
+          <a href="https://www.gt-world-challenge-europe.com/calendar/" target="_blank" rel="noopener" class="series-link">Calendar ↗</a>
+        </div>
         <div class="news-grid" id="gt-news">
-          <div class="news-card loading-card"><div class="news-title">Loading…</div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:78%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:60%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:88%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:65%;height:0.7rem;"></div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:85%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:70%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:55%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:75%;height:0.7rem;"></div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:65%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:80%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:70%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:90%;height:0.7rem;"></div></div>
         </div>
       </div>
 
       <!-- IRISH MOTORSPORT -->
       <div class="feed-section">
-        <h2 class="series-heading">
-          <span class="series-dot"></span>Irish Motorsport
-          <a href="https://motorsportireland.ie/events/" target="_blank" rel="noopener" class="series-ext">Events ↗</a>
-        </h2>
+        <div class="series-heading">
+          <span class="series-dot"></span>
+          <span class="series-name">Irish Motorsport</span>
+          <a href="https://motorsportireland.ie/events/" target="_blank" rel="noopener" class="series-link">Events ↗</a>
+        </div>
         <div class="news-grid" id="irish-news">
-          <div class="news-card loading-card"><div class="news-title">Loading…</div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:82%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:68%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:92%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:58%;height:0.7rem;"></div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:76%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:88%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:63%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:78%;height:0.7rem;"></div></div>
+          <div class="news-card"><div class="skel" style="width:5rem;height:0.6rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:72%;height:0.9rem;margin-bottom:0.4rem;"></div><div class="skel" style="width:55%;height:0.9rem;margin-bottom:0.75rem;"></div><div class="skel" style="width:82%;height:0.7rem;margin-bottom:0.3rem;"></div><div class="skel" style="width:70%;height:0.7rem;"></div></div>
         </div>
       </div>
 
       <!-- CTA -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);padding:2.5rem;margin-top:3rem;">
-        <p style="font-family:var(--font-heading);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Accreditation</p>
-        <h3 style="font-size:1.5rem;margin-bottom:0.75rem;">Seeking Media Access</h3>
-        <p style="color:var(--text-muted);font-weight:300;max-width:600px;">
+      <div class="accred-cta">
+        <p class="section-eyebrow">Accreditation</p>
+        <h3 class="accred-title">Seeking Media Access</h3>
+        <p class="accred-desc">
           If you're a press officer or series coordinator and you'd like to discuss media credentials, get in touch.
         </p>
-        <a href="/contact" class="btn btn-primary" style="margin-top:1.5rem;display:inline-flex;">Contact Me &rarr;</a>
+        <a href="/contact" class="btn btn-primary accred-btn">Contact Me &rarr;</a>
       </div>
 
     </div>
@@ -117,7 +132,10 @@ import Layout from '../layouts/Layout.astro';
     function renderCards(id: string, items: { title: string; link: string; pubDate: string; description: string }[]) {
       const el = document.getElementById(id);
       if (!el) return;
-      if (!items.length) { el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">No recent news found</div></div>`; return; }
+      if (!items.length) {
+        el.innerHTML = `<div class="news-card"><div class="news-empty">No recent articles found.</div></div>`;
+        return;
+      }
       el.innerHTML = items.map(item => `
         <a href="${item.link}" target="_blank" rel="noopener" class="news-card">
           <div class="news-meta">${fmtDate(item.pubDate)}</div>
@@ -128,26 +146,30 @@ import Layout from '../layouts/Layout.astro';
 
     function renderErr(id: string) {
       const el = document.getElementById(id);
-      if (el) el.innerHTML = `<div class="news-card"><div class="news-title" style="opacity:0.4;">No recent news available.</div></div>`;
+      if (el) el.innerHTML = `<div class="news-card"><div class="news-empty">No recent articles found.</div></div>`;
     }
 
     // ── F1 ────────────────────────────────────────────────────────────────────
     (async () => {
       const year = new Date().getFullYear();
-      document.getElementById('f1-badge')!.textContent = `${year}`;
+      const badge = document.getElementById('f1-badge');
+      if (badge) badge.textContent = `${year}`;
       try {
         const res = await fetch(`https://api.jolpi.ca/ergast/f1/${year}/races/?format=json&limit=30`);
         const data = await res.json();
         const races = (data?.MRData?.RaceTable?.Races ?? []) as any[];
         const upcoming = races.filter(r => new Date(`${r.date}T${r.time ?? '12:00:00Z'}`) >= new Date());
         const container = document.getElementById('f1-races')!;
-        if (!upcoming.length) { container.innerHTML = `<div class="event-card"><div class="event-series">Season complete.</div></div>`; return; }
+        if (!upcoming.length) {
+          container.innerHTML = `<div class="event-card"><div class="event-series">Season complete</div><div class="event-name" style="opacity:0.5;font-size:0.9rem;">No upcoming rounds this season.</div></div>`;
+          return;
+        }
         container.innerHTML = upcoming.map(r => `
           <div class="event-card">
             <div class="event-series">Round ${r.round}</div>
             <div class="event-name">${r.raceName}</div>
             <div class="event-detail">${r.Circuit.circuitName}</div>
-            <div class="event-detail" style="margin-top:0.2rem;">${r.Circuit.Location.locality}, ${r.Circuit.Location.country}</div>
+            <div class="event-detail" style="margin-top:0.15rem;">${r.Circuit.Location.locality}, ${r.Circuit.Location.country}</div>
             <div class="event-date">${fmtDate(r.date)}</div>
           </div>`).join('');
       } catch { renderErr('f1-races'); }
@@ -161,7 +183,6 @@ import Layout from '../layouts/Layout.astro';
       { id: 'irish-news', url: 'https://motorsportireland.ie/feed/' },
     ];
 
-    // Load sequentially — wait for each to finish before starting next
     (async () => {
       for (const { id, url } of feeds) {
         try { renderCards(id, await fetchFeed(url)); }
@@ -171,50 +192,66 @@ import Layout from '../layouts/Layout.astro';
   </script>
 
   <style>
-    .feed-section { margin-bottom: 4rem; }
+    /* ── Layout ── */
+    .feed-section { margin-bottom: 4.5rem; }
+
+    /* ── Series heading ── */
     .series-heading {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      font-size: 0.9rem;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
       border-bottom: 1px solid var(--border);
     }
     .series-dot {
-      display: block; width: 0.45rem; height: 0.45rem;
-      background: var(--accent); border-radius: 50%; flex-shrink: 0;
+      display: block;
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
     }
-    .series-badge { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; }
-    .series-ext {
-      margin-left: auto;
-      font-size: 0.65rem;
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: 0.08em;
-      opacity: 0.7;
-    }
-    .series-ext:hover { opacity: 1; }
-    .event-date {
-      margin-top: 0.75rem;
+    .series-name {
       font-family: var(--font-heading);
-      font-size: 0.7rem;
+      font-size: 1rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .series-badge {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.55rem;
+      line-height: 1.6;
+    }
+    .series-link {
+      margin-left: auto;
+      font-family: var(--font-heading);
+      font-size: 0.65rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--accent);
+      opacity: 0.65;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
     }
+    .series-link:hover { opacity: 1; }
+
+    /* ── News grid & cards ── */
     .news-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
     }
     .news-card {
       background: var(--bg);
-      padding: 1.25rem 1.5rem;
+      padding: 1.75rem;
       display: block;
       text-decoration: none;
       color: inherit;
@@ -223,21 +260,75 @@ import Layout from '../layouts/Layout.astro';
     a.news-card:hover { background: var(--surface); }
     .news-meta {
       font-family: var(--font-heading);
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
     .news-title {
       font-family: var(--font-heading);
-      font-size: 0.9rem;
-      letter-spacing: 0.04em;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       line-height: 1.3;
       color: var(--text);
     }
-    .news-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5; }
-    .loading-card { opacity: 0.4; }
+    .news-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      margin-top: 0.6rem;
+      line-height: 1.6;
+    }
+    .news-empty {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ── F1 event date override ── */
+    .event-date {
+      margin-top: 0.75rem;
+      font-family: var(--font-heading);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ── Skeleton shimmer ── */
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .skel {
+      display: block;
+      background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%);
+      background-size: 400% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      border-radius: 2px;
+    }
+
+    /* ── Accreditation CTA ── */
+    .accred-cta {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 2.5rem;
+      margin-top: 2rem;
+    }
+    .accred-title {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin: 0.5rem 0 0.75rem;
+    }
+    .accred-desc {
+      color: var(--text-muted);
+      font-weight: 300;
+      max-width: 520px;
+    }
+    .accred-btn { margin-top: 1.5rem; display: inline-flex; }
   </style>
 </Layout>
