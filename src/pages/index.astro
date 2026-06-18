@@ -1,0 +1,155 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const featuredShots = [
+  { title: 'Into the Apex', event: 'Monza · Italian GP 2024', category: 'Formula' },
+  { title: 'Pit Wall Drama', event: 'Le Mans 24h 2024', category: 'Endurance' },
+  { title: 'Sliding Sideways', event: 'Rally Catalunya 2024', category: 'Rally' },
+  { title: 'Last Light Lap', event: 'Spa-Francorchamps 2024', category: 'Formula' },
+];
+
+const recentCoverage = [
+  { series: 'FIA Formula 2', event: 'Silverstone Feature Race', date: 'July 2024', location: 'UK' },
+  { series: 'WEC', event: 'Le Mans 24 Hours', date: 'June 2024', location: 'France' },
+  { series: 'WRC', event: 'Rally Catalunya', date: 'Oct 2024', location: 'Spain' },
+  { series: 'GT World Challenge', event: 'Spa Sprint Cup', date: 'Sep 2024', location: 'Belgium' },
+  { series: 'Radical Cup', event: 'Mondello Park', date: 'Aug 2024', location: 'Ireland' },
+  { series: 'Porsche Carrera Cup', event: 'Knockhill', date: 'Aug 2024', location: 'Scotland' },
+];
+---
+
+<Layout title="TrackMarc — Motorsport Photography">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-shapes"></div>
+    <div class="hero-placeholder-label">
+      <span>📷</span>
+      Your hero shot<br />goes here
+    </div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Motorsport Photography</p>
+      <h1>Where Speed<br />Meets <em>Lens</em></h1>
+      <p class="hero-desc">
+        Capturing the raw intensity of motorsport — from Formula 2 to endurance classics.
+        Available for media accreditation and editorial commissions.
+      </p>
+      <div class="hero-actions">
+        <a href="/gallery" class="btn btn-primary">View Portfolio</a>
+        <a href="/contact" class="btn btn-outline">Press Inquiry</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- FEATURED GALLERY -->
+  <div style="padding: 0 2rem;">
+    <div style="max-width: var(--max-width); margin: 0 auto; padding: 5rem 0 0;">
+      <div class="section-header">
+        <p class="section-eyebrow">Portfolio</p>
+        <h2 class="section-title">Featured Shots</h2>
+        <p class="section-subtitle">A selection of recent work from circuits and stages across Europe.</p>
+      </div>
+      <div class="featured-grid">
+        {featuredShots.map((shot) => (
+          <div class="photo-card">
+            <div class="photo-placeholder">
+              <div class="photo-placeholder-icon">📷</div>
+              <div class="photo-placeholder-text">{shot.category}</div>
+            </div>
+            <div class="photo-card-overlay">
+              <div class="photo-card-meta">
+                <div class="photo-card-title">{shot.title}</div>
+                <div class="photo-card-event">{shot.event}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style="text-align: center; margin-top: 2.5rem;">
+        <a href="/gallery" class="btn btn-outline">Full Gallery &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT STRIP -->
+  <div style="margin-top: 6rem;">
+    <div class="about-strip">
+      <div class="about-strip-inner">
+        <div class="about-strip-photo">
+          <div class="photo-placeholder" style="position:absolute; inset:0;">
+            <div class="photo-placeholder-icon">📷</div>
+            <div class="photo-placeholder-text">Photographer portrait</div>
+          </div>
+        </div>
+        <div class="about-strip-content">
+          <p class="section-eyebrow">The Photographer</p>
+          <h2>Chasing the <em>Story</em><br />Behind the Speed</h2>
+          <p>
+            Trackside since 2019, I've been documenting the sport that most people only see
+            through barriers or on screens — getting close enough to feel the heat off the
+            exhaust and hear the gravel kick up under tyres.
+          </p>
+          <p>
+            My work focuses on narrative and emotion over pure technical capture: the engineer
+            staring at a timing screen, the driver's visor reflecting the circuit at golden
+            hour, the mechanic sprinting with a wheel.
+          </p>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="stat-number">30<span>+</span></div>
+              <div class="stat-label">Events</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">8</div>
+              <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">6<span>+</span></div>
+              <div class="stat-label">Series</div>
+            </div>
+          </div>
+          <a href="/about" class="btn btn-outline">More About Me &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECENT COVERAGE -->
+  <div class="section">
+    <div class="section-header">
+      <p class="section-eyebrow">Coverage</p>
+      <h2 class="section-title">Recent Events</h2>
+      <p class="section-subtitle">Circuits and stages covered in the last 12 months.</p>
+    </div>
+    <div class="events-grid">
+      {recentCoverage.map((ev) => (
+        <div class="event-card">
+          <div class="event-series">{ev.series}</div>
+          <div class="event-name">{ev.event}</div>
+          <div class="event-detail">{ev.date} &middot; {ev.location}</div>
+        </div>
+      ))}
+    </div>
+    <div style="text-align: center; margin-top: 2.5rem;">
+      <a href="/coverage" class="btn btn-outline">All Coverage &rarr;</a>
+    </div>
+  </div>
+
+  <!-- PRESS CTA BANNER -->
+  <div style="padding: 0 2rem; margin-bottom: 6rem;">
+    <div style="max-width: var(--max-width); margin: 0 auto; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
+      <div>
+        <p style="font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;">Media Accreditation</p>
+        <h3 style="font-size: clamp(1.4rem, 3vw, 2rem);">Covering Your Event?</h3>
+        <p style="color: var(--text-muted); font-weight: 300; margin-top: 0.5rem; max-width: 480px;">
+          I'm actively seeking media credentials at FIA, ACO, and national-level events.
+          If you're a press officer or series coordinator, let's talk.
+        </p>
+      </div>
+      <a href="/contact" class="btn btn-primary" style="flex-shrink: 0;">Get in Touch &rarr;</a>
+    </div>
+  </div>
+</Layout>

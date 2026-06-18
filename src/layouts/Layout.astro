@@ -1,0 +1,80 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = 'Motorsport photography by Marc — capturing speed, power, and drama from the pit lane to the podium.',
+  ogImage = '/og-default.jpg',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <nav class="nav" id="main-nav">
+      <a href="/" class="nav-logo">Track<span>Marc</span></a>
+      <ul class="nav-links">
+        <li><a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a></li>
+        <li><a href="/gallery" class:list={[{ active: currentPath.startsWith('/gallery') }]}>Gallery</a></li>
+        <li><a href="/coverage" class:list={[{ active: currentPath.startsWith('/coverage') }]}>Coverage</a></li>
+        <li><a href="/about" class:list={[{ active: currentPath.startsWith('/about') }]}>About</a></li>
+        <li><a href="/contact" class:list={[{ active: currentPath.startsWith('/contact') }]}>Contact</a></li>
+      </ul>
+      <a href="/contact" class="nav-cta">Press Inquiry</a>
+    </nav>
+
+    <div class="page-content">
+      <slot />
+    </div>
+
+    <footer class="footer">
+      <div class="footer-logo">Track<span>Marc</span></div>
+      <p class="footer-copy">&copy; {new Date().getFullYear()} TrackMarc. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="/gallery">Gallery</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </footer>
+
+    <script>
+      // Sticky nav scroll effect
+      const nav = document.getElementById('main-nav');
+      window.addEventListener('scroll', () => {
+        nav?.classList.toggle('scrolled', window.scrollY > 40);
+      }, { passive: true });
+    </script>
+  </body>
+</html>

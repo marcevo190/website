@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const events = [
+  // 2024
+  { year: '2024', series: 'WEC', event: 'Le Mans 24 Hours', location: 'Circuit de la Sarthe, France', date: 'Jun 2024', credential: 'Media' },
+  { year: '2024', series: 'FIA WRC', event: 'Rally Catalunya', location: 'Salou, Spain', date: 'Oct 2024', credential: 'Media' },
+  { year: '2024', series: 'FIA Formula 2', event: 'Silverstone Round', location: 'Silverstone, UK', date: 'Jul 2024', credential: 'Media' },
+  { year: '2024', series: 'FIA Formula 2', event: 'Monza Round', location: 'Monza, Italy', date: 'Sep 2024', credential: 'Media' },
+  { year: '2024', series: 'GT World Challenge Europe', event: 'Spa Sprint Cup', location: 'Spa-Francorchamps, Belgium', date: 'Sep 2024', credential: 'Media' },
+  { year: '2024', series: 'Porsche Carrera Cup GB', event: 'Knockhill Round', location: 'Knockhill, Scotland', date: 'Aug 2024', credential: 'Media' },
+  { year: '2024', series: 'Radical European Masters', event: 'Mondello Park Round', location: 'Mondello, Ireland', date: 'Aug 2024', credential: 'Media' },
+  // 2023
+  { year: '2023', series: 'WEC', event: 'Le Mans 24 Hours', location: 'Circuit de la Sarthe, France', date: 'Jun 2023', credential: 'Media' },
+  { year: '2023', series: 'ELMS', event: 'Portimão Round', location: 'Autodromo do Algarve, Portugal', date: 'Apr 2023', credential: 'Media' },
+  { year: '2023', series: 'ELMS', event: 'Imola Round', location: 'Imola, Italy', date: 'Jul 2023', credential: 'Media' },
+  { year: '2023', series: 'GT World Challenge Europe', event: 'Paul Ricard Round', location: 'Le Castellet, France', date: 'Jun 2023', credential: 'Media' },
+  { year: '2023', series: 'Radical European Masters', event: 'Spa Round', location: 'Spa-Francorchamps, Belgium', date: 'Sep 2023', credential: 'Media' },
+  // 2022
+  { year: '2022', series: 'WEC', event: 'Le Mans 24 Hours', location: 'Circuit de la Sarthe, France', date: 'Jun 2022', credential: 'Media' },
+  { year: '2022', series: 'Mondello Park Nationals', event: 'Full Season', location: 'Mondello, Ireland', date: '2022 Season', credential: 'Media' },
+];
+
+const years = [...new Set(events.map(e => e.year))].sort((a, b) => Number(b) - Number(a));
+---
+
+<Layout
+  title="Coverage — TrackMarc Motorsport Photography"
+  description="Full event coverage history — FIA-sanctioned and national motorsport series across Europe."
+>
+  <div style="padding-top: var(--nav-height);">
+    <div class="section">
+      <div class="section-header">
+        <p class="section-eyebrow">History</p>
+        <h1 class="section-title">Coverage</h1>
+        <p class="section-subtitle">
+          {events.length} events across {years.length} seasons, spanning {[...new Set(events.map(e => e.series))].length} series.
+        </p>
+      </div>
+
+      {years.map((year) => (
+        <div style="margin-bottom: 3rem;">
+          <h2 style="font-size: 1rem; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">{year}</h2>
+          <div class="events-grid">
+            {events.filter(e => e.year === year).map(ev => (
+              <div class="event-card">
+                <div class="event-series">{ev.series}</div>
+                <div class="event-name">{ev.event}</div>
+                <div class="event-detail">{ev.date} &middot; {ev.location}</div>
+                <div style="margin-top: 0.75rem;">
+                  <span style="font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.2rem 0.5rem; border: 1px solid rgba(232,0,45,0.3); color: var(--accent);">{ev.credential}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <!-- Accreditation target -->
+      <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 2.5rem; margin-top: 3rem;">
+        <p style="font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;">Goal for 2025</p>
+        <h3 style="font-size: 1.5rem; margin-bottom: 0.75rem;">Targeting FIA Formula 1 Accreditation</h3>
+        <p style="color: var(--text-muted); font-weight: 300; max-width: 600px;">
+          Building toward a full FIA Formula 1 media pass application through demonstrated experience
+          in FIA Formula 2, WEC, and WRC. Open to conversations with team media managers and
+          FIA press officers.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Contact — TrackMarc Motorsport Photography"
+  description="Press inquiries, accreditation requests, and editorial commissions for motorsport photographer Marc Ronan."
+>
+  <div class="contact-wrap">
+    <div class="contact-header">
+      <p class="section-eyebrow">Get in Touch</p>
+      <h1 class="section-title">Press &amp; Inquiries</h1>
+      <p class="section-subtitle">
+        For accreditation requests, editorial commissions, or licensing — use the form or reach out directly.
+      </p>
+    </div>
+
+    <div class="contact-grid">
+      <form
+        class="contact-form"
+        action="https://formspree.io/f/YOUR_FORM_ID"
+        method="POST"
+      >
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input class="form-input" type="text" id="name" name="name" required placeholder="Your name" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" type="email" id="email" name="email" required placeholder="your@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="organisation">Organisation / Series</label>
+          <input class="form-input" type="text" id="organisation" name="organisation" placeholder="e.g. FIA, ACO, team name" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="type">Inquiry Type</label>
+          <select class="form-select" id="type" name="type">
+            <option value="">Select...</option>
+            <option value="accreditation">Media Accreditation Request</option>
+            <option value="commission">Editorial Commission</option>
+            <option value="licensing">Image Licensing</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea class="form-textarea" id="message" name="message" required placeholder="Tell me about the event, series, or project..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+          Send Message &rarr;
+        </button>
+      </form>
+
+      <div class="contact-info">
+        <div class="contact-info-item">
+          <div class="contact-info-label">Email</div>
+          <div class="contact-info-value">press@trackmarc.com</div>
+        </div>
+
+        <div class="contact-info-item">
+          <div class="contact-info-label">Based</div>
+          <div class="contact-info-value">Ireland — available across Europe</div>
+        </div>
+
+        <div class="contact-info-item">
+          <div class="contact-info-label">Response Time</div>
+          <div class="contact-info-value">Within 24 hours</div>
+        </div>
+
+        <div class="contact-info-item">
+          <div class="contact-info-label">Accreditation History</div>
+          <div class="contact-info-value">
+            FIA Formula 2 &bull; FIA WRC &bull; WEC/ELMS &bull;
+            GT World Challenge &bull; National Championships
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+          <div class="contact-info-label" style="margin-bottom: 1rem;">Social</div>
+          <div class="contact-socials">
+            <a href="#" class="social-link">Instagram</a>
+            <a href="#" class="social-link">X / Twitter</a>
+            <a href="#" class="social-link">LinkedIn</a>
+          </div>
+        </div>
+
+        <div class="accreditation-box" style="margin-top: 2rem;">
+          <h4>Press Kit</h4>
+          <p>
+            Accreditation history, bio, and hi-res headshot available on request.
+            Turnaround: same-day editorial, 24hr full edit delivery.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

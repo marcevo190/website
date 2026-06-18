@@ -1,0 +1,123 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const photos = [
+  { title: 'Exit of Raidillon', event: 'Spa 2024', category: 'formula', size: 'tall' },
+  { title: 'Wheel Change', event: 'Le Mans 2024', category: 'endurance', size: 'mid' },
+  { title: 'Full Lock', event: 'Rally Catalunya 2024', category: 'rally', size: 'wide' },
+  { title: 'Battle for Position', event: 'Silverstone F2 2024', category: 'formula', size: 'tall' },
+  { title: 'Night Pitstop', event: 'Le Mans 2024', category: 'endurance', size: 'wide' },
+  { title: 'Gravel Spray', event: 'WRC Wales 2024', category: 'rally', size: 'mid' },
+  { title: 'Corner Entry', event: 'Monza 2024', category: 'formula', size: 'mid' },
+  { title: 'Sunrise Warm-Up', event: 'Le Mans 2024', category: 'endurance', size: 'tall' },
+  { title: 'Tyre Smoke', event: 'Spa GT World Challenge 2024', category: 'gt', size: 'wide' },
+  { title: 'Grid Walk', event: 'Silverstone 2024', category: 'formula', size: 'mid' },
+  { title: 'Flat Out', event: 'Mondello Park 2024', category: 'gt', size: 'tall' },
+  { title: 'Safety Car Period', event: 'Knockhill 2024', category: 'gt', size: 'mid' },
+  { title: 'Jump Crest', event: 'WRC Catalunya 2024', category: 'rally', size: 'tall' },
+  { title: 'Podium Spray', event: 'F2 Feature Race 2024', category: 'formula', size: 'wide' },
+  { title: 'Dusk Run', event: 'Spa 2024', category: 'endurance', size: 'mid' },
+];
+
+const categories = ['all', 'formula', 'endurance', 'rally', 'gt'];
+---
+
+<Layout
+  title="Gallery — TrackMarc Motorsport Photography"
+  description="Full portfolio of motorsport photography — Formula, Endurance, Rally, GT across Europe."
+>
+  <div style="padding-top: var(--nav-height);">
+    <div class="section">
+      <div class="section-header">
+        <p class="section-eyebrow">Portfolio</p>
+        <h1 class="section-title">Gallery</h1>
+        <p class="section-subtitle">
+          {photos.length} images across {categories.length - 1} categories.
+          Click any photo to view full size.
+        </p>
+      </div>
+
+      <div class="gallery-filters" id="filters">
+        {categories.map((cat) => (
+          <button
+            class:list={['filter-btn', { active: cat === 'all' }]}
+            data-filter={cat}
+          >
+            {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <div class="gallery-masonry" id="gallery">
+        {photos.map((photo) => (
+          <div
+            class:list={['photo-card', `h-${photo.size}`, 'ph']}
+            data-category={photo.category}
+            data-title={photo.title}
+            data-event={photo.event}
+          >
+            <div class="photo-placeholder">
+              <div class="photo-placeholder-icon">📷</div>
+              <div class="photo-placeholder-text">{photo.title}</div>
+            </div>
+            <div class="photo-card-overlay">
+              <div class="photo-card-meta">
+                <div class="photo-card-title">{photo.title}</div>
+                <div class="photo-card-event">{photo.event}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">&#x2715; Close</button>
+    <div class="lightbox-meta">
+      <div class="photo-card-title" id="lightbox-title"></div>
+      <div class="photo-card-event" id="lightbox-event"></div>
+    </div>
+  </div>
+
+  <script>
+    // Filter
+    const filters = document.getElementById('filters');
+    const cards = document.querySelectorAll<HTMLElement>('#gallery .photo-card');
+
+    filters?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.filter-btn') as HTMLElement | null;
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbEvent = document.getElementById('lightbox-event');
+    const lbClose = document.getElementById('lightbox-close');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        if (lbTitle) lbTitle.textContent = card.dataset.title ?? '';
+        if (lbEvent) lbEvent.textContent = card.dataset.event ?? '';
+        lightbox?.classList.add('open');
+      });
+    });
+
+    lbClose?.addEventListener('click', () => lightbox?.classList.remove('open'));
+    lightbox?.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.classList.remove('open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') lightbox?.classList.remove('open');
+    });
+  </script>
+</Layout>
