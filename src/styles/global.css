@@ -3,15 +3,15 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #080808;
-  --surface: #111111;
-  --surface-2: #1a1a1a;
-  --border: #242424;
-  --accent: #e8002d;
-  --accent-dim: rgba(232, 0, 45, 0.15);
+  --bg: #0d1114;
+  --surface: #141a1e;
+  --surface-2: #1c2429;
+  --border: #243038;
+  --accent: #00d2be;
+  --accent-dim: rgba(0, 210, 190, 0.12);
   --text: #f0f0f0;
-  --text-muted: #888888;
-  --text-dim: #555555;
+  --text-muted: #8a9ba8;
+  --text-dim: #4a5a65;
   --font-heading: 'Oswald', sans-serif;
   --font-body: 'Inter', sans-serif;
   --max-width: 1400px;
@@ -104,7 +104,7 @@ h1, h2, h3, h4 {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 40%, #0a0a0a 100%);
+  background: linear-gradient(135deg, #0d1114 0%, #0d1e22 40%, #0d1114 100%);
   z-index: 0;
 }
 .hero-bg::after {
@@ -112,8 +112,8 @@ h1, h2, h3, h4 {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 60% 40%, rgba(232,0,45,0.08) 0%, transparent 70%),
-    linear-gradient(to bottom, transparent 50%, rgba(8,8,8,0.9) 100%);
+    radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,210,190,0.07) 0%, transparent 70%),
+    linear-gradient(to bottom, transparent 50%, rgba(13,17,20,0.9) 100%);
 }
 /* Placeholder "photo" shapes in hero */
 .hero-shapes {
@@ -127,7 +127,7 @@ h1, h2, h3, h4 {
   position: absolute;
   top: 10%; right: -5%;
   width: 65%; height: 90%;
-  background: linear-gradient(135deg, #1c1c1c 0%, #141414 50%, #1a1010 100%);
+  background: linear-gradient(135deg, #161f24 0%, #111a1e 50%, #0d1a1e 100%);
   clip-path: polygon(5% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 .hero-shapes::after {
@@ -135,9 +135,9 @@ h1, h2, h3, h4 {
   position: absolute;
   top: 20%; right: 5%;
   width: 55%; height: 65%;
-  background: linear-gradient(135deg, rgba(232,0,45,0.05) 0%, rgba(255,100,0,0.03) 100%);
+  background: linear-gradient(135deg, rgba(0,210,190,0.05) 0%, rgba(0,180,160,0.02) 100%);
   clip-path: polygon(0% 5%, 95% 0%, 100% 95%, 5% 100%);
-  border: 1px solid rgba(232,0,45,0.1);
+  border: 1px solid rgba(0,210,190,0.1);
 }
 .hero-placeholder-label {
   position: absolute;
