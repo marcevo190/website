@@ -198,19 +198,17 @@ const locations = [
       return isNaN(d.getTime()) ? str : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    // Fetch RSS via corsproxy.io — returns raw XML, no JSON wrapper
+    // rss2json.com — purpose-built RSS-to-JSON service, no API key needed for public feeds
     async function fetchRSS(url: string): Promise<{ title: string; link: string; pubDate: string; description: string }[]> {
-      const proxy = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-      const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const text = await res.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'text/xml');
-      return Array.from(doc.querySelectorAll('item')).map(item => ({
-        title: item.querySelector('title')?.textContent?.trim() ?? '',
-        link: item.querySelector('link')?.textContent?.trim() ?? '#',
-        pubDate: item.querySelector('pubDate')?.textContent?.trim() ?? '',
-        description: item.querySelector('description')?.textContent?.replace(/<[^>]+>/g, '').slice(0, 120).trim() ?? '',
+      const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=6`;
+      const res = await fetch(api, { signal: AbortSignal.timeout(10000) });
+      const json = await res.json();
+      if (json.status !== 'ok') throw new Error(json.message ?? 'feed error');
+      return (json.items ?? []).map((item: any) => ({
+        title: item.title ?? '',
+        link: item.link ?? '#',
+        pubDate: item.pubDate ?? '',
+        description: (item.description ?? '').replace(/<[^>]+>/g, '').slice(0, 120).trim(),
       }));
     }
 
@@ -267,10 +265,10 @@ const locations = [
 
     // ── RSS Feeds ─────────────────────────────────────────────────────────────
     const feeds = [
-      { id: 'wec-news',   url: 'https://www.motorsport.com/rss/wec/news/',                   label: 'WEC' },
-      { id: 'wrc-news',   url: 'https://www.motorsport.com/rss/wrc/news/',                   label: 'WRC' },
-      { id: 'gt-news',    url: 'https://www.motorsport.com/rss/gt-world-challenge-europe/news/', label: 'GT' },
-      { id: 'irish-news', url: 'https://www.motorsportireland.com/feed/',                    label: 'Irish motorsport' },
+      { id: 'wec-news',   url: 'https://www.autosport.com/rss/wec/news/',    label: 'WEC' },
+      { id: 'wrc-news',   url: 'https://www.autosport.com/rss/wrc/news/',    label: 'WRC' },
+      { id: 'gt-news',    url: 'https://www.autosport.com/rss/gt/news/',     label: 'GT' },
+      { id: 'irish-news', url: 'https://motorsportireland.ie/feed/',         label: 'Irish motorsport' },
     ];
 
     feeds.forEach(({ id, url, label }) => {
