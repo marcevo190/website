@@ -8,21 +8,22 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "npm run build && wrangler dev",
     "astro": "astro",
-    "generate-types": "wrangler types"
+    "generate-types": "wrangler types",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.7.0",
     "astro": "^6.4.7",
-    "leaflet": "^1.9.4",
-    "wrangler": "^4.102.0"
+    "leaflet": "^1.9.4"
   },
   "overrides": {
     "vite": "^7"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.21",
-    "playwright": "^1.61.0"
+    "playwright": "^1.61.0",
+    "wrangler": "^4.102.0"
   }
 }
