@@ -81,12 +81,6 @@ const hasPhotos = photos.length > 0;
                 widths={[400, 800, 1200]}
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
-              <div class="photo-card-overlay">
-                <div class="photo-card-meta">
-                  <div class="photo-card-title">{photo.title}</div>
-                  <div class="photo-card-event">{categoryLabels[photo.category] ?? photo.category}</div>
-                </div>
-              </div>
             </div>
           ))}
         </div>
@@ -139,8 +133,6 @@ const hasPhotos = photos.length > 0;
       card.addEventListener('click', () => {
         const img = card.querySelector('img');
         if (lbImg && img) { lbImg.src = img.src; lbImg.alt = img.alt; }
-        if (lbTitle) lbTitle.textContent = card.dataset.title ?? '';
-        if (lbEvent) lbEvent.textContent = card.dataset.category ?? '';
         lightbox?.classList.add('open');
       });
     });
