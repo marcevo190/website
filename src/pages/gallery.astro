@@ -53,6 +53,9 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
             ? `${photos.length} image${photos.length !== 1 ? 's' : ''} across ${categories.length} categories. Click any photo to view full size.`
             : 'Photos coming soon. Check back after the next event.'}
         </p>
+        <p style="margin-top:0.5rem;font-size:0.78rem;color:var(--text-dim);">
+          All images &copy; Marc Ronan. For press or editorial use see <a href="/licensing" style="color:var(--accent);">licensing</a>.
+        </p>
       </div>
 
       {hasPhotos && (

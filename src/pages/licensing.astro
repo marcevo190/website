@@ -1,0 +1,139 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Licensing — TrackMarc Motorsport Photography"
+  description="Image licensing and usage rights for motorsport photography by Marc Ronan."
+>
+  <div style="padding-top: var(--nav-height);">
+    <div class="section">
+
+      <div class="section-header">
+        <p class="section-eyebrow">Usage &amp; Rights</p>
+        <h1 class="section-title">Licensing</h1>
+        <p class="section-subtitle">
+          All images on this site are the exclusive property of Marc Ronan. Here's how they can be used.
+        </p>
+      </div>
+
+      <div class="license-grid">
+
+        <div class="license-card">
+          <div class="license-icon">✕</div>
+          <h3>Not Permitted Without Agreement</h3>
+          <ul class="license-list">
+            <li>Reproducing or publishing images without written permission</li>
+            <li>Using images for commercial purposes, advertising, or merchandise</li>
+            <li>Removing or altering copyright notices or watermarks</li>
+            <li>Sharing images without credit</li>
+          </ul>
+        </div>
+
+        <div class="license-card license-card--accent">
+          <div class="license-icon">✓</div>
+          <h3>Editorial &amp; Press Use</h3>
+          <ul class="license-list">
+            <li>Press and editorial licensing available on request</li>
+            <li>Team and series media use — contact for rates</li>
+            <li>Publication credit: <em>© Marc Ronan / TrackMarc</em></li>
+            <li>High-resolution files supplied upon agreement</li>
+          </ul>
+        </div>
+
+        <div class="license-card">
+          <div class="license-icon">◎</div>
+          <h3>Personal &amp; Social</h3>
+          <ul class="license-list">
+            <li>Drivers and teams may share images of themselves on social media</li>
+            <li>Credit required: <em>@trackmarc</em> or <em>trackmarc.com</em></li>
+            <li>No cropping of watermarks or logos</li>
+            <li>Not for commercial or promotional use without a licence</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="accred-cta" style="margin-top:3rem;">
+        <p class="section-eyebrow">Get in Touch</p>
+        <h3 class="accred-title">Licensing Enquiries</h3>
+        <p class="accred-desc">
+          For editorial licences, team use, or any other enquiries about image rights,
+          contact me directly and I'll get back to you within 24 hours.
+        </p>
+        <a href="mailto:info@trackmarc.com" class="btn btn-primary accred-btn">info@trackmarc.com</a>
+      </div>
+
+      <p class="license-legal">
+        All photographs on this website are protected by copyright law. Unauthorised reproduction,
+        distribution, or use of any image without prior written consent from Marc Ronan is strictly
+        prohibited and may result in legal action. &copy; {new Date().getFullYear()} Marc Ronan. All rights reserved.
+      </p>
+
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .license-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .license-card {
+    background: var(--bg);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+  .license-card:hover { background: var(--surface); }
+  .license-card--accent { border-left: 3px solid var(--accent); }
+  .license-icon {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .license-card h3 {
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .license-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .license-list li {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.5;
+    padding-left: 1rem;
+    position: relative;
+  }
+  .license-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.3rem;
+    height: 0.3rem;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .license-list em { color: var(--text); font-style: normal; }
+  .license-legal {
+    margin-top: 3rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+  }
+</style>

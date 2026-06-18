@@ -92,10 +92,14 @@ const currentPath = Astro.url.pathname;
 
     <footer class="footer">
       <div class="footer-logo">Track<span>Marc</span></div>
-      <p class="footer-copy">&copy; {new Date().getFullYear()} TrackMarc. All rights reserved.</p>
+      <p class="footer-copy">
+        &copy; {new Date().getFullYear()} Marc Ronan. All images protected by copyright.
+        <a href="/licensing" style="color:var(--accent);margin-left:0.4em;">Licensing ↗</a>
+      </p>
       <div class="footer-links">
         <a href="/gallery">Gallery</a>
         <a href="/about">About</a>
+        <a href="/licensing">Licensing</a>
         <a href="/contact">Contact</a>
         <a href="mailto:info@trackmarc.com">info@trackmarc.com</a>
       </div>
