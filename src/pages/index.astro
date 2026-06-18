@@ -1,5 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// Auto-pick hero image from src/assets/images/hero/ — first file found wins
+const heroModules = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/hero/*.{jpg,jpeg,png,webp,JPG,JPEG}',
+  { eager: true }
+);
+const heroImage = Object.values(heroModules)[0]?.default ?? null;
 
 const featuredShots = [
   { title: 'Into the Apex', event: 'Monza · Italian GP 2024', category: 'Formula' },
@@ -22,11 +31,24 @@ const recentCoverage = [
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg"></div>
-    <div class="hero-shapes"></div>
-    <div class="hero-placeholder-label">
-      <span>📷</span>
-      Your hero shot<br />goes here
-    </div>
+    {heroImage ? (
+      <Image
+        src={heroImage}
+        alt="Hero shot"
+        class="hero-photo"
+        widths={[800, 1440, 1920]}
+        sizes="100vw"
+        loading="eager"
+      />
+    ) : (
+      <>
+        <div class="hero-shapes"></div>
+        <div class="hero-placeholder-label">
+          <span>📷</span>
+          Your hero shot<br />goes here
+        </div>
+      </>
+    )}
 
     <div class="hero-content">
       <p class="hero-eyebrow">Motorsport Photography</p>
