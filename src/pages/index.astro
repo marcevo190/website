@@ -10,12 +10,6 @@ const heroModules = import.meta.glob<{ default: ImageMetadata }>(
 );
 const heroImage = Object.values(heroModules)[0]?.default ?? null;
 
-const featuredShots = [
-  { title: 'Into the Apex', event: 'Monza · Italian GP 2024', category: 'Formula' },
-  { title: 'Pit Wall Drama', event: 'Le Mans 24h 2024', category: 'Endurance' },
-  { title: 'Sliding Sideways', event: 'Rally Catalunya 2024', category: 'Rally' },
-  { title: 'Last Light Lap', event: 'Spa-Francorchamps 2024', category: 'Formula' },
-];
 
 ---
 
@@ -57,36 +51,6 @@ const featuredShots = [
 
     <div class="hero-scroll">Scroll</div>
   </section>
-
-  <!-- FEATURED GALLERY -->
-  <div style="padding: 0 2rem;">
-    <div style="max-width: var(--max-width); margin: 0 auto; padding: 5rem 0 0;">
-      <div class="section-header">
-        <p class="section-eyebrow">Portfolio</p>
-        <h2 class="section-title">Featured Shots</h2>
-        <p class="section-subtitle">A selection of recent work from circuits and stages across Europe.</p>
-      </div>
-      <div class="featured-grid">
-        {featuredShots.map((shot) => (
-          <div class="photo-card">
-            <div class="photo-placeholder">
-              <div class="photo-placeholder-icon">📷</div>
-              <div class="photo-placeholder-text">{shot.category}</div>
-            </div>
-            <div class="photo-card-overlay">
-              <div class="photo-card-meta">
-                <div class="photo-card-title">{shot.title}</div>
-                <div class="photo-card-event">{shot.event}</div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div style="text-align: center; margin-top: 2.5rem;">
-        <a href="/gallery" class="btn btn-outline">Full Gallery &rarr;</a>
-      </div>
-    </div>
-  </div>
 
   <!-- PRESS CTA BANNER -->
   <div style="padding: 0 2rem; margin-bottom: 6rem;">
