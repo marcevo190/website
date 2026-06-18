@@ -53,7 +53,19 @@ const currentPath = Astro.url.pathname;
         <li><a href="/contact" class:list={[{ active: currentPath.startsWith('/contact') }]}>Contact</a></li>
       </ul>
       <a href="/contact" class="nav-cta">Press Inquiry</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
+
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="/" onclick="closeMobileMenu()">Home</a>
+      <a href="/gallery" onclick="closeMobileMenu()">Gallery</a>
+      <a href="/coverage" onclick="closeMobileMenu()">Coverage</a>
+      <a href="/about" onclick="closeMobileMenu()">About</a>
+      <a href="/contact" onclick="closeMobileMenu()">Contact</a>
+      <a href="/contact" class="mobile-cta" onclick="closeMobileMenu()">Press Inquiry</a>
+    </div>
 
     <div class="page-content">
       <slot />
@@ -70,11 +82,25 @@ const currentPath = Astro.url.pathname;
     </footer>
 
     <script>
-      // Sticky nav scroll effect
       const nav = document.getElementById('main-nav');
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobile-menu');
+
       window.addEventListener('scroll', () => {
         nav?.classList.toggle('scrolled', window.scrollY > 40);
       }, { passive: true });
+
+      hamburger?.addEventListener('click', () => {
+        const isOpen = mobileMenu?.classList.toggle('open');
+        hamburger.classList.toggle('open', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+
+      (window as any).closeMobileMenu = () => {
+        mobileMenu?.classList.remove('open');
+        hamburger?.classList.remove('open');
+        document.body.style.overflow = '';
+      };
     </script>
   </body>
 </html>
