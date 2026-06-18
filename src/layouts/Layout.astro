@@ -9,11 +9,12 @@ interface Props {
 
 const {
   title,
-  description = 'Motorsport photography by Marc — capturing speed, power, and drama from the pit lane to the podium.',
+  description = 'Marc Ronan — independent motorsport photographer based in Ireland, capturing F1, WEC and GT racing across Europe.',
   ogImage = '/og-default.jpg',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).href;
 const currentPath = Astro.url.pathname;
 ---
 
@@ -31,13 +32,28 @@ const currentPath = Astro.url.pathname;
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageAbsolute} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:alt" content="TrackMarc — Motorsport Photography" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={ogImageAbsolute} />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Marc Ronan",
+      "jobTitle": "Motorsport Photographer",
+      "url": "https://trackmarc.com",
+      "sameAs": ["https://instagram.com/trackmarc"],
+      "knowsAbout": ["Motorsport Photography", "Formula 1", "FIA WEC", "GT Racing", "Rally"],
+      "address": { "@type": "PostalAddress", "addressCountry": "IE" },
+      "image": `${Astro.site}og-default.jpg`
+    })} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
