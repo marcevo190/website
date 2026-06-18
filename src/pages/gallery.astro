@@ -36,6 +36,7 @@ const photos = Object.entries(imageModules).map(([path, mod]) => {
 });
 
 const hasPhotos = photos.length > 0;
+const populatedCategories = categories.filter(cat => photos.some(p => p.category === cat));
 ---
 
 <Layout
@@ -56,7 +57,7 @@ const hasPhotos = photos.length > 0;
 
       {hasPhotos && (
         <div class="gallery-filters" id="filters">
-          {(['all', ...categories] as const).map((cat) => (
+          {(['all', ...populatedCategories] as const).map((cat) => (
             <button
               class:list={['filter-btn', { active: cat === 'all' }]}
               data-filter={cat}
