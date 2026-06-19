@@ -3,37 +3,49 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
-// Auto-pick hero image from src/assets/images/hero/ — first file found wins
+// Hero image — first in carousel
 const heroModules = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/hero/*.{jpg,jpeg,png,webp,JPG,JPEG}',
   { eager: true }
 );
 const heroImage = Object.values(heroModules)[0]?.default ?? null;
 
+// Gallery images for carousel rotation
+const galleryModules = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  { eager: true }
+);
+const galleryImages = Object.values(galleryModules).map(m => m.default);
 
+// Hero first, then up to 9 gallery images shuffled by filename
+const slides = [
+  ...(heroImage ? [heroImage] : []),
+  ...galleryImages.slice(0, 9),
+];
 ---
 
 <Layout title="TrackMarc — Motorsport Photography">
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg"></div>
-    {heroImage ? (
-      <Image
-        src={heroImage}
-        alt="Hero shot"
-        class="hero-photo"
-        widths={[800, 1440, 1920]}
-        sizes="100vw"
-        loading="eager"
-      />
-    ) : (
-      <>
-        <div class="hero-shapes"></div>
-        <div class="hero-placeholder-label">
-          <span>📷</span>
-          Your hero shot<br />goes here
-        </div>
-      </>
+
+    <!-- Carousel -->
+    {slides.length > 0 && (
+      <div class="hero-carousel" id="hero-carousel">
+        {slides.map((img, i) => (
+          <div class:list={['carousel-slide', { active: i === 0 }]}>
+            <Image
+              src={img}
+              alt="Motorsport photography by TrackMarc"
+              class="carousel-img"
+              widths={[800, 1440, 1920]}
+              sizes="100vw"
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
+          </div>
+        ))}
+        <div class="carousel-overlay"></div>
+      </div>
     )}
 
     <div class="hero-content">
@@ -68,7 +80,67 @@ const heroImage = Object.values(heroModules)[0]?.default ?? null;
   </div>
 </Layout>
 
+<script>
+  const slides = document.querySelectorAll<HTMLElement>('.carousel-slide');
+  if (slides.length > 1) {
+    let current = 0;
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 5000);
+  }
+</script>
+
 <style>
+  /* ── Carousel ── */
+  .hero-carousel {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .carousel-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+  .carousel-slide.active { opacity: 1; }
+  .carousel-img {
+    position: absolute;
+    top: 0; right: 0;
+    width: 62%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 12%, black 28%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 12%, black 28%);
+  }
+  /* Desktop overlay — subtle dark gradient over image area */
+  .carousel-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(13,17,20,0.9) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── Mobile: full-width with dark overlay ── */
+  @media (max-width: 768px) {
+    .carousel-img {
+      width: 100%;
+      left: 0;
+      mask-image: none;
+      -webkit-mask-image: none;
+      opacity: 0.55;
+    }
+    .carousel-overlay {
+      background:
+        linear-gradient(to bottom, rgba(13,17,20,0.25) 0%, rgba(13,17,20,0.5) 50%, rgba(13,17,20,0.95) 85%);
+    }
+  }
+
+  /* ── Press CTA ── */
   .press-cta-wrap {
     padding: 0 2rem;
     margin-bottom: 6rem;
