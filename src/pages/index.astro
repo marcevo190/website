@@ -3,14 +3,18 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
-// Gallery images for carousel rotation
+// Gallery images for carousel rotation — shuffled across all categories
 const galleryModules = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
-const galleryImages = Object.values(galleryModules).map(m => m.default);
-
-const slides = galleryImages.slice(0, 10);
+const allImages = Object.values(galleryModules).map(m => m.default);
+// Fisher-Yates shuffle
+for (let i = allImages.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [allImages[i], allImages[j]] = [allImages[j], allImages[i]];
+}
+const slides = allImages.slice(0, 10);
 ---
 
 <Layout title="TrackMarc — Motorsport Photography">
