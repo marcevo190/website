@@ -5,7 +5,7 @@ import type { ImageMetadata } from 'astro';
 
 // Auto-scan category folders — drop a photo in the folder, it appears here
 const imageModules = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/{formula,endurance,rally,gt,car-shows}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
 
@@ -21,6 +21,7 @@ const categoryLabels: Record<string, string> = {
 const photos = Object.entries(imageModules).map(([path, mod]) => {
   const parts = path.split('/');
   const filename = parts[parts.length - 1];
+  // folder is the category — one level above the file, inside watermarked/
   const folder = parts[parts.length - 2] as typeof categories[number];
   // Derive a readable title from the filename (remove extension, replace - and _ with spaces)
   const title = filename

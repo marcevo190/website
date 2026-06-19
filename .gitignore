@@ -1,5 +1,8 @@
 # build output
 dist/
+
+# watermarked images — generated at build time, never committed
+src/assets/watermarked/
 # generated types
 .astro/
 
