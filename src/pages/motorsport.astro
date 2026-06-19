@@ -272,5 +272,14 @@ import Layout from '../layouts/Layout.astro';
       max-width: 520px;
     }
     .accred-btn { margin-top: 1.5rem; display: inline-flex; }
+
+    @media (max-width: 768px) {
+      .feed-section { margin-bottom: 2.5rem; }
+      .series-heading { flex-wrap: wrap; row-gap: 0.4rem; }
+      .series-name { font-size: 0.85rem; }
+      .series-link { margin-left: 0; }
+      .accred-cta { padding: 1.5rem 1.25rem; }
+      .accred-title { font-size: 1.3rem !important; }
+    }
   </style>
 </Layout>

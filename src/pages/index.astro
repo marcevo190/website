@@ -53,17 +53,54 @@ const heroImage = Object.values(heroModules)[0]?.default ?? null;
   </section>
 
   <!-- PRESS CTA BANNER -->
-  <div style="padding: 0 2rem; margin-bottom: 6rem;">
-    <div style="max-width: var(--max-width); margin: 0 auto; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
+  <div class="press-cta-wrap">
+    <div class="press-cta">
       <div>
-        <p style="font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;">Media Accreditation</p>
-        <h3 style="font-size: clamp(1.4rem, 3vw, 2rem);">Covering Your Event?</h3>
-        <p style="color: var(--text-muted); font-weight: 300; margin-top: 0.5rem; max-width: 480px;">
+        <p class="section-eyebrow">Media Accreditation</p>
+        <h3 class="press-cta-title">Covering Your Event?</h3>
+        <p class="press-cta-desc">
           I'm actively seeking media credentials at FIA, ACO, and national-level events.
           If you're a press officer or series coordinator, let's talk.
         </p>
       </div>
-      <a href="/contact" class="btn btn-primary" style="flex-shrink: 0;">Get in Touch &rarr;</a>
+      <a href="/contact" class="btn btn-primary press-cta-btn">Get in Touch &rarr;</a>
     </div>
   </div>
 </Layout>
+
+<style>
+  .press-cta-wrap {
+    padding: 0 2rem;
+    margin-bottom: 6rem;
+  }
+  .press-cta {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .press-cta-title {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin: 0.5rem 0;
+  }
+  .press-cta-desc {
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-top: 0.5rem;
+    max-width: 480px;
+  }
+  .press-cta-btn { flex-shrink: 0; }
+
+  @media (max-width: 768px) {
+    .press-cta-wrap { padding: 0 1.25rem; margin-bottom: 3rem; }
+    .press-cta { padding: 1.75rem 1.25rem; flex-direction: column; align-items: flex-start; }
+    .press-cta-btn { width: 100%; justify-content: center; }
+  }
+</style>
