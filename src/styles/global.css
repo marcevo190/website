@@ -69,6 +69,7 @@ h1, h2, h3, h4 {
   width: 22px;
   height: 15px;
   margin-right: 0.55rem;
+  margin-top: 3px;
   border: 1px solid rgba(255,255,255,0.12);
   overflow: hidden;
   flex-shrink: 0;
