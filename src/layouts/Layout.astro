@@ -61,7 +61,14 @@ const currentPath = Astro.url.pathname;
   </head>
   <body>
     <nav class="nav" id="main-nav">
-      <a href="/" class="nav-logo">Track<span>Marc</span></a>
+      <a href="/" class="nav-logo">
+        <span class="nav-flag">
+          <span style="background:#169B62;"></span>
+          <span style="background:#FFFFFF;"></span>
+          <span style="background:#FF883E;"></span>
+        </span>
+        Track<span>Marc</span>
+      </a>
       <ul class="nav-links">
         <li><a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a></li>
         <li><a href="/gallery" class:list={[{ active: currentPath.startsWith('/gallery') }]}>Gallery</a></li>

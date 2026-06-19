@@ -62,6 +62,17 @@ h1, h2, h3, h4 {
   text-transform: uppercase;
 }
 .nav-logo span { color: var(--accent); }
+.nav-flag {
+  display: inline-flex;
+  width: 22px;
+  height: 15px;
+  margin-right: 0.55rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  overflow: hidden;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.nav-flag span { flex: 1; display: block; }
 .nav-links { display: flex; gap: 2rem; list-style: none; }
 .nav-links a {
   font-family: var(--font-heading);
@@ -182,35 +193,6 @@ h1, h2, h3, h4 {
   z-index: 3;
   max-width: 720px;
 }
-/* ── RALLY DRIVER PLATE ── */
-.driver-plate {
-  display: inline-flex;
-  align-items: stretch;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(255,255,255,0.18);
-  overflow: hidden;
-}
-.driver-flag {
-  display: flex;
-  width: 32px;
-  flex-shrink: 0;
-}
-.driver-flag span {
-  flex: 1;
-  display: block;
-}
-.driver-name {
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #fff;
-  padding: 0.45rem 1rem 0.45rem 0.9rem;
-  background: rgba(10,14,17,0.75);
-  border-left: 1px solid rgba(255,255,255,0.12);
-}
-
 .hero-eyebrow {
   display: inline-flex;
   align-items: center;
