@@ -13,15 +13,15 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_190904_828.jpg': {
     title: 'Ferrari F40 — Wheel Detail',
-    caption: 'Detail of a Ferrari F40\'s front wheel arch — the five-spoke magnesium-style rim and Prancing Horse badge leave no doubt as to what you\'re looking at.',
+    caption: 'Detail of a Ferrari F40\'s front wheel arch — the five-spoke rim and Prancing Horse badge leave no doubt as to what you\'re looking at.',
   },
   'IMG_20260503_191325_342.jpg': {
     title: 'Pagani Zonda',
     caption: 'The rear of a Pagani Zonda in deep blue carbon-fibre, its quad exhaust pipes arranged with the kind of obsessive geometry that defines everything Horacio Pagani builds.',
   },
   'IMG_20260503_191441_067.jpg': {
-    title: 'Porsche 911 SC — Racing Stripes',
-    caption: 'A late-1970s Porsche 911 in silver wears green and black racing stripes along its roofline and tail, a "Le Mans Clubsport" sticker hinting at ambitions beyond the showroom. Irish plate ZV 35609.',
+    title: 'Porsche 911 — Racing Stripes',
+    caption: 'A Porsche 911 in silver wears green and black racing stripes along its roofline and tail, a "Le Mans Clubsport" sticker hinting at ambitions beyond the showroom.',
   },
   'IMG_20260503_191611_130.jpg': {
     title: 'Two Porsche 911 Turbos (930)',
@@ -41,7 +41,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_192442_806.jpg': {
     title: 'McLaren — Nose Detail',
-    caption: 'The nose of a dark gunmetal McLaren — likely a 570S or 720S — framed tight, the three-pointed roundel the only badge it needs. Irish-registered, Sligo plates.',
+    caption: 'The nose of a dark gunmetal McLaren, framed tight. Irish-registered, Sligo plates.',
   },
   'IMG_20260503_192712_783.jpg': {
     title: 'Pagani Zonda — Front Three-Quarter',
@@ -49,7 +49,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_234051_444.jpg': {
     title: 'Porsche 911 GT3 RS (992)',
-    caption: 'Porsche 911 GT3 RS (992 generation) in Shark Blue, rear view dominated by the enormous swan-neck wing. "GT3 RS" on the engine lid. A Porsche Centre Dublin dealer plate hangs beneath the diffuser.',
+    caption: 'Porsche 911 GT3 RS (992 generation), rear view dominated by the enormous swan-neck wing. "GT3 RS" on the engine lid. A Porsche Centre Dublin dealer plate hangs beneath the diffuser.',
   },
   'IMG_20260503_234528_510.jpg': {
     title: 'BMW M1',
@@ -57,7 +57,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_234814_290.jpg': {
     title: 'Two Early Porsche 911s',
-    caption: 'Two early Porsche 911s from the 1970s — one deep teal with gold "911" script, one in navy blue. Both from Custodian Classics, both wearing their age gracefully.',
+    caption: 'Two early Porsche 911s — one deep teal with gold "911" script, one in navy blue. Both from Custodian Classics, both wearing their age gracefully.',
   },
   'IMG_20260503_235252_421.jpg': {
     title: 'Porsche 911 & Alfa Romeo Giulia',
@@ -65,11 +65,11 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_235536_754.jpg': {
     title: 'Ferrari 275 GTB',
-    caption: 'Ferrari 275 GTB in vivid yellow, the show placard confirming what the V12 under the bonnet already tells you: 3285cc of pure 1960s Ferrari. Irish plate ZV 7917, a Pagani engine cover just visible at the top of frame.',
+    caption: 'Ferrari 275 GTB in vivid yellow, the show placard confirming what the V12 under the bonnet already tells you: 3285cc of pure 1960s Ferrari. Irish plate ZV 7917.',
   },
   'IMG_20260504_000957_371.jpg': {
     title: 'Alfa Romeo GTV',
-    caption: 'Close-up on an Alfa Romeo GTV from the 1970s, the quad round headlights and shield badge centred in the frame. Irish plate ZV 10818. A red example alongside, a blue one parked off to the side.',
+    caption: 'Close-up on an Alfa Romeo GTV, the quad round headlights and shield badge centred in the frame. Irish plate ZV 10818.',
   },
   'IMG_20260504_001453_491.jpg': {
     title: 'Alfa Romeo Giulia GT',
@@ -77,15 +77,15 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260504_001721_116.jpg': {
     title: 'Volkswagen New Beetle RSi',
-    caption: 'A Volkswagen New Beetle RSi with its bonnet propped open, the 3.2-litre VR6 on display. One of just 250 built, with Haldex all-wheel drive and a chassis tuned by the same team behind the Golf R32. Unlikely company at a classic car show — entirely deserving of it.',
+    caption: 'A Volkswagen New Beetle RSi with its bonnet propped open, the 3.2-litre VR6 on display. Unlikely company at a classic car show — entirely deserving of it.',
   },
   'IMG_20260504_001947_200.jpg': {
     title: 'Ford Transit Mk1',
-    caption: 'A red first-generation Ford Transit Mk1 from the 1970s, front-on. A working man\'s icon among weekend dreamers.',
+    caption: 'A red first-generation Ford Transit, front-on. A working man\'s icon among weekend dreamers.',
   },
   'IMG_20260504_002330_444.jpg': {
-    title: 'Porsche 911 Carrera RS (964)',
-    caption: 'A yellow Porsche 911 (964 generation), likely a Carrera RS, faces the camera with the plate "J999 CUP." A red mid-engine car — possibly a Ferrari 308 — lurks in the background.',
+    title: 'Porsche 911 (964)',
+    caption: 'A yellow Porsche 911 (964 generation) faces the camera with the plate "J999 CUP."',
   },
   'IMG_20260504_002654_112.jpg': {
     title: 'Porsche 911 Turbo (930) — Rear',
@@ -107,20 +107,20 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'Ferrari 296 LMGT3, car #33, rolls through the pit lane in the vivid yellow of Keating Motorsports. The timer board reads 17 hours — more than halfway, and the fight is still on.',
   },
   'DSC_4871-Enhanced-NR.jpg': {
-    title: 'Keating Ferrari #33 & Hypercar — Le Mans 2025',
-    caption: 'Two classes, one frame: the yellow Keating Ferrari #33 alongside a dark hypercar in the pit lane. Goodyear tyres, Rolex and Motul signage overhead — Le Mans at full nocturnal intensity.',
+    title: 'Keating Ferrari #33 — Le Mans 2025',
+    caption: 'The yellow Keating Ferrari #33 in the pit lane. Goodyear tyres, Rolex and Motul signage overhead — Le Mans at full nocturnal intensity.',
   },
   'DSC_4875-Enhanced-NR.jpg': {
     title: 'Aston Martin Valkyrie AMR Pro #23 — Le Mans 2025',
-    caption: 'Aston Martin Valkyrie AMR Pro, car #23, in the Heart of Racing pit. Dark green and gold under the "007" pit gantry. A car that sounds like it was designed by a Bond villain — and looks the part too.',
+    caption: 'Aston Martin Valkyrie AMR Pro, car #23, in the Heart of Racing pit. Dark green and gold under the "007" pit gantry.',
   },
   'DSC_4876-Enhanced-NR.jpg': {
     title: 'Aston Martin Thor Team Pit — Le Mans 2025',
-    caption: 'A wider view of the Aston Martin Thor Team pit complex. Car #23 under the "007" gantry, the Heart of Racing branding running along the pit wall. Le Mans grandeur in miniature.',
+    caption: 'A wider view of the Aston Martin Thor Team pit complex. Car #23 under the "007" gantry, the Heart of Racing branding running along the pit wall.',
   },
   'DSC_4879-Enhanced-NR.jpg': {
     title: 'Michelin Chicane — 24h Le Mans 2025',
-    caption: 'The Michelin chicane arch at night, lit up with "24h Le Mans 10–14 Juin 2025" signage. Red and orange taillights blaze through the dark in the distance, cars already reduced to streaks of light and sound.',
+    caption: 'The Michelin chicane arch at night, lit up with "24h Le Mans 10–14 Juin 2025" signage. Taillights trace through the dark in the distance.',
   },
   'DSC_4881-Enhanced-NR.jpg': {
     title: 'Ford Mustang GT3 #88 — Le Mans 2025',
@@ -128,35 +128,35 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4891-Enhanced-NR.jpg': {
     title: 'Le Mans at Night — Circuit de la Sarthe',
-    caption: 'Another pass at the Michelin chicane gantry as the night deepens. The 24 Heures branding glows against the dark sky. Track lights pick out cars on the circuit below.',
+    caption: 'The Michelin chicane gantry as the night deepens. The 24 Heures branding glows against the dark sky.',
   },
   'DSC_4894-Enhanced-NR.jpg': {
     title: 'Lexus RC F GT3 — Le Mans 2025',
-    caption: 'A green and black Lexus RC F GT3 in the Akkodis ASP pit, the "Lexus" badge on the nose catching the pit lane light. A quiet moment between the chaos of pit stops.',
+    caption: 'A Lexus RC F GT3 in the Akkodis ASP pit, the "Lexus" badge on the nose catching the pit lane light. A quiet moment between the chaos of pit stops.',
   },
   'DSC_4896-Enhanced-NR.jpg': {
     title: 'Tower Events Oreca 07 LMP2 #30 — Le Mans 2025',
-    caption: 'Tower Events\' Oreca 07 LMP2, car #30, stationary in the pit in its orange and blue livery. Goodyear tyres, "P2" class marking on the nose, crew in matching orange and black. The long-haul specialists.',
+    caption: 'Tower Events\' Oreca 07 LMP2, car #30, stationary in the pit in its orange and blue livery. Goodyear tyres, "P2" class marking on the nose, crew in matching orange and black.',
   },
   'DSC_4897-Enhanced-NR.jpg': {
-    title: 'Aston Martin Valkyrie Pit Stop — Le Mans 2025',
-    caption: 'The Heart of Racing\'s Aston Martin Valkyrie AMR Pro in the pit, flanked by gantry signs for cars #007 and #009. Dark green, deeply serious, impossibly fast.',
+    title: 'Aston Martin Valkyrie Pit — Le Mans 2025',
+    caption: 'The Heart of Racing\'s Aston Martin Valkyrie AMR Pro in the pit, flanked by gantry signs for cars #007 and #009.',
   },
   'DSC_4899-Enhanced-NR.jpg': {
     title: 'Aston Martin Valkyrie AMR Pro #009 — Le Mans 2025',
-    caption: 'Aston Martin Valkyrie AMR Pro, car #009, clear in the pit lane. "The Heart of Racing" branding runs the length of the flank, car #007 visible in the adjacent bay. Two Valkyries in one pit complex — Le Mans does nothing by halves.',
+    caption: 'Aston Martin Valkyrie AMR Pro, car #009, clear in the pit lane. "The Heart of Racing" branding runs the length of the flank, car #007 visible in the adjacent bay.',
   },
   'DSC_4903-Enhanced-NR.jpg': {
     title: 'Peugeot 9X8 #93 — Le Mans 2025',
-    caption: 'Peugeot 9X8, car #93, in the TotalEnergies pit. The white and black zebra-stripe livery is unmistakable; the "HY" hybrid badge marks it as one of the most technically ambitious cars in the field. The tailless Peugeot, still chasing the finish line.',
+    caption: 'Peugeot 9X8, car #93, in the TotalEnergies pit. The white and black zebra-stripe livery is unmistakable; the "HY" hybrid badge marks it as one of the most technically ambitious cars in the field.',
   },
   'DSC_4905-Enhanced-NR.jpg': {
     title: 'Aston Martin Pit Complex — Le Mans 2025',
-    caption: 'Three Aston Martin bays in one frame: the blue Vantage GT3 #23 on the left, the green Valkyrie hypercar crew in the centre, and a second green hypercar to the right. The Aston Martin Le Mans operation at scale.',
+    caption: 'Three Aston Martin bays in one frame: the Vantage GT3 #23 on the left, the Valkyrie hypercar crew in the centre, and a second hypercar to the right. The Aston Martin Le Mans operation at scale.',
   },
   'DSC_4907-Enhanced-NR.jpg': {
     title: 'Aston Martin Valkyrie #009 — Pit Stop',
-    caption: 'Close-in on Aston Martin Valkyrie AMR Pro #009 during a pit stop. Crew working, gantry lit, everything choreographed to the second. The "Aston Martin Thor Team" designation overhead.',
+    caption: 'Close-in on Aston Martin Valkyrie AMR Pro #009 during a pit stop. Crew working, gantry lit, everything choreographed to the second.',
   },
   'DSC_4910-Enhanced-NR.jpg': {
     title: 'Aston Martin Vantage GT3 #23 & Valkyrie #009 — Le Mans 2025',
@@ -168,7 +168,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4915-Enhanced-NR.jpg': {
     title: 'Aston Martin Valkyrie #009 — Le Mans 2025',
-    caption: 'Aston Martin Valkyrie AMR Pro #009 alone in its pit box, crew standing ready. The "Aston Martin Thor Team — 009" gantry above. Calm before the next call.',
+    caption: 'Aston Martin Valkyrie AMR Pro #009 alone in its pit box, crew standing ready. The "Aston Martin Thor Team — 009" gantry above.',
   },
   'DSC_4924-Enhanced-NR.jpg': {
     title: 'Aston Martin Thor Team — Double Bay',
@@ -176,11 +176,11 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4926-Enhanced-NR.jpg': {
     title: 'Aston Martin Pit Complex — Wide View',
-    caption: 'Wide view of the Aston Martin pit complex: Heart of Racing GT3 #23 on the left, hypercar #009 in the centre, a third bay to the right. The Rolex boards overhead keep time on a race that demands everything.',
+    caption: 'Wide view of the Aston Martin pit complex: Heart of Racing GT3 #23 on the left, hypercar #009 in the centre. The Rolex boards overhead keep time on a race that demands everything.',
   },
   'DSC_4931-Enhanced-NR.jpg': {
     title: 'United Autosports Oreca 07 #22 — Le Mans 2025',
-    caption: 'United Autosports\' Oreca 07 LMP2, car #22, in blue, red and white. The Manthey Racing pit — #92 — visible next door. Competing series, competing cultures, same strip of tarmac.',
+    caption: 'United Autosports\' Oreca 07 LMP2, car #22, in blue, red and white. The Manthey Racing pit — #92 — visible next door.',
   },
   'DSC_4933-Enhanced-NR.jpg': {
     title: 'United Autosports #22 & Manthey Racing #92 — Le Mans 2025',
@@ -188,35 +188,35 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_5070-Enhanced-NR.jpg': {
     title: 'Mercedes-AMG GT3 — Le Mans 2025',
-    caption: 'A Mercedes-AMG GT3 in white and grey camouflage livery with a purple-lit front splitter, framed through the circuit fence at night. The three-pointed star just visible on the nose.',
+    caption: 'A Mercedes-AMG GT3 in white and grey camouflage livery, framed through the circuit fence at night.',
   },
   'DSC_5071-Enhanced-NR.jpg': {
     title: 'Aston Martin Valkyrie on Circuit — Le Mans 2025',
-    caption: 'Two cars through the fence: the dark green Aston Martin Valkyrie AMR Pro trails a dark red GT car on the circuit. Le Mans at 3am looks like no other race on earth.',
+    caption: 'The dark green Aston Martin Valkyrie AMR Pro on circuit, viewed through the fence. Le Mans at night looks like no other race on earth.',
   },
   'DSC_5072-Enhanced-NR.jpg': {
-    title: 'CrowdStrike Racing LMP2 & Cadillac Hypercar — Le Mans 2025',
-    caption: 'CrowdStrike Racing by APR\'s LMP2 car in dark silver cuts through the shot, the "CrowdStrike" sponsor prominent. A silver and red Cadillac hypercar blurs in the background. Speed, sponsor logos, and night air.',
+    title: 'CrowdStrike Racing LMP2 — Le Mans 2025',
+    caption: 'CrowdStrike Racing by APR\'s LMP2 car in dark silver cuts through the shot, the "CrowdStrike" sponsor prominent.',
   },
   'DSC_5074-Enhanced-NR.jpg': {
     title: 'AF Corse Ferrari 296 LMGT3 #150 — Le Mans 2025',
-    caption: 'An AF Corse Ferrari 296 LMGT3, car #150, in green and yellow with Richard Mille branding, on circuit. An orange GT car — Tower Events\' Oreca — visible above on a higher section of track.',
+    caption: 'An AF Corse Ferrari 296 LMGT3, car #150, in green and yellow with Richard Mille branding, on circuit.',
   },
   'DSC_5075-Enhanced-NR.jpg': {
-    title: 'Isotta Fraschini LMH Hypercar — Le Mans 2025',
-    caption: 'A Richard Mille-liveried LMH hypercar — likely the Isotta Fraschini Tipo 6 — on circuit, the "HY" hybrid badge catching the light. One of the smaller Hypercar programmes, running hard.',
+    title: 'Richard Mille LMH Hypercar — Le Mans 2025',
+    caption: 'A Richard Mille-liveried LMH hypercar on circuit, the "HY" hybrid badge catching the light.',
   },
   'DSC_5076-Enhanced-NR.jpg': {
     title: 'McLaren 720S GT3 Evo #58 — Le Mans 2025',
-    caption: 'McLaren 720S GT3 Evo, car #58, in orange and light blue with Korloff Paris sponsorship, on circuit through the fence. A white BMW M4 GT3 tracks behind. Two GT3 weapons in the dark.',
+    caption: 'McLaren 720S GT3 Evo, car #58, in orange and light blue with Korloff Paris sponsorship, on circuit through the fence.',
   },
   'DSC_5086-Enhanced-NR.jpg': {
     title: 'Mercedes-AMG GT3 #79 — Le Mans 2025',
-    caption: 'Mercedes-AMG GT3, car #79, in silver and lime green livery with "MANN" sponsor, pit lane at night. CrowdStrike advertising boards glow in the background. A car and a brand, both working the night shift.',
+    caption: 'Mercedes-AMG GT3, car #79, in silver and lime green livery, pit lane at night.',
   },
   'DSC_5096-Enhanced-NR.jpg': {
     title: 'Alpine A424 Hypercar — Le Mans 2025',
-    caption: 'Alpine A424 on circuit, the dark blue livery and "A" roundel picked out against the circuit lights. The elf and Alpine branding unmistakable. France\'s hypercar, racing on home soil.',
+    caption: 'Alpine A424 on circuit, the dark blue livery and "A" roundel picked out against the circuit lights.',
   },
 };
 
