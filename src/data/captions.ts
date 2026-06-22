@@ -76,8 +76,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'Full front view of a yellow Alfa Romeo Giulia GT. Four round headlights, that unmistakable Alfa grille badge. The 1970s at their most Italian.',
   },
   'IMG_20260504_001721_116.jpg': {
-    title: 'Volkswagen New Beetle',
-    caption: 'A silver Volkswagen New Beetle with its bonnet propped open, engine bay on display. On show alongside the classics — a different kind of nostalgia.',
+    title: 'Volkswagen New Beetle RSi',
+    caption: 'A Volkswagen New Beetle RSi with its bonnet propped open, the 3.2-litre VR6 on display. One of just 250 built, with Haldex all-wheel drive and a chassis tuned by the same team behind the Golf R32. Unlikely company at a classic car show — entirely deserving of it.',
   },
   'IMG_20260504_001947_200.jpg': {
     title: 'Ford Transit Mk1',
