@@ -708,8 +708,17 @@ h1, h2, h3, h4 {
   bottom: 1.5rem; left: 50%;
   transform: translateX(-50%);
   text-align: center;
+  max-width: min(600px, 90vw);
+  width: 100%;
 }
 .lightbox-meta .photo-card-title { font-size: 1rem; }
+.lightbox-caption {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 300;
+  line-height: 1.6;
+  margin-top: 0.5rem;
+}
 
 /* ── PAGE TRANSITIONS ── */
 .page-content { animation: fadeIn 0.4s ease; }

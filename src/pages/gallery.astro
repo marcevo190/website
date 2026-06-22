@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import { getCaption } from '../data/captions';
 
 // Auto-scan category folders — drop a photo in the folder, it appears here
 const imageModules = import.meta.glob<{ default: ImageMetadata }>(
@@ -24,14 +25,16 @@ const photos = Object.entries(imageModules).map(([path, mod]) => {
   // folder is the category — one level above the file, inside watermarked/
   const folder = parts[parts.length - 2] as typeof categories[number];
   // Derive a readable title from the filename (remove extension, replace - and _ with spaces)
-  const title = filename
+  const autoTitle = filename
     .replace(/\.[^.]+$/, '')
     .replace(/[-_]/g, ' ')
     .replace(/\b\w/g, c => c.toUpperCase());
+  const cap = getCaption(filename);
   return {
     src: mod.default,
     category: folder,
-    title,
+    title: cap?.title ?? autoTitle,
+    caption: cap?.caption ?? '',
     filename,
   };
 });
@@ -79,6 +82,7 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
               class="photo-card"
               data-category={photo.category}
               data-title={photo.title}
+              data-caption={photo.caption}
             >
               <Image
                 src={photo.src}
@@ -86,6 +90,11 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
                 widths={[400, 800, 1200]}
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
+              <div class="photo-card-overlay">
+                <div class="photo-card-meta">
+                  <p class="photo-card-title">{photo.title}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -106,7 +115,7 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
     <img class="lightbox-img" id="lightbox-img" src="" alt="" />
     <div class="lightbox-meta">
       <div class="photo-card-title" id="lightbox-title"></div>
-      <div class="photo-card-event" id="lightbox-event"></div>
+      <p class="lightbox-caption" id="lightbox-caption"></p>
     </div>
   </div>
 
@@ -131,13 +140,15 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
     const lightbox = document.getElementById('lightbox');
     const lbImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
     const lbTitle = document.getElementById('lightbox-title');
-    const lbEvent = document.getElementById('lightbox-event');
+    const lbCaption = document.getElementById('lightbox-caption');
     const lbClose = document.getElementById('lightbox-close');
 
     cards.forEach(card => {
       card.addEventListener('click', () => {
         const img = card.querySelector('img');
         if (lbImg && img) { lbImg.src = img.src; lbImg.alt = img.alt; }
+        if (lbTitle) lbTitle.textContent = (card as HTMLElement).dataset.title ?? '';
+        if (lbCaption) lbCaption.textContent = (card as HTMLElement).dataset.caption ?? '';
         lightbox?.classList.add('open');
       });
     });
