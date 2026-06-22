@@ -9,7 +9,7 @@ export const captions: Record<string, CaptionEntry> = {
 
   'IMG_20260503_190752_005.jpg': {
     title: 'Ferrari 512 TR',
-    caption: 'A Ferrari 512 TR sits under the lights, its Rosso Corsa flanks catching the glow of a classic car show. The Austrian-registered coupe wears its "512 TR" badge with the quiet confidence of a car that needs no introduction.',
+    caption: 'A Ferrari 512 TR sits under the lights, its Rosso Corsa flanks catching the glow of a classic car show. The Irish-registered coupe wears its "512 TR" badge with the quiet confidence of a car that needs no introduction.',
   },
   'IMG_20260503_190904_828.jpg': {
     title: 'Ferrari F40 — Wheel Detail',
@@ -21,7 +21,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_191441_067.jpg': {
     title: 'Porsche 911 SC — Racing Stripes',
-    caption: 'A late-1970s Porsche 911 in silver wears green and black racing stripes along its roofline and tail, a "Le Mans Clubsport" sticker hinting at ambitions beyond the showroom.',
+    caption: 'A late-1970s Porsche 911 in silver wears green and black racing stripes along its roofline and tail, a "Le Mans Clubsport" sticker hinting at ambitions beyond the showroom. Irish plate ZV 35609.',
   },
   'IMG_20260503_191611_130.jpg': {
     title: 'Two Porsche 911 Turbos (930)',
@@ -65,11 +65,11 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_235536_754.jpg': {
     title: 'Ferrari 275 GTB',
-    caption: 'Ferrari 275 GTB in vivid yellow, the show placard confirming what the V12 under the bonnet already tells you: 3285cc of pure 1960s Ferrari. An Austrian plate, a Pagani engine cover just visible at the top of frame.',
+    caption: 'Ferrari 275 GTB in vivid yellow, the show placard confirming what the V12 under the bonnet already tells you: 3285cc of pure 1960s Ferrari. Irish plate ZV 7917, a Pagani engine cover just visible at the top of frame.',
   },
   'IMG_20260504_000957_371.jpg': {
     title: 'Alfa Romeo GTV',
-    caption: 'Close-up on an Alfa Romeo GTV from the 1970s, the quad round headlights and shield badge centred in the frame. A red example alongside, a blue one parked off to the side.',
+    caption: 'Close-up on an Alfa Romeo GTV from the 1970s, the quad round headlights and shield badge centred in the frame. Irish plate ZV 10818. A red example alongside, a blue one parked off to the side.',
   },
   'IMG_20260504_001453_491.jpg': {
     title: 'Alfa Romeo Giulia GT',
