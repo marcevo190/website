@@ -112,7 +112,9 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
   <!-- Lightbox -->
   <div class="lightbox" id="lightbox">
     <button class="lightbox-close" id="lightbox-close">&#x2715; Close</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous">&#8592;</button>
     <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next">&#8594;</button>
     <div class="lightbox-meta">
       <div class="photo-card-title" id="lightbox-title"></div>
       <p class="lightbox-caption" id="lightbox-caption"></p>
@@ -142,23 +144,47 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
     const lbTitle = document.getElementById('lightbox-title');
     const lbCaption = document.getElementById('lightbox-caption');
     const lbClose = document.getElementById('lightbox-close');
+    const lbPrev = document.getElementById('lightbox-prev');
+    const lbNext = document.getElementById('lightbox-next');
+
+    let currentIndex = 0;
+
+    function visibleCards() {
+      return Array.from(cards).filter(c => (c as HTMLElement).style.display !== 'none');
+    }
+
+    function showCard(index: number) {
+      const visible = visibleCards();
+      if (!visible.length) return;
+      currentIndex = (index + visible.length) % visible.length;
+      const card = visible[currentIndex] as HTMLElement;
+      const img = card.querySelector('img');
+      if (lbImg && img) { lbImg.src = img.src; lbImg.alt = img.alt; }
+      if (lbTitle) lbTitle.textContent = card.dataset.title ?? '';
+      if (lbCaption) lbCaption.textContent = card.dataset.caption ?? '';
+    }
 
     cards.forEach(card => {
       card.addEventListener('click', () => {
-        const img = card.querySelector('img');
-        if (lbImg && img) { lbImg.src = img.src; lbImg.alt = img.alt; }
-        if (lbTitle) lbTitle.textContent = (card as HTMLElement).dataset.title ?? '';
-        if (lbCaption) lbCaption.textContent = (card as HTMLElement).dataset.caption ?? '';
+        const visible = visibleCards();
+        currentIndex = visible.indexOf(card as HTMLElement);
+        showCard(currentIndex);
         lightbox?.classList.add('open');
       });
     });
+
+    lbPrev?.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex - 1); });
+    lbNext?.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex + 1); });
 
     lbClose?.addEventListener('click', () => lightbox?.classList.remove('open'));
     lightbox?.addEventListener('click', (e) => {
       if (e.target === lightbox) lightbox.classList.remove('open');
     });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') lightbox?.classList.remove('open');
+      if (!lightbox?.classList.contains('open')) return;
+      if (e.key === 'Escape') lightbox.classList.remove('open');
+      if (e.key === 'ArrowLeft') showCard(currentIndex - 1);
+      if (e.key === 'ArrowRight') showCard(currentIndex + 1);
     });
   </script>
 </Layout>
