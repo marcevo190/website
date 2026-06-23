@@ -347,11 +347,11 @@ h1, h2, h3, h4 {
 .photo-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 50%);
+  background: linear-gradient(to bottom, rgba(8,8,8,0.85) 0%, transparent 50%);
   opacity: 0;
   transition: opacity 0.3s;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   padding: 1.25rem;
 }
 .photo-card:hover .photo-card-overlay { opacity: 1; }
