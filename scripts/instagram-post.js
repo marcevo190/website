@@ -29,8 +29,8 @@ function collectImages() {
   return images;
 }
 
-// ── Generate hashtags from caption content ───────────────────────────────────
-function generateHashtags(title, caption, category) {
+// ── Generate hashtags + @mentions from caption content ───────────────────────
+function generateTagsAndMentions(title, caption, category) {
   const text = (title + ' ' + caption).toLowerCase();
   const tags = new Set([
     '#TrackMarc', '#MotorsportPhotography', '#Motorsport', '#RaceCarPhotography',
@@ -41,6 +41,7 @@ function generateHashtags(title, caption, category) {
     tags.add('#CarShow'); tags.add('#ClassicCars'); tags.add('#CarCulture');
   }
 
+  // Hashtags by manufacturer
   const manufacturerMap = {
     'ferrari':      ['#Ferrari', '#FerrariRacing', '#ScuderiaFerrari'],
     'porsche':      ['#Porsche', '#PorscheRacing', '#PorscheMoment'],
@@ -66,24 +67,59 @@ function generateHashtags(title, caption, category) {
     if (text.includes(keyword)) htags.forEach(t => tags.add(t));
   }
 
-  if (text.includes('le mans'))   { tags.add('#LeMans24'); tags.add('#24hLeMans'); tags.add('#CircuitDeLaSarthe'); tags.add('#LeMans2025'); }
-  if (text.includes('hypercar'))  { tags.add('#HypercarClass'); tags.add('#LMH'); }
-  if (text.includes('lmgt3'))     { tags.add('#LMGT3'); tags.add('#GTRacing'); }
-  if (text.includes('gt3'))       tags.add('#GT3');
-  if (text.includes('lmp2'))      tags.add('#LMP2');
-  if (text.includes('lmp3'))      tags.add('#LMP3');
+  if (text.includes('le mans'))    { tags.add('#LeMans24'); tags.add('#24hLeMans'); tags.add('#CircuitDeLaSarthe'); tags.add('#LeMans2025'); }
+  if (text.includes('hypercar'))   { tags.add('#HypercarClass'); tags.add('#LMH'); }
+  if (text.includes('lmgt3'))      { tags.add('#LMGT3'); tags.add('#GTRacing'); }
+  if (text.includes('gt3'))        tags.add('#GT3');
+  if (text.includes('lmp2'))       tags.add('#LMP2');
+  if (text.includes('lmp3'))       tags.add('#LMP3');
   if (text.includes('pit lane') || text.includes('pit stop')) tags.add('#PitLane');
-  if (text.includes('night'))     tags.add('#NightRacing');
-  if (text.includes('gulf'))      tags.add('#GulfRacing');
-  if (text.includes('valkyrie'))  tags.add('#AstonMartinValkyrie');
-  if (text.includes('zonda'))     tags.add('#PaganiZonda');
-  if (text.includes('f40'))       tags.add('#FerrariF40');
-  if (text.includes('senna'))     tags.add('#AyrtonSenna');
-  if (text.includes('goodyear'))  tags.add('#Goodyear');
-  if (text.includes('michelin'))  tags.add('#Michelin');
+  if (text.includes('night'))      tags.add('#NightRacing');
+  if (text.includes('gulf'))       tags.add('#GulfRacing');
+  if (text.includes('valkyrie'))   tags.add('#AstonMartinValkyrie');
+  if (text.includes('zonda'))      tags.add('#PaganiZonda');
+  if (text.includes('f40'))        tags.add('#FerrariF40');
+  if (text.includes('senna'))      tags.add('#AyrtonSenna');
+  if (text.includes('goodyear'))   tags.add('#Goodyear');
+  if (text.includes('michelin'))   tags.add('#Michelin');
   if (text.includes('safety car')) tags.add('#SafetyCar');
 
-  return Array.from(tags).slice(0, 30).join(' ');
+  // @mentions — brands and teams (verify these handles are correct)
+  const mentions = new Set();
+  const mentionMap = {
+    'ferrari':          '@ferrari',
+    'porsche':          '@porsche',
+    'mclaren':          '@mclaren',
+    'aston martin':     '@astonmartin',
+    'toyota':           '@toyotagazooracing',
+    'alpine':           '@alpinecars',
+    'peugeot':          '@peugeot',
+    'mercedes':         '@mercedesamg',
+    'bmw':              '@bmw',
+    'cadillac':         '@cadillac',
+    'pagani':           '@paganiautomobili',
+    'bentley':          '@bentleymotors',
+    'alfa romeo':       '@alfaromeo',
+    'heart of racing':  '@heartofracingteam',
+    'united autosports':'@unitedautosports',
+    'manthey':          '@manthey.racing',
+    'kessel':           '@kesselracing',
+    'gulf':             '@gulfracinguk',
+    'rolex':            '@rolex',
+    'hertz':            '@hertz',
+    'goodyear':         '@goodyear',
+    'michelin':         '@michelin',
+    'motul':            '@motul',
+  };
+
+  for (const [keyword, handle] of Object.entries(mentionMap)) {
+    if (text.includes(keyword)) mentions.add(handle);
+  }
+
+  const hashtagStr = Array.from(tags).slice(0, 30).join(' ');
+  const mentionStr = Array.from(mentions).join(' ');
+
+  return mentionStr ? `${mentionStr}\n${hashtagStr}` : hashtagStr;
 }
 
 // ── Pick next group of 3, alternating categories ─────────────────────────────
@@ -165,8 +201,8 @@ async function main() {
     return;
   }
 
-  const hashtags  = generateHashtags(primaryCap.title, primaryCap.caption, primary.category);
-  const igCaption = `${primaryCap.caption}\n\nSwipe → for more.\n\n${hashtags}`;
+  const tagsAndMentions = generateTagsAndMentions(primaryCap.title, primaryCap.caption, primary.category);
+  const igCaption       = `${primaryCap.caption}\n\nSwipe → for more.\n\n${tagsAndMentions}`;
 
   const toUrl = img =>
     `https://github.com/marcevo190/website/raw/main/src/assets/images/${img.category}/${img.filename}`;
