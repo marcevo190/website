@@ -9,15 +9,15 @@ export const captions: Record<string, CaptionEntry> = {
 
   'IMG_20260503_190752_005.jpg': {
     title: 'Ferrari 512 TR',
-    caption: 'A red Ferrari 512 TR, registration ZV 12521, on display with the model designation clearly visible on its bodywork.',
+    caption: 'A red Ferrari 512 TR, registration ZV 12521, on display with the model designation clearly visible on its bodywork. The 512 TR succeeded the Testarossa in 1992; "TR" is itself an abbreviation of Testarossa, Italian for "red head" — a reference to the engine\'s distinctive red cam covers.',
   },
   'IMG_20260503_190904_828.jpg': {
     title: 'Ferrari F40 — Wheel Detail',
-    caption: 'Detail of a Ferrari F40\'s front wheel arch — the five-spoke rim and Prancing Horse badge leave no doubt as to what you\'re looking at.',
+    caption: 'Detail of a Ferrari F40\'s front wheel arch — the five-spoke rim and Prancing Horse badge leave no doubt as to what you\'re looking at. The F40 was the last car personally approved by Enzo Ferrari before his death in August 1988 — the same year it was launched.',
   },
   'IMG_20260503_191325_342.jpg': {
     title: 'Pagani Zonda',
-    caption: 'The rear of a Pagani Zonda in deep blue carbon-fibre, its quad exhaust pipes arranged with the kind of obsessive geometry that defines everything Horacio Pagani builds. On display courtesy of European Prestige.',
+    caption: 'The rear of a Pagani Zonda in deep blue carbon-fibre, its quad exhaust pipes arranged with the kind of obsessive geometry that defines everything Horacio Pagani builds. On display courtesy of European Prestige. The Zonda takes its name from the warm, dry wind that sweeps across the Argentine Andes — a nod to founder Horacio Pagani\'s homeland.',
   },
   'IMG_20260503_191441_067.jpg': {
     title: 'Porsche 911 — Le Mans Clubsport',
@@ -29,7 +29,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_191840_818.jpg': {
     title: 'McLaren Senna',
-    caption: 'A blue McLaren Senna on display, its carbon detailing and red brake callipers catching the light. Brutally functional aero, dihedral doors open — this is a car built without apology.',
+    caption: 'A blue McLaren Senna on display, its carbon detailing and red brake callipers catching the light. Brutally functional aero, dihedral doors open — this is a car built without apology. Named in honour of three-time Formula 1 World Champion Ayrton Senna, it was developed in close collaboration with the Senna family.',
   },
   'IMG_20260503_192032_018.jpg': {
     title: 'Bentley — Custom Wrap',
@@ -37,7 +37,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_192220_007.jpg': {
     title: 'Ferrari F40',
-    caption: 'A red Ferrari F40 on display, its iconic lines unmistakable. The plate reads "40 RED." Appropriate.',
+    caption: 'A red Ferrari F40 on display, its iconic lines unmistakable. The plate reads "40 RED." Appropriate. The F40 was the last car personally approved by Enzo Ferrari before his death in August 1988 — the same year it was launched.',
   },
   'IMG_20260503_192442_806.jpg': {
     title: 'McLaren — Nose Detail',
@@ -45,7 +45,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_192712_783.jpg': {
     title: 'Pagani Zonda — Front Three-Quarter',
-    caption: 'The same Pagani Zonda, now from the front three-quarter. Blue iridescent paint over exposed carbon-fibre, side strakes carving the air. A car from another dimension of coachbuilding.',
+    caption: 'The same Pagani Zonda, now from the front three-quarter. Blue iridescent paint over exposed carbon-fibre, side strakes carving the air. A car from another dimension of coachbuilding. Every Zonda is powered by a Mercedes-AMG V12 — a partnership forged personally between Horacio Pagani and AMG.',
   },
   'IMG_20260503_234051_444.jpg': {
     title: 'Porsche 911 GT3 RS',
@@ -53,7 +53,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_234528_510.jpg': {
     title: 'BMW M1',
-    caption: 'A white BMW M1 on display, wearing the full M-sport tricolour stripe the length of the car. Plate "H1 MZ6." One of the rarest road cars BMW ever made.',
+    caption: 'A white BMW M1 on display, wearing the full M-sport tricolour stripe the length of the car. Plate "H1 MZ6." One of the rarest road cars BMW ever made. The M1 remains the only mid-engined production road car BMW has ever built.',
   },
   'IMG_20260503_234814_290.jpg': {
     title: 'Two Early Porsche 911s',
@@ -65,7 +65,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_235536_754.jpg': {
     title: 'Ferrari 275 GTB',
-    caption: 'A yellow Ferrari 275 GTB, registration ZV 7917, on display with its show placard confirming the 3285cc V12 beneath the bonnet.',
+    caption: 'A yellow Ferrari 275 GTB, registration ZV 7917, on display with its show placard confirming the 3285cc V12 beneath the bonnet. The 275 GTB was the first Ferrari road car to feature fully independent rear suspension on all four wheels.',
   },
   'IMG_20260504_000957_371.jpg': {
     title: 'Alfa Romeo GTV',
@@ -85,7 +85,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260504_002330_444.jpg': {
     title: 'Porsche 911 (964) — J999 CUP',
-    caption: 'A yellow Porsche 911 (964 generation) carrying the plate "J999 CUP" on display at the show.',
+    caption: 'A yellow Porsche 911 (964 generation) carrying the plate "J999 CUP" on display at the show. The 964 was the first 911 to offer all-wheel drive as a production option, introduced with the Carrera 4 in 1989.',
   },
   'IMG_20260504_002654_112.jpg': {
     title: 'Porsche 911 Turbo (930) — Rear',
@@ -93,7 +93,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260504_003126_589.webp': {
     title: 'Pagani Zonda — Diffuser Detail',
-    caption: 'Close-up of the Pagani Zonda\'s rear diffuser and exhaust arrangement. The chrome "Zonda" script sits above the carbon-fibre mesh, blue iridescent paint glowing behind it.',
+    caption: 'Close-up of the Pagani Zonda\'s rear diffuser and exhaust arrangement. The chrome "Zonda" script sits above the carbon-fibre mesh, blue iridescent paint glowing behind it. The Zonda was the first car produced by Pagani Automobili, entering production in 1999.',
   },
 
   // ── 24 Heures du Mans 2025 ─────────────────────────────────────────────────
@@ -112,7 +112,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4875-Enhanced-NR.jpg': {
     title: 'Aston Martin Valkyrie AMR Pro #23 — Le Mans 2025',
-    caption: 'A dark green Aston Martin running under The Heart of Racing banner in the pit lane at Le Mans 2025.',
+    caption: 'A dark green Aston Martin running under The Heart of Racing banner in the pit lane at Le Mans 2025. The Valkyrie road car uses a Cosworth-developed 6.5-litre naturally aspirated V12 that revs beyond 11,100 rpm — one of the highest-revving engines ever fitted to a production road car.',
   },
   'DSC_4876-Enhanced-NR.jpg': {
     title: 'Aston Martin Thor Team — Le Mans 2025',
@@ -148,7 +148,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4903-Enhanced-NR.jpg': {
     title: 'Peugeot 9X8 #93 — Le Mans 2025',
-    caption: 'Peugeot 9X8, car #93, in the TotalEnergies pit. The white and black zebra-stripe livery is unmistakable; the "HY" hybrid badge marks it as one of the most technically ambitious cars in the field.',
+    caption: 'Peugeot 9X8, car #93, in the TotalEnergies pit. The white and black zebra-stripe livery is unmistakable; the "HY" hybrid badge marks it as one of the most technically ambitious cars in the field. When the 9X8 made its racing debut in 2022, it was the first Le Mans Hypercar to race without a conventional rear wing, relying entirely on underbody aerodynamics for downforce.',
   },
   'DSC_4905-Enhanced-NR.jpg': {
     title: 'Aston Martin Pit Complex — Le Mans 2025',
@@ -216,7 +216,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_5096-Enhanced-NR.jpg': {
     title: 'Alpine A424 Hypercar — Le Mans 2025',
-    caption: 'A blue Alpine A424 on circuit at Le Mans 2025, the "A" roundel and elf sponsorship visible on the bodywork.',
+    caption: 'A blue Alpine A424 on circuit at Le Mans 2025, the "A" roundel and elf sponsorship visible on the bodywork. Alpine won the 24 Heures du Mans outright in 1978 as Renault Alpine — the only French car manufacturer ever to win Le Mans overall.',
   },
 
   // ── 24 Heures du Mans 2025 — New Batch ────────────────────────────────────
@@ -231,7 +231,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4941-Enhanced-NR.jpg': {
     title: 'Toyota GR010 Hybrid — Le Mans 2025',
-    caption: 'A Toyota GR010 Hybrid powers through the wooded section of the Circuit de la Sarthe, observed by two orange-suited marshals standing trackside. The distinctive white, red and black livery of the Japanese hypercar is framed by the circuit\'s security fencing, with a DHL sponsor board marking the corner entry.',
+    caption: 'A Toyota GR010 Hybrid powers through the wooded section of the Circuit de la Sarthe, observed by two orange-suited marshals standing trackside. The distinctive white, red and black livery of the Japanese hypercar is framed by the circuit\'s security fencing, with a DHL sponsor board marking the corner entry. Toyota won five consecutive Le Mans 24 Hours races from 2018 to 2022 — the longest uninterrupted winning streak by a single manufacturer in the modern Le Mans era.',
   },
   'DSC_4944-Enhanced-NR.jpg': {
     title: 'GT Pack Battle — Le Mans 2025',
@@ -255,7 +255,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4970-Enhanced-NR.jpg': {
     title: 'McLaren GT3 #77 — Le Mans Cup 2025',
-    caption: 'The #77 McLaren GT3 of De Andres and Simmenauer runs at speed in the distinctive Gulf blue-grey and orange livery, carrying BlueBull Financial Advisory and MAGNA sponsorship in the Le Mans Cup GT3 class. The Gulf roundel dominates the door, the McLaren wordmark lines the sill, and the prominent rear wing frames the car against the Armco barriers.',
+    caption: 'The #77 McLaren GT3 of De Andres and Simmenauer runs at speed in the distinctive Gulf blue-grey and orange livery, carrying BlueBull Financial Advisory and MAGNA sponsorship in the Le Mans Cup GT3 class. The Gulf roundel dominates the door, the McLaren wordmark lines the sill, and the prominent rear wing frames the car against the Armco barriers. The road car it is based on — the McLaren 720S — takes its name from its 720PS output, the metric equivalent of around 710bhp.',
   },
   'DSC_4974-Enhanced-NR.jpg': {
     title: 'Multi-Class Battle Through the Barriers — Le Mans 2025',
@@ -459,7 +459,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_5073-Enhanced-NR.jpg': {
     title: 'Alpine A424 #35 — Le Mans 2025',
-    caption: 'The Alpine A424 #35 is framed through the catch fence as it powers past the blue and yellow kerbing at Le Mans. Headlights blazing in the low light, the blue, white and red machine carries elf, ixell and businessolver livery as the Hypercar prototype presses on through the night.',
+    caption: 'The Alpine A424 #35 is framed through the catch fence as it powers past the blue and yellow kerbing at Le Mans. Headlights blazing in the low light, the blue, white and red machine carries elf, ixell and businessolver livery as the Hypercar prototype presses on through the night. Alpine won the 24 Heures du Mans outright in 1978 as Renault Alpine — the only French car manufacturer ever to win Le Mans overall.',
   },
 };
 
