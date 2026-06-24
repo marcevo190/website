@@ -6,7 +6,7 @@ import { getCaption } from '../data/captions';
 
 // Auto-scan category folders — drop a photo in the folder, it appears here
 const imageModules = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  '/src/assets/images/{formula,endurance,rally,gt,car-shows}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
 
