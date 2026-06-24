@@ -122,35 +122,15 @@ function generateTagsAndMentions(title, caption, category) {
   return mentionStr ? `${mentionStr}\n${hashtagStr}` : hashtagStr;
 }
 
-// ── Pick next group of 3, alternating categories ─────────────────────────────
-function pickNextGroup(images, posted) {
-  // posted is an array of arrays (each entry is a group of filenames)
-  const postedFilenames = new Set(posted.flat());
-  const pending = images.filter(img => !postedFilenames.has(img.filename));
+// ── Pick next image, alternating categories ──────────────────────────────────
+function pickNext(images, posted) {
+  const postedSet = new Set(posted);
+  const pending   = images.filter(img => !postedSet.has(img.filename));
   if (pending.length === 0) return null;
 
-  // Determine last posted category
-  const lastGroup    = posted[posted.length - 1] || [];
-  const lastFilename = lastGroup[lastGroup.length - 1];
-  const lastCat      = images.find(i => i.filename === lastFilename)?.category;
-
-  // Group pending by category
-  const byCategory = {};
-  for (const img of pending) {
-    if (!byCategory[img.category]) byCategory[img.category] = [];
-    byCategory[img.category].push(img);
-  }
-
-  // Prefer a different category from the last post
-  const candidates = Object.entries(byCategory)
-    .filter(([cat]) => cat !== lastCat && byCategory[cat].length >= 3);
-
-  const [, chosen] = candidates.length > 0
-    ? candidates[0]
-    : Object.entries(byCategory).find(([, imgs]) => imgs.length > 0) || [null, null];
-
-  if (!chosen) return null;
-  return chosen.slice(0, 3);
+  const lastCat = images.find(i => i.filename === posted[posted.length - 1])?.category;
+  const different = pending.filter(i => i.category !== lastCat);
+  return different.length > 0 ? different[0] : pending[0];
 }
 
 // ── Fire Make.com webhook ────────────────────────────────────────────────────
@@ -183,46 +163,33 @@ async function main() {
 
   const captions = loadCaptions();
   const images   = collectImages();
-  const group    = pickNextGroup(images, queue.posted);
+  const next     = pickNext(images, queue.posted);
 
-  if (!group) {
+  if (!next) {
     console.log('All images have been posted — queue complete.');
     return;
   }
 
-  // Use the first image's caption as the main caption, add swipe prompt
-  const primary    = group[0];
-  const primaryCap = captions[primary.filename];
-
-  if (!primaryCap) {
-    console.log(`No caption for ${primary.filename} — skipping group.`);
-    queue.posted.push(group.map(i => i.filename));
+  const cap = captions[next.filename];
+  if (!cap) {
+    console.log(`No caption for ${next.filename} — skipping.`);
+    queue.posted.push(next.filename);
     fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2));
     return;
   }
 
-  const tagsAndMentions = generateTagsAndMentions(primaryCap.title, primaryCap.caption, primary.category);
-  const igCaption       = `${primaryCap.caption}\n\nSwipe → for more.\n\n${tagsAndMentions}`;
+  const tagsAndMentions = generateTagsAndMentions(cap.title, cap.caption, next.category);
+  const igCaption       = `${cap.caption}\n\n${tagsAndMentions}`;
+  const imageUrl        = `https://github.com/marcevo190/website/raw/main/src/assets/images/${next.category}/${next.filename}`;
 
-  const toUrl = img =>
-    `https://github.com/marcevo190/website/raw/main/src/assets/images/${img.category}/${img.filename}`;
+  console.log(`Posting:  ${next.filename} (${next.category})`);
+  console.log(`Title:    ${cap.title}`);
 
-  const payload = {
-    image_url_1: toUrl(group[0]),
-    image_url_2: toUrl(group[1]),
-    image_url_3: toUrl(group[2]),
-    caption:     igCaption,
-  };
-
-  console.log('Posting carousel:');
-  group.forEach((img, i) => console.log(`  ${i + 1}. ${img.filename} (${img.category})`));
-  console.log(`Caption: ${primaryCap.title}`);
-
-  const result = await fireWebhook(payload);
+  const result = await fireWebhook({ image_url: imageUrl, caption: igCaption });
   console.log(`Response: ${result.status} — ${result.body}`);
 
   if (result.body.trim() === 'Accepted' || result.status === 200) {
-    queue.posted.push(group.map(i => i.filename));
+    queue.posted.push(next.filename);
     fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2));
     console.log('Queue updated successfully.');
   } else {
