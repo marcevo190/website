@@ -1,0 +1,32 @@
+name: Auto-add caption placeholders
+
+on:
+  push:
+    paths:
+      - 'src/assets/images/**'
+
+jobs:
+  captions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Add placeholders for uncaptioned images
+        run: node scripts/auto-captions.js
+
+      - name: Commit if changed
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add src/data/captions.ts
+          git diff --staged --quiet || git commit -m "chore: add caption placeholders for new images [skip ci]"
+          git push
