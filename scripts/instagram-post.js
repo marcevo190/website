@@ -2,7 +2,7 @@ const fs    = require('fs');
 const path  = require('path');
 const https = require('https');
 
-// ── Load captions from captions.ts ───────────────────────────────────────────
+// ── Load website captions from captions.ts ───────────────────────────────────
 function loadCaptions() {
   const src = fs.readFileSync('src/data/captions.ts', 'utf8');
   const js  = src
@@ -10,6 +10,13 @@ function loadCaptions() {
     .replace(/export const captions\s*:\s*Record<[^>]+>\s*=\s*/, 'return ')
     .replace(/export function[\s\S]+$/, '');
   return new Function(js)();
+}
+
+// ── Load Instagram-specific captions ─────────────────────────────────────────
+function loadInstagramCaptions() {
+  const igPath = 'scripts/instagram-captions.json';
+  if (!fs.existsSync(igPath)) return {};
+  return JSON.parse(fs.readFileSync(igPath, 'utf8'));
 }
 
 // ── Collect all images from asset folders ────────────────────────────────────
@@ -161,9 +168,10 @@ async function main() {
     ? JSON.parse(fs.readFileSync(queuePath, 'utf8'))
     : { posted: [] };
 
-  const captions = loadCaptions();
-  const images   = collectImages();
-  const next     = pickNext(images, queue.posted);
+  const captions   = loadCaptions();
+  const igCaptions = loadInstagramCaptions();
+  const images     = collectImages();
+  const next       = pickNext(images, queue.posted);
 
   if (!next) {
     console.log('All images have been posted — queue complete.');
@@ -178,8 +186,10 @@ async function main() {
     return;
   }
 
+  // Use Instagram-specific caption if available, fall back to website caption
+  const captionText     = igCaptions[next.filename] || cap.caption;
   const tagsAndMentions = generateTagsAndMentions(cap.title, cap.caption, next.category);
-  const igCaption       = `${cap.caption}\n\n${tagsAndMentions}`;
+  const igCaption       = `${captionText}\n\n${tagsAndMentions}`;
   const imageUrl        = `https://github.com/marcevo190/website/raw/main/src/assets/images/${next.category}/${next.filename}`;
 
   console.log(`Posting:  ${next.filename} (${next.category})`);
