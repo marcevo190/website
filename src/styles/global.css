@@ -681,12 +681,14 @@ h1, h2, h3, h4 {
   background: rgba(0,0,0,0.95);
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 1.25rem;
   padding: 2rem;
 }
 .lightbox.open { display: flex; }
 .lightbox-img {
   max-width: 90vw;
-  max-height: 85vh;
+  max-height: 75vh;
   object-fit: contain;
 }
 .lightbox-close {
@@ -722,9 +724,6 @@ h1, h2, h3, h4 {
 .lightbox-prev { left: 1.5rem; }
 .lightbox-next { right: 1.5rem; }
 .lightbox-meta {
-  position: absolute;
-  bottom: 1.5rem; left: 50%;
-  transform: translateX(-50%);
   text-align: center;
   max-width: min(600px, 90vw);
   width: 100%;
