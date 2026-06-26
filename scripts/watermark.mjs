@@ -17,6 +17,7 @@ function findImages(dir, results = []) {
 
 const INPUT_BASE  = 'src/assets/images';
 const OUTPUT_BASE = 'src/assets/watermarked';
+const IG_BASE     = 'public/ig';
 const CATEGORIES  = ['formula', 'endurance', 'rally', 'gt', 'car-shows'];
 const EXTS        = '{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}';
 
@@ -75,6 +76,11 @@ for (const src of files) {
     .composite([{ input: wm, blend: 'over' }])
     .jpeg({ quality: 88 })
     .toFile(dest);
+
+  // Also copy to public/ig/ so Instagram posts can use a reliable Cloudflare URL
+  const igDest = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
+  fs.mkdirSync(path.dirname(igDest), { recursive: true });
+  fs.copyFileSync(dest, igDest);
 
   console.log(`[watermark] ✓ ${rel}`);
   stamped++;

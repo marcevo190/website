@@ -190,7 +190,8 @@ async function main() {
   const captionText     = igCaptions[next.filename] || cap.caption;
   const tagsAndMentions = generateTagsAndMentions(cap.title, cap.caption, next.category);
   const igCaption       = `${captionText}\n\n${tagsAndMentions}`;
-  const imageUrl        = `https://media.githubusercontent.com/media/marcevo190/website/main/src/assets/images/${next.category}/${next.filename}`;
+  const igFilename      = next.filename.replace(/\.[^.]+$/, '.jpg');
+  const imageUrl        = `https://trackmarc.com/ig/${next.category}/${igFilename}`;
 
   console.log(`Posting:  ${next.filename} (${next.category})`);
   console.log(`Title:    ${cap.title}`);
