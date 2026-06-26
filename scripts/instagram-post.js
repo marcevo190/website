@@ -190,7 +190,7 @@ async function main() {
   const captionText     = igCaptions[next.filename] || cap.caption;
   const tagsAndMentions = generateTagsAndMentions(cap.title, cap.caption, next.category);
   const igCaption       = `${captionText}\n\n${tagsAndMentions}`;
-  const imageUrl        = `https://github.com/marcevo190/website/raw/main/src/assets/images/${next.category}/${next.filename}`;
+  const imageUrl        = `https://media.githubusercontent.com/media/marcevo190/website/main/src/assets/images/${next.category}/${next.filename}`;
 
   console.log(`Posting:  ${next.filename} (${next.category})`);
   console.log(`Title:    ${cap.title}`);
