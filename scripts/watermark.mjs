@@ -84,7 +84,7 @@ for (const src of files) {
   fs.mkdirSync(path.dirname(igDest), { recursive: true });
   const igWidth  = Math.min(meta.width, 1080);
   const igHeight = Math.max(Math.round(igWidth * meta.height / meta.width), Math.ceil(igWidth / 1.91));
-  await sharp(dest)
+  await sharp(src)
     .resize({ width: igWidth, height: igHeight, fit: 'cover', position: 'centre', withoutEnlargement: true })
     .jpeg({ quality: 88 })
     .toFile(igDest);
