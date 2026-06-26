@@ -59,8 +59,9 @@ for (const src of files) {
   const rel  = path.relative(INPUT_BASE, src);
   const dest = path.join(OUTPUT_BASE, rel).replace(/\.[^.]+$/, '.jpg');
 
-  // Skip if dest is newer than source
-  if (fs.existsSync(dest)) {
+  // Skip if dest is newer than source AND ig version already exists
+  const igDest0 = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
+  if (fs.existsSync(dest) && fs.existsSync(igDest0)) {
     const srcMtime  = fs.statSync(src).mtimeMs;
     const destMtime = fs.statSync(dest).mtimeMs;
     if (destMtime >= srcMtime) { skipped++; continue; }
@@ -78,11 +79,10 @@ for (const src of files) {
     .toFile(dest);
 
   // Also write a 1080px-wide version to public/ig/ for Instagram posts
-  const igDest = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
+  const igDest = igDest0;
   fs.mkdirSync(path.dirname(igDest), { recursive: true });
-  await sharp(src)
+  await sharp(dest)
     .resize({ width: 1080, withoutEnlargement: true })
-    .composite([{ input: watermarkSVG(Math.min(meta.width, 1080), Math.round(Math.min(meta.width, 1080) * meta.height / meta.width)), blend: 'over' }])
     .jpeg({ quality: 88 })
     .toFile(igDest);
 
