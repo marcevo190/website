@@ -77,10 +77,14 @@ for (const src of files) {
     .jpeg({ quality: 88 })
     .toFile(dest);
 
-  // Also copy to public/ig/ so Instagram posts can use a reliable Cloudflare URL
+  // Also write a 1080px-wide version to public/ig/ for Instagram posts
   const igDest = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
   fs.mkdirSync(path.dirname(igDest), { recursive: true });
-  fs.copyFileSync(dest, igDest);
+  await sharp(src)
+    .resize({ width: 1080, withoutEnlargement: true })
+    .composite([{ input: watermarkSVG(Math.min(meta.width, 1080), Math.round(Math.min(meta.width, 1080) * meta.height / meta.width)), blend: 'over' }])
+    .jpeg({ quality: 88 })
+    .toFile(igDest);
 
   console.log(`[watermark] ✓ ${rel}`);
   stamped++;
