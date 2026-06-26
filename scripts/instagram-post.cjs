@@ -60,36 +60,81 @@ function generateTagsAndMentions(title, caption, category) {
     'mercedes':     ['#Mercedes', '#MercedesAMG'],
     'bmw':          ['#BMW', '#BMWMotorsport'],
     'cadillac':     ['#Cadillac', '#CadillacRacing'],
-    'pagani':       ['#Pagani', '#PaganiZonda'],
-    'bentley':      ['#Bentley'],
-    'lamborghini':  ['#Lamborghini'],
+    'pagani':       ['#Pagani', '#PaganiAutomobili'],
+    'bentley':      ['#Bentley', '#BentleyMotorsport'],
+    'lamborghini':  ['#Lamborghini', '#LamborghiniRacing'],
     'lexus':        ['#Lexus', '#LexusRacing'],
     'ford':         ['#Ford', '#FordRacing'],
     'ligier':       ['#Ligier', '#LMP3'],
     'oreca':        ['#Oreca', '#LMP2'],
     'alfa romeo':   ['#AlfaRomeo', '#Alfa'],
+    'nissan':       ['#Nissan', '#NissanMotorsport'],
+    'lotus':        ['#Lotus', '#LotusMotorsport'],
+    'audi':         ['#Audi', '#AudiSport'],
+    'jaguar':       ['#Jaguar', '#JaguarRacing'],
+    'maserati':     ['#Maserati'],
+    'acura':        ['#Acura', '#AcuraMotorsport'],
+    'glickenhaus':  ['#Glickenhaus', '#SCG'],
+    'isotta':       ['#IsottaFraschini'],
+    'proton':       ['#ProtonCompetition'],
+    'jota':         ['#JotaSport'],
   };
 
   for (const [keyword, htags] of Object.entries(manufacturerMap)) {
     if (text.includes(keyword)) htags.forEach(t => tags.add(t));
   }
 
-  if (text.includes('le mans'))    { tags.add('#LeMans24'); tags.add('#24hLeMans'); tags.add('#CircuitDeLaSarthe'); tags.add('#LeMans2025'); }
+  // Model-specific hashtags
+  const modelMap = {
+    'gt-r':         ['#NissanGTR', '#GTR', '#Godzilla'],
+    'gtr':          ['#NissanGTR', '#GTR'],
+    'emira':        ['#LotusEmira', '#Emira'],
+    '911':          ['#Porsche911'],
+    '963':          ['#Porsche963'],
+    '718':          ['#Porsche718'],
+    'cayman':       ['#PorscheCayman'],
+    '296':          ['#Ferrari296', '#Ferrari296GT3'],
+    '488':          ['#Ferrari488'],
+    '499p':         ['#Ferrari499P'],
+    'f40':          ['#FerrariF40'],
+    'f50':          ['#FerrariF50'],
+    'laferrari':    ['#LaFerrari'],
+    'gr010':        ['#ToyotaGR010', '#GR010'],
+    '9x8':          ['#Peugeot9X8', '#9X8'],
+    'a424':         ['#AlpineA424', '#A424'],
+    'v-series':     ['#CadillacVSeriesR', '#VSeriesR'],
+    'valkyrie':     ['#AstonMartinValkyrie', '#Valkyrie'],
+    'vantage':      ['#AstonMartinVantage'],
+    'zonda':        ['#PaganiZonda', '#Zonda'],
+    'huayra':       ['#PaganiHuayra', '#Huayra'],
+    'senna':        ['#McLarenSenna'],
+    'p1':           ['#McLarenP1'],
+    'artura':       ['#McLarenArtura'],
+    'huracan':      ['#LamborghiniHuracan'],
+    'aventador':    ['#LamborghiniAventador'],
+    'urus':         ['#LamborghiniUrus'],
+    'continental':  ['#BentleyContinental'],
+    'gt3 rs':       ['#Porsche911GT3RS'],
+    'gt3':          ['#GT3'],
+  };
+
+  for (const [keyword, htags] of Object.entries(modelMap)) {
+    if (text.includes(keyword)) htags.forEach(t => tags.add(t));
+  }
+
+  if (text.includes('le mans'))    { tags.add('#LeMans24'); tags.add('#24hLeMans'); tags.add('#CircuitDeLaSarthe'); tags.add('#LeMans2026'); }
   if (text.includes('hypercar'))   { tags.add('#HypercarClass'); tags.add('#LMH'); }
   if (text.includes('lmgt3'))      { tags.add('#LMGT3'); tags.add('#GTRacing'); }
-  if (text.includes('gt3'))        tags.add('#GT3');
   if (text.includes('lmp2'))       tags.add('#LMP2');
   if (text.includes('lmp3'))       tags.add('#LMP3');
+  if (text.includes('wec'))        { tags.add('#WEC'); tags.add('#WorldEnduranceChampionship'); }
   if (text.includes('pit lane') || text.includes('pit stop')) tags.add('#PitLane');
   if (text.includes('night'))      tags.add('#NightRacing');
   if (text.includes('gulf'))       tags.add('#GulfRacing');
-  if (text.includes('valkyrie'))   tags.add('#AstonMartinValkyrie');
-  if (text.includes('zonda'))      tags.add('#PaganiZonda');
-  if (text.includes('f40'))        tags.add('#FerrariF40');
-  if (text.includes('senna'))      tags.add('#AyrtonSenna');
   if (text.includes('goodyear'))   tags.add('#Goodyear');
   if (text.includes('michelin'))   tags.add('#Michelin');
   if (text.includes('safety car')) tags.add('#SafetyCar');
+  if (text.includes('track day'))  { tags.add('#TrackDay'); tags.add('#TrackLife'); }
 
   // @mentions — brands and teams (verify these handles are correct)
   const mentions = new Set();
@@ -107,6 +152,9 @@ function generateTagsAndMentions(title, caption, category) {
     'pagani':           '@paganiautomobili',
     'bentley':          '@bentleymotors',
     'alfa romeo':       '@alfaromeo',
+    'nissan':           '@nissan',
+    'lotus':            '@lotuscars',
+    'lamborghini':      '@lamborghini',
     'heart of racing':  '@heartofracingteam',
     'united autosports':'@unitedautosports',
     'manthey':          '@manthey.racing',
