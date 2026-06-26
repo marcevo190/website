@@ -25,7 +25,7 @@ jobs:
       - name: Post next photo to Instagram
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
-        run: node scripts/instagram-post.js
+        run: node scripts/instagram-post.cjs
 
       - name: Commit updated queue
         run: |

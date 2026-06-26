@@ -21,7 +21,7 @@ jobs:
           node-version: "24"
 
       - name: Add placeholders for uncaptioned images
-        run: node scripts/auto-captions.js
+        run: node scripts/auto-captions.cjs
 
       - name: Commit if changed
         run: |
