@@ -79,10 +79,13 @@ for (const src of files) {
     .toFile(dest);
 
   // Also write a 1080px-wide version to public/ig/ for Instagram posts
+  // Instagram requires aspect ratio between 0.8 (4:5 portrait) and 1.91:1 (landscape)
   const igDest = igDest0;
   fs.mkdirSync(path.dirname(igDest), { recursive: true });
+  const igWidth  = Math.min(meta.width, 1080);
+  const igHeight = Math.max(Math.round(igWidth * meta.height / meta.width), Math.ceil(igWidth / 1.91));
   await sharp(dest)
-    .resize({ width: 1080, withoutEnlargement: true })
+    .resize({ width: igWidth, height: igHeight, fit: 'cover', position: 'centre', withoutEnlargement: true })
     .jpeg({ quality: 88 })
     .toFile(igDest);
 
