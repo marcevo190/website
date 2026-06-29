@@ -140,11 +140,11 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'The No. 38 Cadillac Racing entry, backed by Hertz, in the pit lane at Le Mans 2026.',
   },
   'DSC_4870-Enhanced-NR.jpg': {
-    title: 'Ferrari 296 LMGT3 #33 — Le Mans 2026',
+    title: 'Corvette Z06 GT3.R #33 — Le Mans 2026',
     caption: 'The yellow No. 33 Keating entry on Goodyear rubber during the WEC 24-hour race, its vivid livery standing out as the endurance battle unfolds.',
   },
   'DSC_4871-Enhanced-NR.jpg': {
-    title: 'Keating Ferrari #33 — Le Mans 2026',
+    title: 'Keating Motorsport Corvette #33 — Le Mans 2026',
     caption: 'The yellow Keating machine in the pit lane, Rolex and Motul signage overhead — Le Mans at full nocturnal intensity.',
   },
   'DSC_4875-Enhanced-NR.jpg': {
