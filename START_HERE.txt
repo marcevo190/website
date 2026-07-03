@@ -1,0 +1,89 @@
+========================================================================
+ TRACKMARC — HAND-OFF NOTE FOR A FRESH CLAUDE CODE SESSION
+========================================================================
+
+Give this file (or its contents) to a new Claude Code instance so it knows
+where to look and can get up to speed immediately.
+
+------------------------------------------------------------------------
+1. WHAT THIS IS
+------------------------------------------------------------------------
+TrackMarc (trackmarc.com) is Marc Ronan's motorsport photography website.
+Marc is a photographer in Ireland aiming for media accreditation. He is
+non-technical — do the technical work for him and explain plainly.
+
+Stack: Astro + Cloudflare Pages (auto-deploys on push) + Git LFS for
+images + Sharp for watermarking + GitHub Actions → Make.com → Instagram.
+
+GitHub repo: marcevo190/website
+
+------------------------------------------------------------------------
+2. FIRST THING TO DO
+------------------------------------------------------------------------
+Read the file **CLAUDE.md** in the root of the repo. It has the full
+project guide: all key files, caption rules, the Instagram pipeline, and
+the critical rules. Everything below is a summary of it.
+
+------------------------------------------------------------------------
+3. THE MOST IMPORTANT RULES (do not break these)
+------------------------------------------------------------------------
+* NEVER identify a car from its filename. Filenames (DSC_4870 etc.) tell
+  you nothing. OPEN the actual image and identify the car by looking.
+  We once labelled a Corvette as a Ferrari doing this — embarrassing.
+
+* Caption style: natural British/Irish English. No em dashes. No AI words
+  (stunning, breathtaking, showcase, etc.). Instagram captions get a hook
+  first line and end with a question. Never invent facts.
+
+* All Le Mans / WEC photos in the repo are from 2026, never 2025.
+
+* Scripts use the .cjs extension (package.json has "type": "module").
+
+* The gallery globs from src/assets/watermarked/ — NOT src/assets/images/.
+  If the gallery is blank, check this.
+
+------------------------------------------------------------------------
+4. KEY FILES
+------------------------------------------------------------------------
+CLAUDE.md ................... full project guide (READ THIS FIRST)
+src/data/captions.ts ....... website captions (title + caption per photo)
+scripts/instagram-captions.json .. Instagram-specific captions
+scripts/watermark.mjs ...... watermarks site images + makes clean IG copies
+scripts/instagram-post.cjs . fires the Make.com webhook for the next photo
+scripts/auto-captions.cjs .. adds caption placeholders for new images
+post-queue.json ............ tracks which photos have been posted
+.github/workflows/ ......... instagram-post.yml (daily 8am UTC) + auto-captions.yml
+
+------------------------------------------------------------------------
+5. INSTAGRAM PIPELINE (how a post happens)
+------------------------------------------------------------------------
+GitHub Action (daily 8am UTC) -> instagram-post.cjs picks next unposted
+photo -> fires Make.com webhook with { image_url, caption } -> Make.com
+posts to Instagram.
+
+Image URL format: https://trackmarc.com/ig/{category}/{filename}.jpg
+These are clean (no watermark), served by Cloudflare, built from the
+originals at build time.
+
+IMPORTANT: after pushing image changes, wait ~3-5 min for the Cloudflare
+build before triggering a post, or Make.com fetches a stale/404 image.
+
+Do NOT use the Meta Graph API directly — it failed with OAuth errors.
+Make.com handles auth. Keep the Meta app in Development mode.
+Webhook URL lives in the GitHub secret MAKE_WEBHOOK_URL.
+
+------------------------------------------------------------------------
+6. WHEN MARC UPLOADS NEW PHOTOS
+------------------------------------------------------------------------
+1. git pull (ensure LFS pulls real image files, not pointers)
+2. Find filenames missing from captions.ts
+3. READ each image and identify the car visually
+4. Write entries in captions.ts AND instagram-captions.json
+5. Commit and push (git pull --rebase first if the push is rejected)
+
+------------------------------------------------------------------------
+7. NOTE ON CREDENTIALS
+------------------------------------------------------------------------
+The GitHub push token is NOT stored in the repo (it's a secret). You'll
+need a GitHub token available to push. Ask Marc if you don't have one.
+========================================================================
