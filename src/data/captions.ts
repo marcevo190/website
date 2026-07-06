@@ -499,6 +499,197 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'The Alpine A424 #35 is framed through the catch fence as it powers past the blue and yellow kerbing at Le Mans. Headlights blazing in the low light, the blue, white and red machine carries elf, ixell and businessolver livery as the Hypercar prototype presses on through the night. Alpine won the 24 Heures du Mans outright in 1978 as Renault Alpine — the only French car manufacturer ever to win Le Mans overall.',
   },
 
+  // ── 24 Heures du Mans 2026 — July Batch ───────────────────────────────────
+
+  'DSC_4557.jpg': {
+    title: 'Paddock Interview, Le Mans 2026',
+    caption: 'A man in a white t-shirt speaks into a microphone during a paddock interview at Le Mans 2026, seated in a director\'s chair with a leather jacket draped over the armrest. A liveried support vehicle and event barrier tape sit blurred in the background.',
+  },
+  'DSC_4624.jpg': {
+    title: 'LMP2 Prototype Through the Cadillac Corner',
+    caption: 'A white and red LMP2 prototype rounds a corner marked by Cadillac\'s trackside branding at Le Mans 2026. The circuit\'s blue and yellow kerbing and dense treeline frame the shot.',
+  },
+  'DSC_4625.jpg': {
+    title: 'IDEC Sport Oreca 07, Car 28',
+    caption: 'The number 28 IDEC Sport Oreca 07 LMP2 car passes the grandstands at Le Mans 2026, running in the P2 class with Les Echos and Le Parisien sponsorship on its flanks.',
+  },
+  'DSC_4626.jpg': {
+    title: 'CrowdStrike Liveried LMP2, Car 4',
+    caption: 'A dark blue and red Oreca 07 LMP2 car, sponsored by CrowdStrike and Accel, carries the number 4 through a fast section at Le Mans 2026.',
+  },
+  'DSC_4627.jpg': {
+    title: 'Mobil 1 Oreca 07 at Speed',
+    caption: 'A red Oreca 07 LMP2 car in Mobil 1 livery accelerates past the treeline at Le Mans 2026, headlights on in the fading evening light.',
+  },
+  'DSC_4630.jpg': {
+    title: 'Shopify Oreca Leads Through the Cadillac Corner',
+    caption: 'The green Shopify liveried Oreca 07 LMP2 car leads a blue and white rival through a corner marked with Cadillac\'s trackside branding at Le Mans 2026.',
+  },
+  'DSC_4632.jpg': {
+    title: 'Yellow and Green LMP2 at Dusk',
+    caption: 'A yellow and green Oreca 07 LMP2 car, carrying wing.vc and Cohesity sponsorship, rounds the Cadillac corner as the light fades at Le Mans 2026.',
+  },
+  'DSC_4635.jpg': {
+    title: 'Marshals at Their Post, Le Mans 2026',
+    caption: 'Orange-suited marshals keep watch from their post as prototypes stream past in the background at Le Mans 2026. MMA sponsor boards line the circuit fencing.',
+  },
+  'DSC_4638.jpg': {
+    title: 'Heart of Racing Aston Martin Vantage GT3, Car 27',
+    caption: 'The number 27 Aston Martin Vantage GT3, run by The Heart of Racing, passes a packed grandstand at Le Mans 2026, headlights cutting through the evening light.',
+  },
+  'DSC_4641.jpg': {
+    title: 'Mobil 1 Oreca Past the Cadillac Boards',
+    caption: 'A red Mobil 1 liveried Oreca 07 LMP2 car rounds a corner at Le Mans 2026 as two marshals in orange overalls look on from behind the barrier.',
+  },
+  'DSC_4645.jpg': {
+    title: 'Shopify Oreca Under Floodlight',
+    caption: 'The green Shopify liveried Oreca 07 LMP2 car rounds the Cadillac corner at Le Mans 2026 as the trackside floodlights begin to switch on.',
+  },
+  'DSC_4648.jpg': {
+    title: 'wing.vc Oreca in the Dark',
+    caption: 'The yellow and green wing.vc liveried Oreca 07 LMP2 car cuts through near darkness at Le Mans 2026, headlights blazing against the black treeline.',
+  },
+  'DSC_4649.jpg': {
+    title: 'wing.vc Oreca Rounding the Bend',
+    caption: 'The yellow and green wing.vc liveried Oreca 07 LMP2 car rounds a bend at Le Mans 2026, its cockpit lit by the last of the evening light.',
+  },
+  'DSC_4650.jpg': {
+    title: 'VistaJet Ferrari 296 GT3',
+    caption: 'The VistaJet liveried Ferrari 296 GT3, backed by Richard Mille, rounds a corner at Le Mans 2026 as marshals watch from trackside.',
+  },
+  'DSC_4652.jpg': {
+    title: 'BMW M4 GT3 in BMW M Motorsport Livery',
+    caption: 'A BMW M4 GT3 in orange and light blue BMW M Motorsport livery rounds a corner at Le Mans 2026, headlights on as dusk settles over the circuit.',
+  },
+  'DSC_4653.jpg': {
+    title: 'Porsche 911 GT3 R Leads Through the Twilight',
+    caption: 'A white Porsche 911 GT3 R leads a rival GT car through a fast section at Le Mans 2026, both cars picked out by their headlights in the fading light.',
+  },
+  'DSC_4654.jpg': {
+    title: 'Aston Martin Vantage GT3 at Dusk',
+    caption: 'An Aston Martin Vantage GT3 in Aston Martin Racing livery rounds a bend at Le Mans 2026, headlights cutting through the near-dark.',
+  },
+  'DSC_4659.jpg': {
+    title: 'Lexus RC F GT3 in Alizoa Livery',
+    caption: 'A yellow and dark blue Lexus RC F GT3, carrying Alizoa sponsorship, rounds the Cadillac corner at Le Mans 2026 as marshals look on from trackside.',
+  },
+  'DSC_4660.jpg': {
+    title: 'Oreca 07 LMP2, Car 10',
+    caption: 'A white and red Oreca 07 LMP2 car, number 10, rounds a bend at Le Mans 2026 with its headlights on against the darkening treeline.',
+  },
+  'DSC_4666.jpg': {
+    title: 'Shopify Oreca Rounding the Bend',
+    caption: 'The green Shopify liveried Oreca 07 LMP2 car rounds a bend at Le Mans 2026, passing the Cadillac corner boards under the evening light.',
+  },
+  'DSC_4667.jpg': {
+    title: 'Mascot Liveried Oreca 07',
+    caption: 'A white and purple Oreca 07 LMP2 car, carrying Mascot sponsorship, rounds the Cadillac corner at Le Mans 2026 with headlights blazing in the mist.',
+  },
+  'DSC_4668.jpg': {
+    title: 'Dark Liveried LMP2 in the Half-Light',
+    caption: 'A black and green LMP2 prototype rounds the Cadillac corner at Le Mans 2026 as the light fades to near darkness.',
+  },
+  'DSC_4688.jpg': {
+    title: 'Heart of Racing Aston Martin Chases a Porsche 911 GT3 R',
+    caption: 'The Heart of Racing\'s Aston Martin Vantage GT3 chases a white Porsche 911 GT3 R, car 91, through a fast section at Le Mans 2026.',
+  },
+  'DSC_4690.jpg': {
+    title: 'Ford Mustang GT3, Car 77',
+    caption: 'The number 77 Ford Mustang GT3, in Ford Racing livery, powers out of a corner at Le Mans 2026 with the gravel trap visible behind it.',
+  },
+  'DSC_4710.jpg': {
+    title: 'Hypercars Battle Through the Chicane',
+    caption: 'A red, yellow and white Hypercar leads a white rival through a fast chicane at Le Mans 2026, TotalEnergies and Rolex boards lining the track behind them.',
+  },
+  'DSC_4714.jpg': {
+    title: 'Cadillac V-Series.R, Hertz Livery, Car 12',
+    caption: 'The number 12 Cadillac V-Series.R Hypercar, in Hertz livery, streaks past the Rolex-branded grandstand fencing at Le Mans 2026.',
+  },
+  'DSC_4719.jpg': {
+    title: 'Hypercar Under the Rolex Bridge',
+    caption: 'A Hypercar\'s rear end glows red under braking as it passes beneath the Rolex signage at Le Mans 2026, dusk settling over the circuit.',
+  },
+  'DSC_4720.jpg': {
+    title: 'Hypercar Passes the Pit Lane at Dusk',
+    caption: 'A dark liveried Hypercar passes the pit lane at Le Mans 2026 as a Manthey 30th anniversary support vehicle sits trackside.',
+  },
+  'DSC_4721.jpg': {
+    title: 'Aston Martin Valkyrie Hypercar, Car 007',
+    caption: 'The Heart of Racing\'s Aston Martin Valkyrie Hypercar, car 007, rounds a bend at Le Mans 2026 in the last of the daylight.',
+  },
+  'DSC_4722.jpg': {
+    title: 'BMW M Hybrid V8 in Hyperpole Qualifying',
+    caption: 'A BMW M Hybrid V8 Hypercar crosses the line during Hyperpole qualifying at Le Mans 2026, the big screen behind showing the session times.',
+  },
+  'DSC_4723.jpg': {
+    title: 'Hypercar Crosses the Line at Dusk',
+    caption: 'An orange Hypercar crosses the timing line at Le Mans 2026 as the Rolex clock counts down behind the pit wall.',
+  },
+  'DSC_4725.jpg': {
+    title: 'Hypercar, Car 17, Under the Floodlights',
+    caption: 'An orange and red Hypercar, number 17, approaches the line at Le Mans 2026 as the circuit\'s floodlights take over from the fading daylight.',
+  },
+  'DSC_4728.jpg': {
+    title: 'Toyota GR010 Hybrid, Car 8',
+    caption: 'The number 8 Toyota GR010 Hybrid Hypercar, backed by Denso, crosses the line at Le Mans 2026 in the last of the evening light.',
+  },
+  'DSC_4731.jpg': {
+    title: 'Aston Martin Valkyrie, Car 007, at Dusk',
+    caption: 'The Heart of Racing\'s Aston Martin Valkyrie, car 007, crosses the timing line at Le Mans 2026 as dusk falls over the Sarthe circuit.',
+  },
+  'DSC_4732.jpg': {
+    title: 'Genesis Magma Racing Hypercar, Rear View',
+    caption: 'The Genesis Magma Racing Hypercar, car 19, pulls away from the line at Le Mans 2026, its tail lights glowing red under the Rolex signage.',
+  },
+  'DSC_4734.jpg': {
+    title: 'Cadillac V-Series.R in Hertz Livery',
+    caption: 'A Cadillac V-Series.R Hypercar in Hertz livery passes the packed grandstands at Le Mans 2026, headlights on as the crowd watches from behind the Rolex-branded fencing.',
+  },
+  'DSC_4743.jpg': {
+    title: 'Aston Martin Valkyrie 009 in the Pit Lane',
+    caption: 'The Heart of Racing\'s Aston Martin Valkyrie, car 009, sits in the pit lane at Le Mans 2026, drivers Roman, Alex and Marco named across the roof.',
+  },
+  'DSC_4749.jpg': {
+    title: 'Ferrari 499P Leads Down the Pit Straight',
+    caption: 'The Eni liveried Ferrari 499P Hypercar leads a pair of LMP2 cars down the pit straight at Le Mans 2026, the Rolex clock and grandstands visible trackside.',
+  },
+  'DSC_4751.jpg': {
+    title: 'Genesis Magma Racing Hypercar, Running Sixth',
+    caption: 'The Genesis Magma Racing Hypercar, car 19, carries a sixth-place board past the pit wall at Le Mans 2026, its red and orange livery lit by the trackside floodlights.',
+  },
+  'DSC_4753.jpg': {
+    title: 'Pit Lane From the Dunlop Bridge',
+    caption: 'A wide view down the Le Mans pit lane at dusk in 2026, taken from the Dunlop bridge with the Porsche curves grandstand and pit garages lit up below.',
+  },
+  'DSC_4755.jpg': {
+    title: 'Aston Martin Valkyrie 009 Pit Stop',
+    caption: 'The Heart of Racing\'s Aston Martin Valkyrie, car 009, is serviced in the pit lane at Le Mans 2026 as a crew member in green overalls looks on from the gantry.',
+  },
+  'DSC_4760.jpg': {
+    title: 'Alpine A424, Car 35',
+    caption: 'The number 35 Alpine A424 Hypercar, backed by Elf, runs 13th past the TotalEnergies boards at Le Mans 2026.',
+  },
+  'DSC_4763.jpg': {
+    title: 'Both Heart of Racing Valkyries in the Pit Lane',
+    caption: 'The Heart of Racing\'s two Aston Martin Valkyrie Hypercars, cars 007 and 009, sit nose to tail in the Le Mans 2026 pit lane.',
+  },
+  'DSC_4766.jpg': {
+    title: 'The Automobile Club de l\'Ouest Race Tower',
+    caption: 'The Automobile Club de l\'Ouest race control tower stands over a packed grandstand at Le Mans 2026, Rolex branding wrapped across every level.',
+  },
+  'DSC_4832.jpg': {
+    title: 'BMW M Team WRT Garage at Night',
+    caption: 'A BMW Hypercar sits in the BMW M Team WRT garage at Le Mans 2026, its purple accent lighting glowing as the crew prepares it for the next stint. Kevin Magnussen\'s image is shown on the team screen above.',
+  },
+  'DSC_4843.jpg': {
+    title: 'Ferrari 296 GT3 Pit Stop, Car 83',
+    caption: 'The VistaJet liveried Ferrari 296 GT3, car 83, is worked on by its crew during a pit stop at Le Mans 2026, a fire marshal standing by with an extinguisher.',
+  },
+  'DSC_4849.jpg': {
+    title: 'Wayne Taylor Racing Cadillac, Car 101',
+    caption: 'The Wayne Taylor Racing Cadillac V-Series.R Hypercar, car 101, is serviced in the pit lane at Le Mans 2026, drivers Ricky Taylor, Jordan Taylor and Albuquerque named across the windscreen.',
+  },
+
   // ── Formula ───────────────────────────────────────────────────────────────
 
   'DSC_4206-Enhanced-NR.jpg': { title: 'Monza Historic Banking', caption: 'The steeply banked oval section of the Autodromo Nazionale Monza, viewed from track level looking along the curve. Built in 1955 and last used in competition in 1969, the banking survives as a preserved monument to motorsport history within the Monza park. Trees line the outside of the banking under an autumn sky.' },
