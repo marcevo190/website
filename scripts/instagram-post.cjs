@@ -219,6 +219,19 @@ function fireWebhook(payload) {
   });
 }
 
+// ── Follow prompt, rotated so it doesn't read as the same bolted-on line every time ──
+const FOLLOW_CTAS = [
+  'Follow @trackmarcdotcom for more shots like this.',
+  'Follow along, new shots go up daily.',
+  'Follow @trackmarcdotcom to keep up with the season.',
+  'More from the paddock daily, give us a follow.',
+  'Follow @trackmarcdotcom for daily trackside photography.',
+];
+
+function pickFollowCta(postedCount) {
+  return FOLLOW_CTAS[postedCount % FOLLOW_CTAS.length];
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 async function main() {
   const queuePath = 'post-queue.json';
@@ -246,8 +259,9 @@ async function main() {
 
   // Use Instagram-specific caption if available, fall back to website caption
   const captionText     = igCaptions[next.filename] || cap.caption;
+  const followCta       = pickFollowCta(queue.posted.length);
   const tagsAndMentions = generateTagsAndMentions(cap.title, cap.caption, next.category);
-  const igCaption       = `${captionText}\n\n${tagsAndMentions}`;
+  const igCaption       = `${captionText}\n\n${followCta}\n\n${tagsAndMentions}`;
   const igFilename      = next.filename.replace(/\.[^.]+$/, '.jpg');
   const imageUrl        = `https://trackmarc.com/ig/${next.category}/${igFilename}`;
 
