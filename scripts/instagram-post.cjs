@@ -22,7 +22,7 @@ function loadInstagramCaptions() {
 // ── Collect all images from asset folders ────────────────────────────────────
 function collectImages() {
   const base       = 'src/assets/images';
-  const categories = ['endurance', 'car-shows', 'formula', 'rally', 'gt'];
+  const categories = ['endurance', 'car-shows', 'formula', 'rally', 'gt', 'instagram-only'];
   const images     = [];
   for (const cat of categories) {
     const dir = path.join(base, cat);
@@ -47,6 +47,14 @@ function generateTagsAndMentions(title, caption, category) {
   if (category === 'car-shows') {
     tags.add('#CarShow'); tags.add('#ClassicCars'); tags.add('#CarCulture');
   }
+  if (category === 'formula' || category === 'instagram-only') {
+    if (text.includes('f1') || text.includes('formula') || text.includes('grand prix')) {
+      tags.add('#F1'); tags.add('#Formula1'); tags.add('#FormulaOne');
+    }
+  }
+  if (text.includes('zandvoort') || text.includes('dutch grand prix')) {
+    tags.add('#DutchGP'); tags.add('#Zandvoort');
+  }
 
   // Hashtags by manufacturer
   const manufacturerMap = {
@@ -58,6 +66,7 @@ function generateTagsAndMentions(title, caption, category) {
     'alpine':       ['#Alpine', '#AlpineMotorsport'],
     'peugeot':      ['#Peugeot', '#PeugeotSport'],
     'mercedes':     ['#Mercedes', '#MercedesAMG'],
+    'red bull':     ['#RedBullRacing', '#RedBull'],
     'bmw':          ['#BMW', '#BMWMotorsport'],
     'cadillac':     ['#Cadillac', '#CadillacRacing'],
     'pagani':       ['#Pagani', '#PaganiAutomobili'],
@@ -147,6 +156,7 @@ function generateTagsAndMentions(title, caption, category) {
     'alpine':           '@alpinecars',
     'peugeot':          '@peugeot',
     'mercedes':         '@mercedesamg',
+    'red bull':         '@redbullracing',
     'bmw':              '@bmw',
     'cadillac':         '@cadillac',
     'pagani':           '@paganiautomobili',

@@ -732,6 +732,15 @@ export const captions: Record<string, CaptionEntry> = {
   'DSC_4539.jpg': { title: 'Ferrari 296 Challenge #102 MR Solar — Le Mans 2026', caption: 'The #102 Ferrari 296 Challenge, in black and yellow livery for MR Solar and Stern, exits a corner in front of the "Raceborn" hoarding, a teal and white car passing on the straight behind.' },
   'DSC_4543.jpg': { title: 'Ferrari 296 Challenge #130 Branson Head-On — Le Mans 2026', caption: 'Head-on view of the #130 Branson Motorsports Ferrari 296 Challenge in light blue and orange, cornering hard onto the circuit\'s painted kerbing.' },
   'DSC_4544.jpg': { title: 'Ferrari 296 Challenge #130 Branson Past the Crowd — Le Mans 2026', caption: 'The #130 Branson Motorsports Ferrari 296 Challenge runs past a packed grandstand hill, Race for RP charity branding visible on the door.' },
+
+  // ── Instagram-only (src/assets/images/instagram-only/) — not shown in the website gallery ──
+  '20210905_151041.jpg': { title: 'Ferrari SF21 Under the Rolex Bridge — Zandvoort 2021', caption: 'A Ferrari SF21 runs down towards Tarzan corner at the 2021 Dutch Grand Prix, passing beneath the trackside Rolex bridge. The grandstands either side are packed with Max Verstappen\'s orange-clad home crowd, marking Formula 1\'s return to Zandvoort after a 36-year absence.' },
+  '20210905_151048.jpg': { title: 'Formula 1 Cars Pass the Grandstand — Zandvoort 2021', caption: 'Two Formula 1 cars run nose to tail past the main grandstand at the 2021 Dutch Grand Prix, with the Rolex bridge spanning the circuit overhead and the orange-clad crowd packed into the stands.' },
+  '20210905_151256b.jpg': { title: 'Red Bull RB16B Leads Under the Rolex Bridge — Zandvoort 2021', caption: 'The Red Bull RB16B runs down towards Tarzan corner in front of the home crowd at the 2021 Dutch Grand Prix, the grandstands either side a wall of orange for Max Verstappen.' },
+  '20210905_151256.jpg': { title: 'Red Bull Leads a Chasing Car — Zandvoort 2021', caption: 'The Red Bull RB16B leads a chasing Formula 1 car down towards Tarzan corner at the 2021 Dutch Grand Prix, framed by the Rolex bridge and a grandstand full of orange.' },
+  '20210905_160317.jpg': { title: 'Aston Martin AMR21 at the Banked Final Corner — Zandvoort 2021', caption: 'An Aston Martin AMR21, in Cognizant-backed pink and green livery, leans into Zandvoort\'s steeply banked final corner during the 2021 Dutch Grand Prix, with "ZANDVOORT" painted across the infield grass.' },
+  '20210905_160320.jpg': { title: 'Ferrari SF21 at the Banked Final Corner — Zandvoort 2021', caption: 'A Ferrari SF21 takes Zandvoort\'s banked final corner during the 2021 Dutch Grand Prix, the circuit\'s trademark banking letting the car carry speed through what would otherwise be a tight bend.' },
+  '20210905_160338.jpg': { title: 'Red Bull Leads an Alpine Through the Banking — Zandvoort 2021', caption: 'The Red Bull RB16B, wearing its Honda-powered livery, leads a blue Alpine A521 through Zandvoort\'s banked final corner at the 2021 Dutch Grand Prix.' },
 };
 
 export function getCaption(filename: string): CaptionEntry | null {

@@ -19,6 +19,8 @@ const INPUT_BASE  = 'src/assets/images';
 const OUTPUT_BASE = 'src/assets/watermarked';
 const IG_BASE     = 'public/ig';
 const CATEGORIES  = ['formula', 'endurance', 'rally', 'gt', 'car-shows'];
+// Posted to Instagram only — excluded from gallery.astro's glob, so no watermarked/ copy is made.
+const IG_ONLY_CATEGORIES = ['instagram-only'];
 const EXTS        = '{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}';
 
 function watermarkSVG(w, h) {
@@ -46,14 +48,28 @@ function watermarkSVG(w, h) {
     </svg>`);
 }
 
-const files = CATEGORIES.flatMap(c => findImages(path.join(INPUT_BASE, c)));
+const files       = CATEGORIES.flatMap(c => findImages(path.join(INPUT_BASE, c)));
+const igOnlyFiles = IG_ONLY_CATEGORIES.flatMap(c => findImages(path.join(INPUT_BASE, c)));
 
-if (!files.length) {
+if (!files.length && !igOnlyFiles.length) {
   console.log('[watermark] No images found — skipping.');
   process.exit(0);
 }
 
 let stamped = 0, skipped = 0;
+
+// Instagram requires aspect ratio between 0.8 (4:5 portrait) and 1.91:1 (landscape)
+async function writeIgVersion(src, igDest) {
+  const meta = await sharp(src).metadata();
+  fs.mkdirSync(path.dirname(igDest), { recursive: true });
+  const igWidth  = Math.min(meta.width, 1080);
+  const igHeight = Math.max(Math.round(igWidth * meta.height / meta.width), Math.ceil(igWidth / 1.91));
+  await sharp(src)
+    .resize({ width: igWidth, height: igHeight, fit: 'cover', position: 'centre', withoutEnlargement: true })
+    .jpeg({ quality: 88 })
+    .toFile(igDest);
+  return meta;
+}
 
 for (const src of files) {
   const rel  = path.relative(INPUT_BASE, src);
@@ -78,18 +94,26 @@ for (const src of files) {
     .jpeg({ quality: 88 })
     .toFile(dest);
 
-  // Also write a 1080px-wide version to public/ig/ for Instagram posts
-  // Instagram requires aspect ratio between 0.8 (4:5 portrait) and 1.91:1 (landscape)
-  const igDest = igDest0;
-  fs.mkdirSync(path.dirname(igDest), { recursive: true });
-  const igWidth  = Math.min(meta.width, 1080);
-  const igHeight = Math.max(Math.round(igWidth * meta.height / meta.width), Math.ceil(igWidth / 1.91));
-  await sharp(src)
-    .resize({ width: igWidth, height: igHeight, fit: 'cover', position: 'centre', withoutEnlargement: true })
-    .jpeg({ quality: 88 })
-    .toFile(igDest);
+  // Also write a 1080px-wide clean version to public/ig/ for Instagram posts
+  await writeIgVersion(src, igDest0);
 
   console.log(`[watermark] ✓ ${rel}`);
+  stamped++;
+}
+
+// Instagram-only images: no watermarked/ copy, so they never appear in the website gallery.
+for (const src of igOnlyFiles) {
+  const rel     = path.relative(INPUT_BASE, src);
+  const igDest0 = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
+
+  if (fs.existsSync(igDest0)) {
+    const srcMtime = fs.statSync(src).mtimeMs;
+    const igMtime  = fs.statSync(igDest0).mtimeMs;
+    if (igMtime >= srcMtime) { skipped++; continue; }
+  }
+
+  await writeIgVersion(src, igDest0);
+  console.log(`[watermark] ✓ ${rel} (Instagram-only)`);
   stamped++;
 }
 
