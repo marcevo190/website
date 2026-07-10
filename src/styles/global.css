@@ -451,26 +451,10 @@ h1, h2, h3, h4 {
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 5rem;
+  grid-template-columns: 1fr;
   align-items: start;
 }
-.about-photo-wrap {
-  position: sticky;
-  top: calc(var(--nav-height) + 2rem);
-}
-.about-photo {
-  aspect-ratio: 3/4;
-  background: var(--surface);
-  position: relative;
-  overflow: hidden;
-}
-.about-photo-caption {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  margin-top: 0.75rem;
-  font-style: italic;
-}
+.about-text { max-width: 760px; margin: 0 auto; }
 .about-text h1 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 0.5rem; }
 .about-text h1 em { color: var(--accent); font-style: normal; }
 .about-role {
@@ -765,8 +749,6 @@ h1, h2, h3, h4 {
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   .gallery-masonry { columns: 2; }
-  .about-hero { grid-template-columns: 1fr; gap: 3rem; }
-  .about-photo-wrap { position: static; }
   .about-strip-inner { grid-template-columns: 1fr; gap: 3rem; }
   .featured-grid .photo-card:nth-child(1) { grid-column: span 12; }
   .featured-grid .photo-card:nth-child(2) { grid-column: span 6; }
@@ -805,7 +787,6 @@ h1, h2, h3, h4 {
     padding-bottom: 3rem;
     gap: 2rem;
   }
-  .about-photo { aspect-ratio: 4/3; }
   .about-text h1 { font-size: clamp(2.2rem, 10vw, 3rem); }
   .about-section-title { margin: 1.5rem 0 0.75rem; padding-top: 1.5rem; }
 
