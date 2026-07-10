@@ -867,22 +867,11 @@ h1, h2, h3, h4 {
   .accred-cta { padding: 1.75rem 1.25rem; }
   .accred-btn { width: 100%; justify-content: center; }
 
-  /* ── Gallery filters ── */
-  .gallery-filters {
-    gap: 0.5rem;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    margin-left: -1.25rem;
-    margin-right: -1.25rem;
-    padding: 0 1.25rem 0.25rem;
-  }
-  .gallery-filters::-webkit-scrollbar { display: none; }
+  /* ── Gallery filters — wrap so every category stays visible & tappable ── */
+  .gallery-filters { gap: 0.5rem; }
   .filter-btn {
     padding: 0.7rem 1.1rem;
     font-size: 0.7rem;
     white-space: nowrap;
-    flex-shrink: 0;
   }
 }
