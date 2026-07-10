@@ -2,6 +2,21 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    if (url.pathname === '/api/visits') {
+      if (request.method === 'POST') {
+        const current = parseInt((await env.VISITS.get('count')) ?? '0', 10);
+        const next = current + 1;
+        await env.VISITS.put('count', String(next));
+        return new Response(JSON.stringify({ count: next }), {
+          headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+        });
+      }
+      const count = parseInt((await env.VISITS.get('count')) ?? '0', 10);
+      return new Response(JSON.stringify({ count }), {
+        headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+      });
+    }
+
     if (url.pathname === '/api/rss') {
       const feedUrl = url.searchParams.get('url');
       if (!feedUrl) return new Response('Missing url param', { status: 400 });

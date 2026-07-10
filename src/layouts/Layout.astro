@@ -103,6 +103,11 @@ const currentPath = Astro.url.pathname;
         &copy; {new Date().getFullYear()} Marc Ronan. All images protected by copyright.
         <a href="/licensing" style="color:var(--accent);margin-left:0.4em;">Licensing ↗</a>
       </p>
+      <div class="odometer" aria-label="Site visit counter">
+        <div class="odometer-display" id="odometer-value"></div>
+        <div class="odometer-label">Site Visits</div>
+      </div>
+
       <div class="footer-links">
         <a href="/gallery">Gallery</a>
         <a href="/about">About</a>
@@ -132,6 +137,52 @@ const currentPath = Astro.url.pathname;
         hamburger?.classList.remove('open');
         document.body.style.overflow = '';
       };
+    </script>
+
+    <script>
+      (function () {
+        const container = document.getElementById('odometer-value');
+        if (!container) return;
+
+        function render(n: number) {
+          const str = String(Math.max(0, Math.floor(n))).padStart(6, '0');
+          container!.innerHTML = '';
+          for (const ch of str) {
+            const span = document.createElement('span');
+            span.className = 'odometer-digit';
+            span.textContent = ch;
+            container!.appendChild(span);
+          }
+        }
+
+        function animateTo(target: number) {
+          const start = Math.max(0, target - 40);
+          const duration = 800;
+          const startTime = performance.now();
+          function tick(now: number) {
+            const progress = Math.min(1, (now - startTime) / duration);
+            const current = Math.round(start + (target - start) * progress);
+            render(current);
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+
+        render(0);
+
+        (async () => {
+          const today = new Date().toISOString().slice(0, 10);
+          const alreadyCountedToday = localStorage.getItem('tm_visit_day') === today;
+          try {
+            const res = await fetch('/api/visits', { method: alreadyCountedToday ? 'GET' : 'POST' });
+            const data = await res.json();
+            if (!alreadyCountedToday) localStorage.setItem('tm_visit_day', today);
+            animateTo(data.count);
+          } catch {
+            // Leave at 000000 if the request fails
+          }
+        })();
+      })();
     </script>
   </body>
 </html>

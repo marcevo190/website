@@ -5,5 +5,11 @@
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "VISITS",
+      "id": "d84395b8434a45b6872f6882d04a92aa"
+    }
+  ]
 }
