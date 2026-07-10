@@ -62,7 +62,7 @@ const locations = [
         <p class="section-subtitle">Click a marker to see what was shot there.</p>
       </div>
     </div>
-    <div id="map" data-locations={JSON.stringify(locations)} style="width:100%; height:55vh; background:var(--surface);"></div>
+    <div id="map" data-locations={JSON.stringify(locations)} style="width:100%; background:var(--surface);"></div>
 
     <!-- VENUE LIST -->
     <div class="section" style="padding-top: 2rem; padding-bottom: 4rem;">
@@ -86,6 +86,14 @@ const locations = [
 
   </div>
 
+  <style>
+    #map { height: 55vh; }
+    @media (max-width: 768px) {
+      /* Shorter on phones so it's easy to scroll past to the venue list */
+      #map { height: 44vh; min-height: 300px; }
+    }
+  </style>
+
   <!-- MAP SCRIPT -->
   <script>
     import L from 'leaflet';
@@ -93,7 +101,16 @@ const locations = [
     const mapEl = document.getElementById('map');
     const locations = JSON.parse(mapEl?.dataset.locations ?? '[]');
 
-    const map = L.map('map', { scrollWheelZoom: false });
+    // On phones a draggable full-width map traps vertical page scroll — a thumb
+    // swipe pans the map instead of scrolling the page. All markers already fit
+    // in view via fitBounds, so panning isn't needed there; disable it on narrow
+    // screens and let taps open popups. Pinch-zoom stays available.
+    const isNarrow = window.matchMedia('(max-width: 768px)').matches;
+    const map = L.map('map', {
+      scrollWheelZoom: false,
+      dragging: !isNarrow,
+      tap: false,
+    });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap &copy; CARTO',
       subdomains: 'abcd',

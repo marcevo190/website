@@ -479,15 +479,17 @@ h1, h2, h3, h4 {
 .gear-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
 .gear-list li {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
   font-size: 0.9rem;
+  line-height: 1.5;
   color: var(--text-muted);
 }
 .gear-list li::before {
   content: '';
   display: block;
   width: 0.4rem; height: 0.4rem;
+  margin-top: 0.5em;
   background: var(--accent);
   flex-shrink: 0;
 }
@@ -718,11 +720,15 @@ h1, h2, h3, h4 {
 .nav-hamburger {
   display: none;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
   z-index: 200;
 }
 .nav-hamburger span {
@@ -765,6 +771,25 @@ h1, h2, h3, h4 {
   margin-top: 1rem;
 }
 
+/* ── ACCREDITATION / ENQUIRY CTA (shared: motorsport + licensing) ── */
+.accred-cta {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  padding: 2.5rem;
+  margin-top: 2rem;
+}
+.accred-title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  margin: 0.5rem 0 0.75rem;
+}
+.accred-desc {
+  color: var(--text-muted);
+  font-weight: 300;
+  max-width: 520px;
+}
+.accred-btn { margin-top: 1.5rem; display: inline-flex; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   .gallery-masonry { columns: 2; }
@@ -785,14 +810,19 @@ h1, h2, h3, h4 {
   .section-subtitle { font-size: 0.88rem; }
 
   /* ── Hero ── */
-  .hero { padding: 0 1.25rem 2rem; height: auto; min-height: 100svh; }
+  .hero { padding: 0 1.25rem 3rem; height: auto; min-height: 100svh; }
+  .hero-content { width: 100%; }
   .hero h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
   .hero-desc { font-size: 0.9rem; margin-bottom: 1.5rem; }
   .hero-actions { flex-direction: column; gap: 0.75rem; }
   .hero-actions .btn { width: 100%; justify-content: center; }
+  /* Scroll cue overlaps the stacked buttons on a phone — hide it */
+  .hero-scroll { display: none; }
 
   /* ── Grids ── */
-  .gallery-masonry { columns: 1; }
+  /* Two columns keeps a big photo set scannable instead of one endless strip */
+  .gallery-masonry { columns: 2; column-gap: 0.5rem; }
+  .gallery-masonry .photo-card { margin-bottom: 0.5rem; }
   .events-grid { grid-template-columns: 1fr; }
   .event-card { padding: 1.25rem; }
   .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
@@ -833,7 +863,26 @@ h1, h2, h3, h4 {
   /* ── Buttons ── */
   .btn { padding: 0.9rem 1.5rem; }
 
+  /* ── Accreditation / enquiry CTA ── */
+  .accred-cta { padding: 1.75rem 1.25rem; }
+  .accred-btn { width: 100%; justify-content: center; }
+
   /* ── Gallery filters ── */
-  .gallery-filters { gap: 0.4rem; }
-  .filter-btn { padding: 0.45rem 0.9rem; font-size: 0.65rem; }
+  .gallery-filters {
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    padding: 0 1.25rem 0.25rem;
+  }
+  .gallery-filters::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    padding: 0.7rem 1.1rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 }

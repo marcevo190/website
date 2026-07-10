@@ -254,32 +254,13 @@ import Layout from '../layouts/Layout.astro';
       border-radius: 2px;
     }
 
-    /* ── Accreditation CTA ── */
-    .accred-cta {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--accent);
-      padding: 2.5rem;
-      margin-top: 2rem;
-    }
-    .accred-title {
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      margin: 0.5rem 0 0.75rem;
-    }
-    .accred-desc {
-      color: var(--text-muted);
-      font-weight: 300;
-      max-width: 520px;
-    }
-    .accred-btn { margin-top: 1.5rem; display: inline-flex; }
+    /* .accred-cta styles now live in global.css (shared with licensing) */
 
     @media (max-width: 768px) {
       .feed-section { margin-bottom: 2.5rem; }
       .series-heading { flex-wrap: wrap; row-gap: 0.4rem; }
       .series-name { font-size: 0.85rem; }
       .series-link { margin-left: 0; }
-      .accred-cta { padding: 1.5rem 1.25rem; }
-      .accred-title { font-size: 1.3rem !important; }
     }
   </style>
 </Layout>
