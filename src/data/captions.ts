@@ -23,8 +23,8 @@ export const captions: Record<string, CaptionEntry> = {
   'DSC_4564-Enhanced-NR.jpg': { title: 'Lotus Elise Series 2 on Display at Outdoor Car Show', caption: 'A grey Lotus Elise Series 2 is pictured at an outdoor car show in France, parked alongside a Nissan 370Z. The Elise is a lightweight, mid-engined British sports car built around Lotus\'s signature aluminium tub chassis. The car carries 24 Heures du Mans event stickers on its windscreen and bonnet, consistent with an organised road-car gathering.' },
   'DSC_4572-Enhanced-NR.jpg': { title: 'Porsche 718 Cayman GT4 in Racing Yellow', caption: 'A Racing Yellow Porsche 718 Cayman GT4 on static display at a car show, photographed from the rear three-quarter angle. The GT4 is distinguished by its prominent fixed rear wing, dark multi-spoke alloys, and yellow-painted brake calipers. The 718 Cayman GT4 uses a naturally aspirated 4.0-litre flat-six engine producing 420 hp, shared with the 911 GT3.' },
   'DSC_4573-Enhanced-NR.jpg': { title: 'Lamborghini Aventador on Static Display', caption: 'A silver Lamborghini Aventador parked on grass at an outdoor car show event, surrounded by other vehicles. The Aventador, introduced in 2011 as the successor to the Murciélago, is powered by a naturally aspirated 6.5-litre V12 engine producing 700 hp. No race numbers or livery are present; this is a road car on static display.' },
-  'DSC_4576-Enhanced-NR.jpg': { title: 'Porsche 718 Cayman GT4 and BMW M3 at Car Show', caption: 'A yellow Porsche 718 Cayman GT4 takes centre stage alongside a dark Aventurine Red BMW M3 (G80) at an outdoor UK car show, parked on grass in a mixed display of performance road cars. The Cayman GT4 is the track-focused variant of the mid-engined 718 Cayman, featuring a naturally aspirated flat-six engine, uprated suspension, and a rear wing — all carried over from the motorsport-derived GT programme. Both cars are shown on static display with UK registration plates.' },
-  'DSC_4578-Enhanced-NR.jpg': { title: 'Porsche 911 GT3 Touring (992) in Slate Grey', caption: 'A Porsche 911 GT3 Touring in slate grey, finished with distinctive gold wheels and an orange front-bumper accent stripe, on static display at an outdoor car show. The 992-generation GT3 Touring omits the standard GT3\'s large rear wing in favour of a subtle integrated spoiler, making it one of the most subtle ways to access a naturally aspirated 510 hp flat-six. The event setting — grass field, white marquee tents in the background — suggests a concours or club display day.' },
+  'DSC_4576-Enhanced-NR.jpg': { title: 'Porsche 718 Cayman GT4 and BMW M340i at Car Show', caption: 'A yellow Porsche 718 Cayman GT4 takes centre stage alongside a dark Aventurine Red BMW M340i at an outdoor UK car show, parked on grass in a mixed display of performance road cars. The Cayman GT4 is the track-focused variant of the mid-engined 718 Cayman, featuring a naturally aspirated flat-six engine, uprated suspension, and a rear wing — all carried over from the motorsport-derived GT programme. Both cars are shown on static display with UK registration plates.' },
+  'DSC_4578-Enhanced-NR.jpg': { title: 'Porsche 911 GT3 Touring (992) in Slate Grey', caption: 'A Porsche 911 GT3 Touring in slate grey, finished with distinctive gold wheels, on static display at an outdoor car show. An orange and black cordon strap runs across the front bumper, part of the display barrier rather than the car itself. The 992-generation GT3 Touring omits the standard GT3\'s large rear wing in favour of a subtle integrated spoiler, making it one of the most subtle ways to access a naturally aspirated 510 hp flat-six. The event setting — grass field, white marquee tents in the background — suggests a concours or club display day.' },
   'DSC_4580-Enhanced-NR.jpg': { title: 'Porsche 911 Targa (992) in Carmine Red', caption: 'A Guards Red / Carmine Red Porsche 911 Targa, from the current 992 generation, on static display at an outdoor car show. The shot emphasises the car\'s distinctive Targa bar and signature round LED headlight, with a second 911 visible in the background. The 992 Targa revives Porsche\'s classic open-top format with an electrically retractable roof behind the fixed stainless-steel hoop, a feature first introduced on the original 911 Targa in 1967.' },
   'DSC_4583-Enhanced-NR.jpg': { title: 'Audi R8 Coupe on Static Display', caption: 'A Daytona Grey Audi R8 coupe (first generation, post-2012 facelift) on static display at an outdoor car show, registration R88 MHO. The car is finished with black multi-spoke alloy wheels and the R8\'s distinctive LED daytime running light strips that run the full width of each headlight cluster. The first-generation R8 was Audi\'s first mid-engined production road car, sharing its aluminium spaceframe platform with the Lamborghini Gallardo.' },
   'DSC_4585-Enhanced-NR.jpg': { title: 'Audi R8 V8 at Car Show', caption: 'A first-generation Audi R8 finished in matte dark grey queues at what appears to be an outdoor car show or concours event, identifiable by the white marquee tents in the background. The car wears UK registration R88 MHO and displays the R8 badge on the tail. The first-generation R8, introduced in 2007, was Audi\'s first mid-engined production supercar and shared its 4.2-litre V8 platform with the Lamborghini Gallardo.' },
@@ -37,7 +37,7 @@ export const captions: Record<string, CaptionEntry> = {
   'DSC_4612-Enhanced-NR.jpg': { title: 'Porsche 944 with Martini-Style Livery', caption: 'A red Porsche 944 wearing a Martini-inspired bonnet and roof stripe in red, white, and blue, registered G3OMAN, makes its way through the paddock at an outdoor car show or track day event. A black Porsche Cayenne follows closely behind. The 944, produced from 1982 to 1991, was notable for being the first Porsche to use a front-mounted, water-cooled four-cylinder engine developed entirely in-house.' },
   'DSC_4617-Enhanced-NR.jpg': { title: 'Porsche 911 Carrera (964) in Guards Red', caption: 'A Guards Red Porsche 911 Carrera of the 964 generation, registered in the UK in the 1990–1991 period, on static display at an outdoor motorsport or classic car event. The 964 was a significant evolution of the 911 line, introducing ABS, power steering, and a redesigned body that retained only around 15% of the previous 911\'s parts. The car sits on dark wheels against a backdrop of fellow enthusiasts and event marquees.' },
   'DSC_4619-Enhanced-NR.jpg': { title: 'Porsche 911 (964) in Guards Red', caption: 'A Guards Red Porsche 911 of the 964 generation (1989–1994) on static display at a car show. The 964 was the first 911 to feature all-wheel drive in the Carrera 4 variant, and introduced coil springs in place of the traditional torsion bars. This example rides on the period-correct black Porsche Cup design alloy wheels.' },
-  'DSC_4621-Enhanced-NR.jpg': { title: 'Porsche 911 (964) Carrera 2S — 20th Anniversary Window Detail', caption: 'A red Porsche 911 of the 964 generation, shown in static display at a car show. The quarter-window carries a commemorative shield sticker marking twenty years ("Zwanzig Jahre") of the 964 Carrera 2S, dated 1992–2012. The 964-generation 911, produced from 1989 to 1994, was the first 911 to feature a fully integrated front and rear bumper design and introduced Porsche\'s all-wheel-drive Carrera 4 alongside the rear-wheel-drive Carrera 2.' },
+  'DSC_4621-Enhanced-NR.jpg': { title: 'Porsche 911 (964) Carrera RS — 20th Anniversary Window Detail', caption: 'A red Porsche 911 of the 964 generation, shown in static display at a car show. The quarter-window carries a commemorative shield sticker marking twenty years ("Zwanzig Jahre") of the 964 Carrera RS, dated 1992–2012. The 964-generation 911, produced from 1989 to 1994, was the first 911 to feature a fully integrated front and rear bumper design and introduced Porsche\'s all-wheel-drive Carrera 4 alongside the rear-wheel-drive Carrera 2.' },
   'DSC_4695-Enhanced-NR.jpg': { title: 'Aston Martin Valkyrie AMR Pro on Static Display', caption: 'The Aston Martin Valkyrie AMR Pro, finished in a dark teal and black two-tone scheme, on static display at an indoor automotive event alongside what appears to be a Vantage GT3. Developed as a track-only evolution of the road-going Valkyrie, the AMR Pro produces over 1,000 bhp from its naturally aspirated Cosworth-developed V12 and generates enough downforce to theoretically corner at 3g. Pirelli P Zero slick tyres and the Aston Martin winged badge are clearly visible on the flanks.' },
   'DSC_4698-Enhanced-NR.jpg': { title: 'Ford GT Mk IV — Pit Board Display', caption: 'A Ford GT Mk IV on static display, shown alongside its illuminated Ford Racing pit identification board bearing the number 6:15. The car is finished in blue and rides on Michelin Pilot Sport tyres. The Ford GT Mk IV is a track-only race car developed by Ford Performance and Multimatic, built exclusively for competition rather than road use.' },
   'DSC_4699-Enhanced-NR.jpg': { title: 'Aston Martin Valkyrie AMR Pro on Static Display', caption: 'The Aston Martin Valkyrie AMR Pro, finished in British Racing Green, photographed on static indoor display. Shod on Pirelli slick tyres, the car\'s extreme closed-wheel bodywork and aerodynamic side channelling distinguish the track-only AMR Pro variant from the road-going Valkyrie. The Valkyrie AMR Pro was designed to comply with Le Mans Hypercar regulations and produces over 1,000 bhp from its naturally aspirated Cosworth V12.' },
@@ -61,12 +61,12 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'A silver-white Porsche 911 bearing "Le Mans Clubsport" livery, registration ZV 35609, on display at the show.',
   },
   'IMG_20260503_191611_130.jpg': {
-    title: 'Porsche 911 Turbo 3.0 — Black and Silver',
-    caption: 'A black Porsche 911 Turbo 3.0 in the foreground, its "Turbo 3.0" badging proudly on display, with a silver example behind. Both are unmistakably from the era when Porsche\'s turbo earned the nickname "widow-maker."',
+    title: 'Porsche 911 Turbo 3.6 — Black and Silver',
+    caption: 'A black Porsche 911 Turbo 3.6 in the foreground, its "turbo 3.6" badging proudly on display, with a silver example behind. Both are unmistakably from the era when Porsche\'s turbo earned the nickname "widow-maker."',
   },
   'IMG_20260503_191840_818.jpg': {
     title: 'McLaren Senna',
-    caption: 'A blue McLaren Senna on display, its carbon detailing and red brake callipers catching the light. Brutally functional aero, dihedral doors open — this is a car built without apology. Named in honour of three-time Formula 1 World Champion Ayrton Senna, it was developed in close collaboration with the Senna family.',
+    caption: 'A blue McLaren Senna on display, its carbon detailing and red brake callipers catching the light. Brutally functional aero, doors closed — this is a car built without apology. Named in honour of three-time Formula 1 World Champion Ayrton Senna, it was developed in close collaboration with the Senna family.',
   },
   'IMG_20260503_192032_018.jpg': {
     title: 'Bentley — Custom Wrap',
@@ -77,8 +77,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'A red Ferrari F40 on display, its iconic lines unmistakable. The plate reads "40 RED." Appropriate. The F40 was the last car personally approved by Enzo Ferrari before his death in August 1988 — the same year it was launched.',
   },
   'IMG_20260503_192442_806.jpg': {
-    title: 'McLaren — Nose Detail',
-    caption: 'The nose of a grey McLaren at the show, Irish-registered with Sligo plates.',
+    title: 'McLaren — Tail Detail',
+    caption: 'The tail of a grey McLaren at the show, Irish-registered with Sligo plates.',
   },
   'IMG_20260503_192712_783.jpg': {
     title: 'Pagani Zonda — Front Three-Quarter',
@@ -90,7 +90,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'IMG_20260503_234528_510.jpg': {
     title: 'BMW M1',
-    caption: 'A white BMW M1 on display, wearing the full M-sport tricolour stripe the length of the car. Plate "H1 MZ6." One of the rarest road cars BMW ever made. The M1 remains the only mid-engined production road car BMW has ever built.',
+    caption: 'A white BMW M1 on display, wearing the full M-sport tricolour stripe the length of the car. Plate "H1 MZL." One of the rarest road cars BMW ever made. The M1 remains the only mid-engined production road car BMW has ever built.',
   },
   'IMG_20260503_234814_290.jpg': {
     title: 'Two Early Porsche 911s',
@@ -184,24 +184,24 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'The Heart of Racing\'s Aston Martin No. 009, backed by the Thor Team, in the pit lane at Le Mans 2026.',
   },
   'DSC_4903-Enhanced-NR.jpg': {
-    title: 'Peugeot 9X8 #93 — Le Mans 2026',
-    caption: 'Peugeot 9X8, car #93, in the TotalEnergies pit. The white and black zebra-stripe livery is unmistakable; the "HY" hybrid badge marks it as one of the most technically ambitious cars in the field. When the 9X8 made its racing debut in 2022, it was the first Le Mans Hypercar to race without a conventional rear wing, relying entirely on underbody aerodynamics for downforce.',
+    title: 'Aston Martin Vantage GT3 #23 — Le Mans 2026',
+    caption: 'The Heart of Racing\'s blue Aston Martin Vantage GT3 #23 during a pit stop at Le Mans 2026, WEC and Goodyear signage visible in the pit lane.',
   },
   'DSC_4905-Enhanced-NR.jpg': {
-    title: 'Aston Martin Pit Complex — Le Mans 2026',
-    caption: 'Three Aston Martin bays in one frame: the Vantage GT3 #23 on the left, the Valkyrie hypercar crew in the centre, and a second hypercar to the right.',
+    title: 'Peugeot Pit Box — Le Mans 2026',
+    caption: 'The Peugeot 9X8 pit box at Le Mans 2026, car #93 backed by TotalEnergies, the yellow "Peugeot 9X8" team board overhead.',
   },
   'DSC_4907-Enhanced-NR.jpg': {
     title: 'Aston Martin Valkyrie #009 — Pit Stop',
     caption: 'Aston Martin Valkyrie AMR Pro #009 during a pit stop, the "Aston Martin Thor Team" gantry overhead.',
   },
   'DSC_4910-Enhanced-NR.jpg': {
-    title: 'Aston Martin Vantage GT3 #23 & Valkyrie #009 — Le Mans 2026',
-    caption: 'The Heart of Racing\'s Aston Martin Vantage GT3 #23 and Valkyrie AMR Pro #009 in adjacent pit bays — two very different Aston Martins, both in the thick of it at Le Mans 2026.',
+    title: 'Aston Martin Valkyrie #009 — Le Mans 2026',
+    caption: 'The Heart of Racing\'s Aston Martin Valkyrie AMR Pro #009 mid pit stop at Le Mans 2026, crew swarming the car under the Thor Team gantry.',
   },
   'DSC_4912-Enhanced-NR.jpg': {
-    title: 'Aston Martin Valkyrie #009 & #007 — Le Mans 2026',
-    caption: 'Aston Martin Valkyrie AMR Pro cars #009 and #007 side by side in the Thor Team pit at Le Mans 2026.',
+    title: 'Aston Martin Valkyrie #009 & Vantage GT3 #23 — Le Mans 2026',
+    caption: 'Two different Aston Martins side by side in the pit lane at Le Mans 2026: the Thor Team\'s Valkyrie AMR Pro #009 and the Heart of Racing\'s Vantage GT3 #23.',
   },
   'DSC_4915-Enhanced-NR.jpg': {
     title: 'Aston Martin Valkyrie #009 — Le Mans 2026',
@@ -216,8 +216,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'A wide view of the Aston Martin pit complex at Le Mans 2026, No. 009 prominent, Rolex timing boards overhead.',
   },
   'DSC_4931-Enhanced-NR.jpg': {
-    title: 'United Autosports #22 — Le Mans 2026',
-    caption: 'The United Autosports No. 22 LMP2 machine in the pit lane, the Manthey Racing bay visible next door.',
+    title: 'Aston Martin Pit Boxes — Le Mans 2026',
+    caption: 'The Aston Martin pit boxes at Le Mans 2026 — Heart of Racing Team #23 and Thor Team #009 and #007 gantry boards visible overhead.',
   },
   'DSC_4933-Enhanced-NR.jpg': {
     title: 'United Autosports #22 & Manthey Racing — Le Mans 2026',
@@ -228,8 +228,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'A Mercedes-AMG GT3 framed through the circuit fence at night, its light-coloured livery catching the trackside lighting.',
   },
   'DSC_5071-Enhanced-NR.jpg': {
-    title: 'Aston Martin Valkyrie on Circuit — Le Mans 2026',
-    caption: 'The dark green Aston Martin Valkyrie AMR Pro on circuit at Le Mans 2026, viewed through the fence.',
+    title: 'Aston Martin Vantage on Circuit — Le Mans 2026',
+    caption: 'A black and navy Aston Martin Vantage, racing under The Heart of Racing banner, battles a maroon Racing Team Turkey car on circuit at Le Mans 2026, viewed through the fence.',
   },
   'DSC_5072-Enhanced-NR.jpg': {
     title: 'CrowdStrike Racing LMP2 — Le Mans 2026',
@@ -245,11 +245,11 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_5076-Enhanced-NR.jpg': {
     title: 'McLaren 720S GT3 Evo #58 — Le Mans 2026',
-    caption: 'The No. 58 McLaren, carrying Korloff, Goodyear, and Gesoft sponsor branding, on circuit through the fence at Le Mans 2026.',
+    caption: 'The No. 58 McLaren, carrying Korloff, Goodyear, and GB Soft sponsor branding, on circuit through the fence at Le Mans 2026.',
   },
   'DSC_5086-Enhanced-NR.jpg': {
     title: 'Mercedes-AMG GT3 #79 — Le Mans 2026',
-    caption: 'The No. 79 Mercedes-AMG GT3 running CrowdStrike livery in silver and green, in the pit lane at Le Mans 2026.',
+    caption: 'The No. 79 Mercedes-AMG GT3 in silver and green livery, carrying noleggiare, Iron Lynx, RANA, and Blaupunkt sponsor branding, in the pit lane at Le Mans 2026 with CrowdStrike advertising on the trackside barrier behind.',
   },
   'DSC_5096-Enhanced-NR.jpg': {
     title: 'Alpine A424 Hypercar — Le Mans 2026',
@@ -263,8 +263,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'The Cadillac Hertz Team Jota #38 V-Series.R sits in the pit lane during a service stop at the 24 Heures du Mans 2026, with mechanics working under the glow of the pit lane lights. The Hertz-liveried black and gold prototype occupies its pit box adjacent to the Cadillac WTR #101 operation in the neighbouring bay.',
   },
   'DSC_4922-Enhanced-NR.jpg': {
-    title: 'Aston Martin Thor Team #007 & #008 — Le Mans 2026',
-    caption: 'The Aston Martin Thor Team executes a simultaneous night pit stop on both its dark green Vantage GT3 entries, #008 (left) and #007 (right), as crews swarm the cars under the Rolex-branded pit lane gantry. Mechanics coordinate the double service in a display of organised precision at the 24 Heures du Mans 2026.',
+    title: 'Aston Martin Thor Team #009 & #007 — Le Mans 2026',
+    caption: 'The Aston Martin Thor Team executes a simultaneous night pit stop on both its dark green Valkyrie AMR Pro entries, #009 (left) and #007 (right), as crews swarm the cars under the Rolex-branded pit lane gantry. Mechanics coordinate the double service in a display of organised precision at the 24 Heures du Mans 2026.',
   },
   'DSC_4941-Enhanced-NR.jpg': {
     title: 'Toyota GR010 Hybrid — Le Mans 2026',
@@ -276,11 +276,11 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4952-Enhanced-NR.jpg': {
     title: 'LMP3 #9 — Le Mans 2026',
-    caption: 'Car #9, running in the LMP3 class with a red and black livery backed by Florian Racing Mind and Motul, runs through damp conditions on circuit during the 24 Heures du Mans 2026. The prototype carries ECPRO branding prominently along the flanks.',
+    caption: 'Car #9, running in the LMP3 class with a red and black livery backed by "FLORIAN feeling wood" and Motul, runs through damp conditions on circuit during the 24 Heures du Mans 2026. The prototype carries TECPRO Barriers branding prominently along the flanks.',
   },
   'DSC_4959-Enhanced-NR.jpg': {
     title: 'Aston Martin Vantage GT3 #10 — Le Mans 2026',
-    caption: 'The #10 Aston Martin Vantage GT3 limps back to the pits trailing a large section of armco catch fencing draped across its bodywork after a significant incident during the 24 Heures du Mans 2026. The dark grey and black livery with teal and lime yellow accents is visibly damaged, with the safety mesh netting caught beneath the car and hanging from the flanks.',
+    caption: 'The #10 Aston Martin Vantage GT3, in dark grey and black livery with teal and lime yellow accents, runs cleanly through a corner at the 24 Heures du Mans 2026, shot through the trackside catch fencing.',
   },
   'DSC_4960-Enhanced-NR.jpg': {
     title: 'Porsche 911 GT3 #54 — Le Mans 2026',
@@ -331,8 +331,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'The #7 LMP3 entry tackles the circuit during the Le Mans Cup support event at Le Mans 2026, its white, blue, and green Mascot Workwear livery prominent through the corner. Running in the P3 class, the car carries Motul backing alongside Brujos and Jalen sponsorship on the flanks.',
   },
   'DSC_4995-Enhanced-NR.jpg': {
-    title: 'Aston Martin Vantage LMGT3 #33 — Le Mans 2026',
-    caption: 'The #33 Aston Martin Vantage LMGT3, in green, white, and orange livery, exits a corner during the 24 Heures du Mans 2026, with a yellow prototype following through the same bend as the two classes share the circuit.',
+    title: 'Aston Martin Vantage GT3 #11 — Le Mans 2026',
+    caption: 'The #11 Aston Martin Vantage GT3, in green, white, and orange livery, exits a corner during the 24 Heures du Mans 2026, with a yellow prototype following through the same bend as the two classes share the circuit.',
   },
   'DSC_4996-Enhanced-NR.jpg': {
     title: 'Aston Martin Vantage GT3 #11 — Le Mans 2026',
@@ -347,12 +347,12 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'Car #34, a Ligier JS P320 LMP3 prototype running in a distinctive green and yellow livery, navigates the circuit at the 24 Heures du Mans 2026. The car powers through under overcast skies with marshals stationed trackside and RACEBORN 75 advertising boards lining the circuit barriers.',
   },
   'DSC_5001-Enhanced-NR.jpg': {
-    title: 'BWT Ligier JS P320 #9 — Le Mans 2026',
-    caption: 'The vivid pink BWT #9 Ligier JS P320 runs through the circuit at Circuit de la Sarthe during the 24 Heures du Mans 2026. A second car is visible cresting the hill in the background as the BWT entry presses on under overcast skies.',
+    title: 'BWT Ligier JS P320 #8 — Le Mans 2026',
+    caption: 'The vivid pink BWT #8 Ligier JS P320 runs through the circuit at Circuit de la Sarthe during the 24 Heures du Mans 2026. A second car is visible cresting the hill in the background as the BWT entry presses on under overcast skies.',
   },
   'DSC_5002-Enhanced-NR.jpg': {
-    title: 'BWT Porsche #8 — Le Mans 2026',
-    caption: 'The BWT-liveried Porsche #8 navigates a corner at the Circuit de la Sarthe during the 24 Heures du Mans 2026. The distinctive all-pink machine carries prominent BWT and Windhager sponsorship as a marshal observes from the bank behind the barriers.',
+    title: 'BWT LMP3 #8 — Le Mans 2026',
+    caption: 'The BWT-liveried LMP3 prototype #8 navigates a corner at the Circuit de la Sarthe during the 24 Heures du Mans 2026. The distinctive all-pink machine carries prominent BWT and Windhager sponsorship as a marshal observes from the bank behind the barriers.',
   },
   'DSC_5004-Enhanced-NR.jpg': {
     title: 'LMP3 #5 and #58 — Le Mans 2026',
@@ -360,7 +360,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_5005-Enhanced-NR.jpg': {
     title: 'Mercedes-AMG GT3 #14 — Le Mans 2026',
-    caption: 'The #14 Mercedes-AMG GT3, running a striking black graphic livery with Bartom branding and skull-motif artwork, navigates the circuit at the 24 Heures du Mans 2026. The car holds the racing line past the Michelin-branded blue and yellow kerbing as it pushes through one of the track\'s sweeping sections.',
+    caption: 'The #14 Mercedes-AMG GT3, running a striking black graphic livery with Bartone branding and skull-motif artwork, navigates the circuit at the 24 Heures du Mans 2026. The car holds the racing line past the Michelin-branded blue and yellow kerbing as it pushes through one of the track\'s sweeping sections.',
   },
   'DSC_5006-Enhanced-NR.jpg': {
     title: 'Atlantis Prototype #67 — Le Mans 2026',
@@ -391,16 +391,16 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'A McLaren GT3 sits in the pit lane at the 24 Heures du Mans 2026, its slate grey and orange bodywork carrying the Gulf roundel and BlueBull Tech Financial Advisory branding alongside Michelin Pilot Sport rubber, with Kessel Racing signage visible in the adjacent garage behind.',
   },
   'DSC_5016-Enhanced-NR.jpg': {
-    title: 'Hypercar Field — Le Mans 2026 Pre-Race Assembly',
-    caption: 'A packed field of Hypercar prototypes lines up in the assembly area ahead of the 24 Heures du Mans 2026. Michelin branding lines the pit lane barriers as the contenders queue in grid lanes, with a striking iridescent-livery prototype prominent among the assembled cars.',
+    title: 'GT3 Field — Le Mans 2026 Pre-Race Assembly',
+    caption: 'A packed field of GT3 and prototype machinery lines up in the assembly area ahead of the 24 Heures du Mans 2026. Michelin branding lines the pit lane barriers as the contenders queue in grid lanes, with a striking black skull-liveried Mercedes-AMG GT3 prominent among the assembled cars.',
   },
   'DSC_5017-Enhanced-NR.jpg': {
-    title: 'RWR Oreca 07 #30 — Le Mans 2026 Pit Lane',
-    caption: 'The pink-liveried RWR Oreca 07 LMP2 prototype, car #30, sits in the pit lane during the 24 Heures du Mans 2026, surrounded by rival prototypes beneath the Michelin-branded pit gantry. The busy pit straight scene captures a moment of race activity with multiple LMP2 entries occupying their garage positions.',
+    title: 'BWT LMP3 #8 — Le Mans 2026 Pit Lane',
+    caption: 'The pink BWT-liveried LMP3 prototype, car #8, sits in the pit lane during the 24 Heures du Mans 2026, surrounded by rival prototypes beneath the Michelin-branded pit gantry. The busy pit straight scene captures a moment of race activity with multiple P3 entries occupying their garage positions.',
   },
   'DSC_5018-Enhanced-NR.jpg': {
     title: 'LMP3 #43 — Le Mans 2026',
-    caption: 'Car #43, running in LMP3 class with a bold yellow and green livery, navigates the circuit at the 24 Heures du Mans 2026. The DEKO-sponsored prototype passes trackside Michelin advertising boards under bright sunshine, with "Europa" branding visible on the rear bodywork.',
+    caption: 'Car #43, running in LMP3 class with a bold yellow and green livery, navigates the circuit at the 24 Heures du Mans 2026. The DEKO-sponsored prototype passes trackside Michelin advertising boards under bright sunshine, with "Inter Europol" branding visible on the rear bodywork.',
   },
   'DSC_5019-Enhanced-NR.jpg': {
     title: 'Le Mans Cup #43 — Circuit de la Sarthe 2026',
@@ -415,8 +415,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'The #42 Vimana Private Jets LMP3 sits in the pit lane during the 24 Heures du Mans 2026, its dark charcoal livery with a red stripe and blue accent catching the afternoon light. Behind it, the #54 Purpose-liveried GT3 car awaits in the pit lane of the Circuit de la Sarthe.',
   },
   'DSC_5022-Enhanced-NR.jpg': {
-    title: 'Porsche 911 GT3 R #4 — Le Mans 2026 Pit Lane',
-    caption: 'The black skull-and-crossbones Porsche 911 GT3 R of Bartone Bros sits in the pit lane during the 24 Heures du Mans 2026, crewed by Bartone and Jans. Sponsors Roger Dean/DeanChevy.com and Talon Air feature prominently on the dark LMGT3 entry.',
+    title: 'Mercedes-AMG GT3 #14 — Le Mans 2026 Pit Lane',
+    caption: 'The black skull-and-crossbones Mercedes-AMG GT3 #14 of Bartone Bros sits in the pit lane during the 24 Heures du Mans 2026, crewed by Bartone and Jans. Sponsors Roger Dean/DeanChevy.com and Talon Air feature prominently on the dark GT3 entry.',
   },
   'DSC_5024-Enhanced-NR.jpg': {
     title: 'BWT #8 P3 Prototype — Le Mans 2026',
@@ -427,8 +427,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'A full grid of prototype and GT machinery lines the pit lane during pre-race preparations at the 24 Heures du Mans 2026, with the Michelin Le Mans Cup gantry arch framing the assembled field. Crews move between cars as the event paddock buzzes with activity ahead of the start.',
   },
   'DSC_5027-Enhanced-NR.jpg': {
-    title: 'WEC Grid Assembly — Le Mans 2026',
-    caption: 'The full WEC field lines up in the pre-race assembly area at Circuit de la Sarthe, with Hypercar prototypes and LMGT3 machinery stretching back toward the paddock under threatening skies. The spectacle of the full entry gathered together underscores the scale of the 24 Heures du Mans 2026.',
+    title: 'Road to Le Mans Grid Assembly — Le Mans 2026',
+    caption: 'The Road to Le Mans support field lines up in the pre-race assembly area at Circuit de la Sarthe, LMP3 prototypes stretching back toward the paddock under threatening skies. The spectacle of the full entry gathered together underscores the scale of Le Mans race week 2026.',
   },
   'DSC_5030-Enhanced-NR.jpg': {
     title: 'Ligier JS P3 #3 (VALEMIK / RDX) — Le Mans 2026',
@@ -447,8 +447,8 @@ export const captions: Record<string, CaptionEntry> = {
     caption: 'The #11 Aston Martin Vantage GT3 sits in the pit lane during the 24 Heures du Mans 2026, its teal, white, and lime green DEFi Le Monde livery vivid under the circuit lights. Car #22 in the P3 class occupies the adjacent pit box in the background.',
   },
   'DSC_5036-Enhanced-NR.jpg': {
-    title: 'Peugeot 9X8 — Tyre Detail, Le Mans 2026',
-    caption: 'A Michelin Pilot Sport tyre fills the frame on a Peugeot 9X8 Hypercar, its dark navy livery marked with the white Luca Médias branding and the distinctive Peugeot lion badge. Handwritten compound codes on the sidewall and the Michelin Bibendum sticker complete the pit-lane scene at the 24 Heures du Mans 2026.',
+    title: 'Prototype — Tyre Detail, Le Mans 2026',
+    caption: 'A Michelin Pilot Sport tyre fills the frame on a dark navy prototype, marked with the white Luca Médias branding and a Duqueine shield logo. Handwritten compound codes on the sidewall and the Michelin Bibendum sticker complete the pit-lane scene at the 24 Heures du Mans 2026.',
   },
   'DSC_5037-Enhanced-NR.jpg': {
     title: 'Mercedes-AMG GT3 #14 GetSpeed — Le Mans 2026',
@@ -671,7 +671,7 @@ export const captions: Record<string, CaptionEntry> = {
   },
   'DSC_4763.jpg': {
     title: 'Both Heart of Racing Valkyries in the Pit Lane',
-    caption: 'The Heart of Racing\'s two Aston Martin Valkyrie Hypercars, cars 007 and 009, sit nose to tail in the Le Mans 2026 pit lane.',
+    caption: 'The Heart of Racing\'s two Aston Martin Valkyrie Hypercars, cars 007 and 009, sit side by side in adjacent pit boxes in the Le Mans 2026 pit lane.',
   },
   'DSC_4766.jpg': {
     title: 'The Automobile Club de l\'Ouest Race Tower',
@@ -694,7 +694,7 @@ export const captions: Record<string, CaptionEntry> = {
 
   'DSC_4206-Enhanced-NR.jpg': { title: 'Monza Historic Banking', caption: 'The steeply banked oval section of the Autodromo Nazionale Monza, viewed from track level looking along the curve. Built in 1955 and last used in competition in 1969, the banking survives as a preserved monument to motorsport history within the Monza park. Trees line the outside of the banking under an autumn sky.' },
   'DSC_4228-Enhanced-NR.jpg': { title: 'Alpine F1 Car at Monza', caption: 'A blue Alpine Formula 1 car passes at speed through the tree-lined parkland section of the Autodromo Nazionale Monza during the Italian Grand Prix. Spectators line the barriers in the background, with a Ferrari flag prominently raised among the tifosi. Monza, located in the Royal Villa of Monza park, is one of the oldest permanent racing circuits in the world, having hosted the Italian Grand Prix almost every year since 1950.' },
-  'DSC_4266-Enhanced-NR.jpg': { title: 'Formula 1 Pit Lane — Marshal or Crew Member Taking a Break', caption: 'A trackside official or crew member in an orange F1-branded suit takes a drink in the pit lane, with bright green pit equipment visible alongside. The image captures a candid moment of the human side of a Formula 1 event, set against the backdrop of the circuit\'s perimeter fencing. No car is the primary subject of this photograph.' },
+  'DSC_4266-Enhanced-NR.jpg': { title: 'Formula 1 Pit Lane — Marshal or Crew Member Taking a Break', caption: 'A trackside official or crew member in an orange F1-branded suit stands with a hand raised to his head in the pit lane, with bright green pit equipment visible alongside. The image captures a candid moment of the human side of a Formula 1 event, set against the backdrop of the circuit\'s perimeter fencing. No car is the primary subject of this photograph.' },
 
   'DSC_4462.jpg': { title: 'Ferrari Challenge Safety Car Leads the Field — Le Mans 2026', caption: 'A Ferrari-shaped safety car in red and white Richard Mille livery, marked "SC" with a roof light bar, leads a bunched Ferrari Challenge field through a chicane during a full course yellow. Behind it, a yellow and black Ferrari 296 Challenge and other Adler Group-liveried cars hold station in single file.' },
   'DSC_4464.jpg': { title: 'Ferrari 296 Challenge #22 — Le Mans 2026', caption: 'The #22 Ferrari 296 Challenge, in silver and blue livery for idealo and Bremhove, exits a corner past marshals holding a flag-change board. Adler Group branding runs across the windscreen, standard across the single-make Ferrari Challenge grid.' },
