@@ -22,7 +22,7 @@ function loadInstagramCaptions() {
 // ── Collect all images from asset folders ────────────────────────────────────
 function collectImages() {
   const base       = 'src/assets/images';
-  const categories = ['endurance', 'car-shows', 'formula', 'rally', 'gt', 'instagram-only'];
+  const categories = ['endurance', 'car-shows', 'formula', 'rally', 'gt', 'iccr', 'instagram-only'];
   const images     = [];
   for (const cat of categories) {
     const dir = path.join(base, cat);

@@ -18,7 +18,7 @@ function findImages(dir, results = []) {
 const INPUT_BASE  = 'src/assets/images';
 const OUTPUT_BASE = 'src/assets/watermarked';
 const IG_BASE     = 'public/ig';
-const CATEGORIES  = ['formula', 'endurance', 'rally', 'gt', 'car-shows'];
+const CATEGORIES  = ['formula', 'endurance', 'rally', 'gt', 'car-shows', 'iccr'];
 // Posted to Instagram only — excluded from gallery.astro's glob, so no watermarked/ copy is made.
 const IG_ONLY_CATEGORIES = ['instagram-only'];
 const EXTS        = '{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}';

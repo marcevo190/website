@@ -3,7 +3,7 @@ const path = require('path');
 
 const IMAGES_BASE = 'src/assets/images';
 const CAPTIONS_FILE = 'src/data/captions.ts';
-const CATEGORIES = ['formula', 'endurance', 'rally', 'gt', 'car-shows'];
+const CATEGORIES = ['formula', 'endurance', 'rally', 'gt', 'car-shows', 'iccr'];
 
 // Collect all image filenames in the repo
 function collectImages() {

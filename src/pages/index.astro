@@ -5,7 +5,7 @@ import type { ImageMetadata } from 'astro';
 
 // Gallery images for carousel rotation — shuffled across all categories
 const galleryModules = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows,iccr}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
 const allImages = Object.values(galleryModules).map(m => m.default);
