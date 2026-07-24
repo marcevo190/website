@@ -50,7 +50,7 @@ things plainly and do the technical work for him.
 - `scripts/instagram-post.cjs` — picks the next unposted photo, loads its Instagram caption,
   generates hashtags/@mentions, fires the Make.com webhook.
 - `post-queue.json` — tracks posted filenames (committed to repo, updated by the Action).
-- `.github/workflows/instagram-post.yml` — runs **daily at 8am UTC**.
+- `.github/workflows/instagram-post.yml` — runs **twice daily, 8am and 5pm UTC** (enough photo backlog now to support two posts a day).
 
 ### Auto-captioning
 - `scripts/auto-captions.cjs` — scans for images with no caption entry, adds placeholders to `captions.ts`.
