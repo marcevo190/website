@@ -47,6 +47,9 @@ function generateTagsAndMentions(title, caption, category) {
   if (category === 'car-shows') {
     tags.add('#CarShow'); tags.add('#ClassicCars'); tags.add('#CarCulture');
   }
+  if (category === 'iccr') {
+    tags.add('#ICCR'); tags.add('#IrishMotorsport'); tags.add('#MondelloPark'); tags.add('#IrishRacing');
+  }
   if (category === 'formula' || category === 'instagram-only') {
     if (text.includes('f1') || text.includes('formula') || text.includes('grand prix')) {
       tags.add('#F1'); tags.add('#Formula1'); tags.add('#FormulaOne');
@@ -131,6 +134,13 @@ function generateTagsAndMentions(title, caption, category) {
     if (text.includes(keyword)) htags.forEach(t => tags.add(t));
   }
 
+  if (text.includes('mondello'))     { tags.add('#MondelloPark'); tags.add('#IrishMotorsport'); }
+  if (text.includes('formula vee'))  tags.add('#FormulaVee');
+  if (text.includes('formula sheane')) tags.add('#FormulaSheane');
+  if (text.includes('fiesta zetec')) tags.add('#FiestaZetec');
+  if (text.includes('fiesta st'))    tags.add('#FiestaST');
+  if (text.includes('sports 2000'))  tags.add('#Sports2000');
+  if (text.includes('mini challenge')) tags.add('#MiniChallenge');
   if (text.includes('le mans'))    { tags.add('#LeMans24'); tags.add('#24hLeMans'); tags.add('#CircuitDeLaSarthe'); tags.add('#LeMans2026'); }
   if (text.includes('hypercar'))   { tags.add('#HypercarClass'); tags.add('#LMH'); }
   if (text.includes('lmgt3'))      { tags.add('#LMGT3'); tags.add('#GTRacing'); }
@@ -175,6 +185,7 @@ function generateTagsAndMentions(title, caption, category) {
     'goodyear':         '@goodyear',
     'michelin':         '@michelin',
     'motul':            '@motul',
+    'mondello':         '@mondellopark',
   };
 
   for (const [keyword, handle] of Object.entries(mentionMap)) {
