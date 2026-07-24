@@ -29,6 +29,7 @@ const photos = Object.entries(imageModules)
       filename,
       title: cap?.title ?? filename.replace(/\.[^.]+$/, ''),
       caption: cap?.caption ?? '',
+      pageSlug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
     };
   })
   .filter(p => event.categories.includes(p.category))
@@ -87,7 +88,7 @@ const heroPhoto = photos.find(p => p.filename === event.hero) ?? photos[0];
             />
             <div class="photo-card-overlay">
               <div class="photo-card-meta">
-                <p class="photo-card-title">{photo.title}</p>
+                <a class="photo-card-title" href={`/photo/${photo.pageSlug}`} style="color:inherit;text-decoration:none;">{photo.title}</a>
               </div>
             </div>
           </div>

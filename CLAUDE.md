@@ -52,6 +52,24 @@ things plainly and do the technical work for him.
 - `post-queue.json` — tracks posted filenames (committed to repo, updated by the Action).
 - `.github/workflows/instagram-post.yml` — runs **twice daily, 8am and 5pm UTC** (enough photo backlog now to support two posts a day).
 
+### Events & photo pages
+- `src/data/events.ts` — event definitions; each event page at `/events/<slug>` pulls photos
+  by category. New event = new entry here.
+- `src/pages/photo/[slug].astro` — one page per photo (slug = filename, lowercased,
+  non-alphanumerics → `-`). Carries ImageObject JSON-LD (license + acquireLicensePage) for
+  Google Images' "Licensable" badge. `watermark.mjs` also embeds EXIF Copyright/Artist into
+  every served image.
+
+### Weekly Instagram Reel
+- `scripts/instagram-reel.cjs` — `build` phase makes a 9:16 slideshow (ffmpeg) from the last
+  7 posted photos (fetched from trackmarc.com/ig/, no LFS needed) → `public/reels/weekly.mp4`;
+  `send` phase fires the `MAKE_REEL_WEBHOOK_URL` webhook with `{ video_url, caption }`.
+- `.github/workflows/instagram-reel.yml` — Sundays 5:30pm UTC. Commits the video (no
+  `[skip ci]` — Cloudflare must build to serve it), waits ~8 min, then sends. Scheduled runs
+  no-op until the `MAKE_REEL_WEBHOOK_URL` repo secret exists; manual dispatch builds anyway
+  for testing. Requires a separate Make.com scenario with an "Instagram — Create a Reel"
+  module (the daily photo scenario cannot post video).
+
 ### Auto-captioning
 - `scripts/auto-captions.cjs` — scans for images with no caption entry, adds placeholders to `captions.ts`.
 - `.github/workflows/auto-captions.yml` — triggers on push to `src/assets/images/**`.

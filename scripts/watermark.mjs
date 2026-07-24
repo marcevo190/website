@@ -48,6 +48,15 @@ function watermarkSVG(w, h) {
     </svg>`);
 }
 
+// Embedded in every served image — machine-readable ownership signals for
+// Google Images ("licensable" detection) and anyone inspecting the file.
+const EXIF_METADATA = {
+  IFD0: {
+    Copyright: '© Marc Ronan / TrackMarc — https://trackmarc.com/licensing',
+    Artist: 'Marc Ronan',
+  },
+};
+
 const files       = CATEGORIES.flatMap(c => findImages(path.join(INPUT_BASE, c)));
 const igOnlyFiles = IG_ONLY_CATEGORIES.flatMap(c => findImages(path.join(INPUT_BASE, c)));
 
@@ -66,6 +75,7 @@ async function writeIgVersion(src, igDest) {
   const igHeight = Math.max(Math.round(igWidth * meta.height / meta.width), Math.ceil(igWidth / 1.91));
   await sharp(src)
     .resize({ width: igWidth, height: igHeight, fit: 'cover', position: 'centre', withoutEnlargement: true })
+    .withMetadata({ exif: EXIF_METADATA })
     .jpeg({ quality: 88 })
     .toFile(igDest);
   return meta;
@@ -91,6 +101,7 @@ for (const src of files) {
 
   await img
     .composite([{ input: wm, blend: 'over' }])
+    .withMetadata({ exif: EXIF_METADATA })
     .jpeg({ quality: 88 })
     .toFile(dest);
 

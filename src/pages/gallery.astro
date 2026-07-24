@@ -37,6 +37,7 @@ const photos = Object.entries(imageModules).map(([path, mod]) => {
     title: cap?.title ?? autoTitle,
     caption: cap?.caption ?? '',
     filename,
+    slug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
   };
 });
 
@@ -94,7 +95,7 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
               />
               <div class="photo-card-overlay">
                 <div class="photo-card-meta">
-                  <p class="photo-card-title">{photo.title}</p>
+                  <a class="photo-card-title" href={`/photo/${photo.slug}`} style="color:inherit;text-decoration:none;">{photo.title}</a>
                 </div>
               </div>
             </div>
@@ -167,7 +168,9 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
     }
 
     cards.forEach(card => {
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (e) => {
+        // Title links navigate to the photo's own page; everything else opens the lightbox
+        if ((e.target as HTMLElement).closest('a')) return;
         const visible = visibleCards();
         currentIndex = visible.indexOf(card as HTMLElement);
         showCard(currentIndex);

@@ -1,0 +1,159 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { getCaption } from '../../data/captions';
+import { events } from '../../data/events';
+
+// One indexable page per photo — unique title/description, ImageObject
+// structured data (drives Google Images' "Licensable" badge), and
+// prev/next links that give crawlers a path through the whole archive.
+export function getStaticPaths() {
+  const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+    '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows,iccr}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+    { eager: true }
+  );
+
+  const photos = Object.entries(imageModules)
+    .map(([path, mod]) => {
+      const parts = path.split('/');
+      const filename = parts[parts.length - 1];
+      const folder = parts[parts.length - 2];
+      return {
+        src: mod.default,
+        category: folder,
+        filename,
+        slug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      };
+    })
+    .sort((a, b) => a.category.localeCompare(b.category) || a.filename.localeCompare(b.filename));
+
+  return photos.map((photo, i) => {
+    // Prev/next within the same category, in filename order
+    const sameCat = photos.filter(p => p.category === photo.category);
+    const idx = sameCat.indexOf(photo);
+    const prev = sameCat[(idx - 1 + sameCat.length) % sameCat.length];
+    const next = sameCat[(idx + 1) % sameCat.length];
+    return {
+      params: { slug: photo.slug },
+      props: {
+        photo,
+        prevSlug: prev !== photo ? prev.slug : null,
+        nextSlug: next !== photo ? next.slug : null,
+      },
+    };
+  });
+}
+
+const { photo, prevSlug, nextSlug } = Astro.props;
+
+const cap = getCaption(photo.filename);
+const title = cap?.title ?? photo.filename.replace(/\.[^.]+$/, '');
+const caption = cap?.caption ?? '';
+
+const event = events.find(e => e.categories.includes(photo.category));
+const imageAbsoluteUrl = new URL(photo.src.src, Astro.site).href;
+
+const imageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ImageObject',
+  contentUrl: imageAbsoluteUrl,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  name: title,
+  description: caption,
+  creator: { '@type': 'Person', name: 'Marc Ronan' },
+  creditText: 'Marc Ronan / TrackMarc',
+  copyrightNotice: `© ${new Date().getFullYear()} Marc Ronan`,
+  license: 'https://trackmarc.com/licensing',
+  acquireLicensePage: 'https://trackmarc.com/licensing',
+};
+---
+
+<Layout
+  title={`${title} — TrackMarc Motorsport Photography`}
+  description={caption || `${title} — motorsport photography by Marc Ronan.`}
+  ogImage={photo.src.src}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(imageSchema)} />
+
+  <div style="padding-top: var(--nav-height);">
+    <div class="section photo-page">
+
+      <div class="photo-page-nav">
+        <a href={event ? `/events/${event.slug}` : '/gallery'} class="photo-back">
+          &larr; {event ? event.name : 'Gallery'}
+        </a>
+        <div class="photo-page-arrows">
+          {prevSlug && <a href={`/photo/${prevSlug}`} rel="prev">&larr; Previous</a>}
+          {nextSlug && <a href={`/photo/${nextSlug}`} rel="next">Next &rarr;</a>}
+        </div>
+      </div>
+
+      <figure class="photo-page-figure">
+        <Image
+          src={photo.src}
+          alt={title}
+          widths={[400, 800, 1200]}
+          sizes="(max-width: 900px) 100vw, 80vw"
+          loading="eager"
+          class="photo-page-img"
+        />
+        <figcaption class="photo-page-caption">
+          <h1 class="photo-page-title">{title}</h1>
+          {caption && <p>{caption}</p>}
+          <p class="photo-page-credit">
+            &copy; Marc Ronan / TrackMarc · Available for editorial licensing —
+            <a href="/licensing">licensing details</a> · <a href="/contact">get in touch</a>
+          </p>
+        </figcaption>
+      </figure>
+
+    </div>
+  </div>
+
+  <style>
+    .photo-page {
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+    .photo-page-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .photo-page-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .photo-page-nav a:hover { color: var(--accent); }
+    .photo-page-arrows { display: flex; gap: 1.25rem; }
+    .photo-page-figure { margin: 0; }
+    .photo-page-img {
+      width: 100%;
+      height: auto;
+      background: var(--surface);
+    }
+    .photo-page-caption { margin-top: 1.25rem; max-width: 46rem; }
+    .photo-page-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      margin-bottom: 0.6rem;
+    }
+    .photo-page-caption p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 0.8rem;
+    }
+    .photo-page-credit {
+      font-size: 0.78rem;
+      color: var(--text-dim, var(--text-muted));
+    }
+    .photo-page-credit a { color: var(--accent); }
+  </style>
+</Layout>
