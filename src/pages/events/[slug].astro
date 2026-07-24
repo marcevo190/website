@@ -1,0 +1,231 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { getCaption } from '../../data/captions';
+import { events } from '../../data/events';
+
+export function getStaticPaths() {
+  return events.map(event => ({ params: { slug: event.slug }, props: { event } }));
+}
+
+const { event } = Astro.props;
+
+// Same source as the gallery — watermarked copies generated at build
+const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows,iccr}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  { eager: true }
+);
+
+const photos = Object.entries(imageModules)
+  .map(([path, mod]) => {
+    const parts = path.split('/');
+    const filename = parts[parts.length - 1];
+    const folder = parts[parts.length - 2];
+    const cap = getCaption(filename);
+    return {
+      src: mod.default,
+      category: folder,
+      filename,
+      title: cap?.title ?? filename.replace(/\.[^.]+$/, ''),
+      caption: cap?.caption ?? '',
+    };
+  })
+  .filter(p => event.categories.includes(p.category))
+  .sort((a, b) => a.filename.localeCompare(b.filename));
+
+const heroPhoto = photos.find(p => p.filename === event.hero) ?? photos[0];
+---
+
+<Layout title={`${event.name} — TrackMarc Motorsport Photography`} description={event.description}>
+  <div style="padding-top: var(--nav-height);">
+
+    <!-- EVENT HERO -->
+    {heroPhoto && (
+      <div class="event-hero">
+        <Image
+          src={heroPhoto.src}
+          alt={heroPhoto.title}
+          class="event-hero-img"
+          widths={[800, 1440, 1920]}
+          sizes="100vw"
+          loading="eager"
+        />
+        <div class="event-hero-overlay"></div>
+        <div class="event-hero-content">
+          <p class="section-eyebrow">Event Coverage</p>
+          <h1 class="event-hero-title">{event.name}</h1>
+          <p class="event-hero-meta">{event.venue} · {event.season} · {photos.length} photographs</p>
+        </div>
+      </div>
+    )}
+
+    <!-- INTRO -->
+    <div class="section" style="padding-bottom: 1rem;">
+      <div class="event-intro">
+        {event.intro.map(par => <p>{par}</p>)}
+        <div class="event-classes">
+          {event.classes.map(c => <span class="event-class-chip">{c}</span>)}
+        </div>
+      </div>
+    </div>
+
+    <!-- PHOTOS -->
+    <div class="section" style="padding-top: 1rem;">
+      <div class="gallery-masonry" id="gallery">
+        {photos.map(photo => (
+          <div
+            class="photo-card"
+            data-title={photo.title}
+            data-caption={photo.caption}
+          >
+            <Image
+              src={photo.src}
+              alt={photo.title}
+              widths={[400, 800, 1200]}
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <div class="photo-card-overlay">
+              <div class="photo-card-meta">
+                <p class="photo-card-title">{photo.title}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- PRESS + DRIVER CTA -->
+    <div class="press-cta-wrap">
+      <div class="press-cta">
+        <div>
+          <p class="section-eyebrow">Press &amp; Drivers</p>
+          <h3 class="press-cta-title">Involved With This Event?</h3>
+          <p class="press-cta-desc">
+            Series and event organisers: I'm available for media coverage and social-ready photography.
+            Drivers pictured here: your photos are free for personal social media use with credit — just ask.
+          </p>
+        </div>
+        <a href="/contact" class="btn btn-primary press-cta-btn">Get in Touch &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">&#x2715; Close</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous">&#8592;</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next">&#8594;</button>
+    <div class="lightbox-meta">
+      <div class="photo-card-title" id="lightbox-title"></div>
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll<HTMLElement>('#gallery .photo-card');
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCaption = document.getElementById('lightbox-caption');
+    const lbClose = document.getElementById('lightbox-close');
+    const lbPrev = document.getElementById('lightbox-prev');
+    const lbNext = document.getElementById('lightbox-next');
+
+    let currentIndex = 0;
+    const cardList = Array.from(cards);
+
+    function showCard(index: number) {
+      if (!cardList.length) return;
+      currentIndex = (index + cardList.length) % cardList.length;
+      const card = cardList[currentIndex];
+      const img = card.querySelector('img');
+      if (lbImg && img) { lbImg.src = img.src; lbImg.alt = img.alt; }
+      if (lbTitle) lbTitle.textContent = card.dataset.title ?? '';
+      if (lbCaption) lbCaption.textContent = card.dataset.caption ?? '';
+    }
+
+    cardList.forEach(card => {
+      card.addEventListener('click', () => {
+        currentIndex = cardList.indexOf(card);
+        showCard(currentIndex);
+        lightbox?.classList.add('open');
+      });
+    });
+
+    lbPrev?.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex - 1); });
+    lbNext?.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex + 1); });
+    lbClose?.addEventListener('click', () => lightbox?.classList.remove('open'));
+    lightbox?.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.classList.remove('open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox?.classList.contains('open')) return;
+      if (e.key === 'Escape') lightbox.classList.remove('open');
+      if (e.key === 'ArrowLeft') showCard(currentIndex - 1);
+      if (e.key === 'ArrowRight') showCard(currentIndex + 1);
+    });
+  </script>
+
+  <style>
+    .event-hero {
+      position: relative;
+      height: min(62vh, 560px);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .event-hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .event-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(13,17,20,0.25) 0%, rgba(13,17,20,0.35) 55%, rgba(13,17,20,0.92) 100%);
+    }
+    .event-hero-content {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+    }
+    .event-hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+      line-height: 1.05;
+      margin: 0.4rem 0 0.6rem;
+    }
+    .event-hero-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .event-intro {
+      max-width: 46rem;
+    }
+    .event-intro p {
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 1.1rem;
+    }
+    .event-classes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.4rem;
+    }
+    .event-class-chip {
+      font-family: var(--font-heading);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border, rgba(255,255,255,0.15));
+      color: var(--text-muted);
+    }
+  </style>
+</Layout>

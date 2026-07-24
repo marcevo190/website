@@ -2,12 +2,29 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import { events } from '../data/events';
 
 // Gallery images for carousel rotation — shuffled across all categories
 const galleryModules = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows,iccr}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
+
+// Event coverage cards — cover image + photo count per event
+const eventCards = events.map(event => {
+  let cover: ImageMetadata | null = null;
+  let count = 0;
+  for (const [path, mod] of Object.entries(galleryModules)) {
+    const parts = path.split('/');
+    const filename = parts[parts.length - 1];
+    const folder = parts[parts.length - 2];
+    if (!event.categories.includes(folder)) continue;
+    count++;
+    if (filename === event.hero) cover = mod.default;
+  }
+  return { event, cover, count };
+});
+
 const allImages = Object.values(galleryModules).map(m => m.default);
 // Fisher-Yates shuffle
 for (let i = allImages.length - 1; i > 0; i--) {
@@ -59,6 +76,38 @@ const slides = allImages.slice(0, 10);
     <div class="hero-scroll">Scroll</div>
   </section>
 
+  <!-- EVENT COVERAGE -->
+  {eventCards.length > 0 && (
+    <div class="section">
+      <div class="section-header">
+        <p class="section-eyebrow">Latest Coverage</p>
+        <h2 class="section-title">Event Galleries</h2>
+        <p class="section-subtitle">Complete photo sets from recent race weekends.</p>
+      </div>
+      <div class="home-event-cards">
+        {eventCards.map(({ event, cover, count }) => (
+          <a href={`/events/${event.slug}`} class="home-event-card">
+            {cover && (
+              <Image
+                src={cover}
+                alt={event.name}
+                widths={[600, 1000, 1400]}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                class="home-event-img"
+              />
+            )}
+            <div class="home-event-overlay"></div>
+            <div class="home-event-meta">
+              <p class="home-event-name">{event.name}</p>
+              <p class="home-event-detail">{event.venue}</p>
+              <p class="home-event-count">{count} photographs · {event.season}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
   <!-- PRESS CTA BANNER -->
   <div class="press-cta-wrap">
     <div class="press-cta">
@@ -88,6 +137,59 @@ const slides = allImages.slice(0, 10);
 </script>
 
 <style>
+  /* ── Event coverage cards ── */
+  .home-event-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+    gap: 1.5rem;
+  }
+  .home-event-card {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+  }
+  .home-event-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .home-event-card:hover .home-event-img {
+    transform: scale(1.04);
+  }
+  .home-event-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(13,17,20,0.05) 40%, rgba(13,17,20,0.9) 100%);
+  }
+  .home-event-meta {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 1.5rem;
+  }
+  .home-event-name {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    margin-bottom: 0.3rem;
+  }
+  .home-event-detail {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+  }
+  .home-event-count {
+    font-size: 0.72rem;
+    color: var(--text-dim, var(--text-muted));
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
   /* ── Carousel ── */
   .hero-carousel {
     position: absolute;

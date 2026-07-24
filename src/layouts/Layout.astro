@@ -72,6 +72,7 @@ const currentPath = Astro.url.pathname;
       <ul class="nav-links">
         <li><a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a></li>
         <li><a href="/gallery" class:list={[{ active: currentPath.startsWith('/gallery') }]}>Gallery</a></li>
+        <li><a href="/events" class:list={[{ active: currentPath.startsWith('/events') }]}>Events</a></li>
         <li><a href="/coverage" class:list={[{ active: currentPath.startsWith('/coverage') }]}>Coverage</a></li>
         <li><a href="/motorsport" class:list={[{ active: currentPath.startsWith('/motorsport') }]}>Motorsport</a></li>
         <li><a href="/about" class:list={[{ active: currentPath.startsWith('/about') }]}>About</a></li>
@@ -86,6 +87,7 @@ const currentPath = Astro.url.pathname;
     <div class="mobile-menu" id="mobile-menu">
       <a href="/" onclick="closeMobileMenu()">Home</a>
       <a href="/gallery" onclick="closeMobileMenu()">Gallery</a>
+      <a href="/events" onclick="closeMobileMenu()">Events</a>
       <a href="/coverage" onclick="closeMobileMenu()">Coverage</a>
       <a href="/motorsport" onclick="closeMobileMenu()">Motorsport</a>
       <a href="/about" onclick="closeMobileMenu()">About</a>
