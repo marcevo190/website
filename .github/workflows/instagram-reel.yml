@@ -56,7 +56,9 @@ jobs:
           git add public/reels
           # No [skip ci] here — the Cloudflare build must run to serve the video
           git diff --staged --quiet || git commit -m "chore: weekly Instagram reel"
-          git pull --rebase origin main
+          # No pull --rebase here: with lfs:false checkouts git misreads LFS
+          # pointers as unstaged changes and refuses to rebase. Plain push,
+          # same as the daily post workflow; a rare race just retries next week.
           git push
 
       - name: Wait for Cloudflare deploy
