@@ -61,9 +61,23 @@ jobs:
           # same as the daily post workflow; a rare race just retries next week.
           git push
 
-      - name: Wait for Cloudflare deploy
+      - name: Wait for this build's video to go live
         if: steps.config.outputs.configured == 'true'
-        run: sleep 480
+        run: |
+          # Poll the live reel-meta.json until it carries THIS run's build stamp —
+          # a fixed sleep breaks whenever the Cloudflare build queue is busy, and
+          # checking only the mp4's existence would pass on last week's video.
+          expected=$(node -e "console.log(require('./public/reels/reel-meta.json').built_at)")
+          echo "Waiting for build stamped: $expected"
+          for i in $(seq 1 50); do
+            if curl -s "https://trackmarc.com/reels/reel-meta.json" | grep -q "$expected"; then
+              echo "Video live after ~$((i*30))s"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "Video still not live after 25 minutes — giving up"
+          exit 1
 
       - name: Post reel to Instagram
         if: steps.config.outputs.configured == 'true'
