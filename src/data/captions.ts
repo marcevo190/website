@@ -764,7 +764,6 @@ export const captions: Record<string, CaptionEntry> = {
   'DSC_5213.jpg': { title: 'Formula Vee #78 Leads #17 — Mondello Park', caption: 'The #78 red Formula Vee leads Stephen Roche\'s #17 green car through a Mondello Park corner.' },
   'DSC_5215.jpg': { title: 'Formula Vee #15 — Mondello Park', caption: 'The #15 orange Formula Vee slides wide past the tyre wall at Mondello Park.' },
   'DSC_5217.jpg': { title: 'Formula Vee #80 — Mondello Park', caption: 'Harry\'s #80 blue Formula Vee, backed by Blanco Nino and VWSpares.ie, turns in at Mondello Park.' },
-  'DSC_5221.jpg': { title: 'Formula Vee #22 Leads — Mondello Park', caption: 'The #22 Formula Vee leads a green rival past the Mondello Park grandstand.' },
   'DSC_5223.jpg': { title: 'Formula Vee #95 — Mondello Park', caption: 'The #95 red, white and blue Formula Vee cuts through a corner in front of the Mondello Park grandstand.' },
   'DSC_5228.jpg': { title: 'Formula Vee Side by Side — Mondello Park', caption: 'The #78 red Formula Vee runs wheel to wheel with a red, white and blue rival through a Mondello Park corner.' },
   'DSC_5229.jpg': { title: 'Formula Vee, Bare Bodywork — Mondello Park', caption: 'An unpainted grey and black Formula Vee turns in at Mondello Park, its carbon-effect bodywork left bare.' },
