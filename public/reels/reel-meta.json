@@ -1,18 +1,6 @@
 {
-  "built_at": "2026-07-25T10:45:13.698Z",
+  "built_at": "2026-07-26T18:30:18.920Z",
   "photos": [
-    {
-      "filename": "DSC_4471.jpg",
-      "category": "endurance"
-    },
-    {
-      "filename": "DSC_4564-Enhanced-NR.jpg",
-      "category": "car-shows"
-    },
-    {
-      "filename": "DSC_4472.jpg",
-      "category": "endurance"
-    },
     {
       "filename": "DSC_4572-Enhanced-NR.jpg",
       "category": "car-shows"
@@ -28,6 +16,18 @@
     {
       "filename": "DSC_4474.jpg",
       "category": "endurance"
+    },
+    {
+      "filename": "DSC_4576-Enhanced-NR.jpg",
+      "category": "car-shows"
+    },
+    {
+      "filename": "DSC_4478.jpg",
+      "category": "endurance"
+    },
+    {
+      "filename": "DSC_4578-Enhanced-NR.jpg",
+      "category": "car-shows"
     }
   ],
   "video_url": "https://trackmarc.com/reels/weekly.mp4",
