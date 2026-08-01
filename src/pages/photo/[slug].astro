@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { getCaption } from '../../data/captions';
 import { events } from '../../data/events';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 // One indexable page per photo — unique title/description, ImageObject
 // structured data (drives Google Images' "Licensable" badge), and
@@ -53,12 +54,13 @@ const caption = cap?.caption ?? '';
 
 const event = events.find(e => e.categories.includes(photo.category));
 const imageAbsoluteUrl = new URL(photo.src.src, Astro.site).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 
 const imageSchema = {
   '@context': 'https://schema.org',
   '@type': 'ImageObject',
   contentUrl: imageAbsoluteUrl,
-  url: new URL(Astro.url.pathname, Astro.site).href,
+  url: pageUrl,
   name: title,
   description: caption,
   creator: { '@type': 'Person', name: 'Marc Ronan' },
@@ -105,6 +107,7 @@ const imageSchema = {
             &copy; Marc Ronan / TrackMarc · Available for editorial licensing —
             <a href="/licensing">licensing details</a> · <a href="/contact">get in touch</a>
           </p>
+          <ShareButtons url={pageUrl} title={title} text={caption} />
         </figcaption>
       </figure>
 
