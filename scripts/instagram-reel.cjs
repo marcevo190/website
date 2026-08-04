@@ -88,7 +88,7 @@ function buildCaption(picked) {
 
   return [
     'Seven days, seven frames. A week of racing through the TrackMarc lens.',
-    'Follow @trackmarcmotorsport for daily trackside photography.',
+    'Follow @trackmarcdotcom for daily trackside photography.',
     Array.from(tags).slice(0, 30).join(' '),
   ].join('\n\n');
 }

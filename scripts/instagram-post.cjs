@@ -232,11 +232,11 @@ function fireWebhook(payload) {
 
 // ── Follow prompt, rotated so it doesn't read as the same bolted-on line every time ──
 const FOLLOW_CTAS = [
-  'Follow @trackmarcmotorsport for more shots like this.',
+  'Follow @trackmarcdotcom for more shots like this.',
   'Follow along, new shots go up daily.',
-  'Follow @trackmarcmotorsport to keep up with the season.',
+  'Follow @trackmarcdotcom to keep up with the season.',
   'More from the paddock daily, give us a follow.',
-  'Follow @trackmarcmotorsport for daily trackside photography.',
+  'Follow @trackmarcdotcom for daily trackside photography.',
 ];
 
 function pickFollowCta(postedCount) {
