@@ -127,6 +127,9 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
           <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 1 0-3-3c0 .24.04.47.09.7L8.04 9.81A3 3 0 1 0 5 15a3 3 0 0 0 2.96-2.99l7.13 4.16c-.05.21-.08.43-.08.65a3 3 0 1 0 3-2.74z"/></svg>
           Share
         </button>
+        <button type="button" class="share-btn" id="lb-share-ig" aria-label="Share to Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.15-3.23 1.66-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.7.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.35 2.63 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.63 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm6.41-10.85a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z"/></svg>
+        </button>
         <a class="share-btn" id="lb-share-wa" target="_blank" rel="noopener" aria-label="Share on WhatsApp">
           <svg viewBox="0 0 24 24"><path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.45 1.32 4.95L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.23h.01c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm0 18.2a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.11.82.83-3.03-.2-.31a8.24 8.24 0 1 1 6.97 3.85zm4.52-6.17c-.25-.12-1.47-.72-1.69-.81-.23-.08-.4-.12-.56.13-.17.25-.65.81-.79.97-.15.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23a7.5 7.5 0 0 1-1.38-1.72c-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.86-.87 2.09s.9 2.42 1.02 2.59c.12.17 1.77 2.7 4.28 3.79.6.26 1.06.41 1.43.53.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.19.21-.58.21-1.08.15-1.19-.06-.1-.23-.17-.48-.29z"/></svg>
         </a>
@@ -172,6 +175,7 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
 
     // Share row — hrefs/state refreshed on every showCard() call
     const lbShareNative = document.getElementById('lb-share-native');
+    const lbShareIg = document.getElementById('lb-share-ig');
     const lbShareWa = document.getElementById('lb-share-wa') as HTMLAnchorElement | null;
     const lbShareFb = document.getElementById('lb-share-fb') as HTMLAnchorElement | null;
     const lbShareX  = document.getElementById('lb-share-x') as HTMLAnchorElement | null;
@@ -180,10 +184,11 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
     let shareUrl = '';
     let shareTitle = '';
 
-    function copyShareLink() {
+    function copyShareLink(message = 'Link copied') {
       navigator.clipboard?.writeText(shareUrl).then(() => {
+        if (lbShareToast) lbShareToast.textContent = message;
         lbShareToast?.classList.add('show');
-        setTimeout(() => lbShareToast?.classList.remove('show'), 2000);
+        setTimeout(() => lbShareToast?.classList.remove('show'), 2500);
       });
     }
     lbShareNative?.addEventListener('click', async (e) => {
@@ -193,6 +198,17 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
         try { await nav.share({ title: shareTitle, url: shareUrl }); return; } catch { /* cancelled/unsupported */ }
       }
       copyShareLink();
+    });
+    // Instagram has no share-by-link web intent — on mobile this opens the same OS
+    // share sheet (Instagram is one of the listed apps); on desktop it copies the
+    // link with Instagram-specific instructions instead of the generic message.
+    lbShareIg?.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const nav = navigator as Navigator & { share?: (data: ShareData) => Promise<void> };
+      if (nav.share) {
+        try { await nav.share({ title: shareTitle, url: shareUrl }); return; } catch { /* cancelled/unsupported */ }
+      }
+      copyShareLink('Link copied — paste into Instagram');
     });
     lbShareCopy?.addEventListener('click', (e) => { e.stopPropagation(); copyShareLink(); });
     [lbShareWa, lbShareFb, lbShareX].forEach(a => a?.addEventListener('click', (e) => e.stopPropagation()));
