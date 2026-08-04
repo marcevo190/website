@@ -198,11 +198,30 @@ function generateTagsAndMentions(title, caption, category) {
   return mentionStr ? `${mentionStr}\n${hashtagStr}` : hashtagStr;
 }
 
-// ── Pick next image, alternating categories ──────────────────────────────────
+// ── Categories currently getting a recency boost ──────────────────────────────
+// Plain category-order rotation buries a fresh event under whatever backlog
+// happens to sort first (endurance/Le Mans, ~170 photos) — stale content gets
+// equal footing with a just-shot event while its audience is still paying
+// attention. List categories here to give them priority picks; every other
+// category still gets mixed in via the normal rotation below, so it's a mix,
+// not a full cutover. Update this after each new event — add the new
+// category, and drop old ones once their backlog has been worked through.
+const PRIORITY_CATEGORIES = ['iccr'];
+
+// ── Pick next image ────────────────────────────────────────────────────────
 function pickNext(images, posted) {
   const postedSet = new Set(posted);
   const pending   = images.filter(img => !postedSet.has(img.filename));
   if (pending.length === 0) return null;
+
+  // Every other post favours a priority category (if it still has pending
+  // photos); the rest fall through to normal category-alternating rotation,
+  // which still includes priority categories in its own mix.
+  const favourPriority = posted.length % 2 === 0;
+  if (favourPriority) {
+    const priorityPending = pending.filter(i => PRIORITY_CATEGORIES.includes(i.category));
+    if (priorityPending.length > 0) return priorityPending[0];
+  }
 
   const lastCat = images.find(i => i.filename === posted[posted.length - 1])?.category;
   const different = pending.filter(i => i.category !== lastCat);

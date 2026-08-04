@@ -48,7 +48,10 @@ things plainly and do the technical work for him.
 
 ### Instagram automation
 - `scripts/instagram-post.cjs` — picks the next unposted photo, loads its Instagram caption,
-  generates hashtags/@mentions, fires the Make.com webhook.
+  generates hashtags/@mentions, fires the Make.com webhook. `PRIORITY_CATEGORIES` (near
+  `pickNext`) gives one category a recency boost (every other post, if it has pending
+  photos) so a just-shot event doesn't get buried under older backlog — **update this list
+  whenever a new event's photos are added**, and drop old ones once their backlog clears.
 - `post-queue.json` — tracks posted filenames (committed to repo, updated by the Action).
 - `.github/workflows/instagram-post.yml` — runs **twice daily, 8am and 5pm UTC** (enough photo backlog now to support two posts a day).
 
