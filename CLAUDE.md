@@ -129,9 +129,27 @@ Make.com handles auth cleanly. Keep the Meta app in Development mode.
 ### New photos pushed by Marc
 1. `git pull` (make sure LFS pulls the actual image files, not just pointers)
 2. Find filenames missing from `captions.ts` (the auto-captions Action adds placeholders)
-3. **Read each image** and identify the car visually
-4. Add entries to `captions.ts` under the correct section, and to `instagram-captions.json`
-5. Commit and push
+3. **Downscale before reading** — run
+   `powershell -ExecutionPolicy Bypass -File scripts/resize-for-review.ps1 -SrcDir <source> -OutDir <scratch-dir>`
+   (uses .NET System.Drawing, no npm install needed) and read the ~1800px copies from
+   `<scratch-dir>` instead of the full-res originals. The site never serves anything above
+   1920px anyway, so full-res is wasted vision tokens for identification purposes. Cuts a
+   typical 40-photo batch from ~270MB to ~15MB. Delete the scratch dir when done.
+4. **Read each (downscaled) image** and identify the car visually
+5. Add entries to `captions.ts` under the correct section, and to `instagram-captions.json`
+6. Commit and push
+7. **New event/category?** (not just adding to an existing one) — also wire the category name
+   into all these spots: `scripts/watermark.mjs` (`CATEGORIES`), `scripts/auto-captions.cjs`
+   (`CATEGORIES`), `scripts/instagram-post.cjs` (`categories` array, and consider adding to
+   `PRIORITY_CATEGORIES` while the event is fresh), `src/pages/gallery.astro` (glob +
+   `categories` + `categoryLabels`), `src/pages/index.astro` (glob), `src/pages/events/
+   index.astro` (glob), `src/pages/events/[slug].astro` (glob), `src/pages/photo/[slug].astro`
+   (glob), plus a new entry in `src/data/events.ts`. See the `iccr`/`bimmerfest` additions in
+   git history for the exact pattern.
+
+**Cost note (2026-08-05):** for a brand new photo batch, prefer starting a **fresh chat
+session** over continuing a long-running one — a fresh session only needs this file, not
+hundreds of prior tool calls/images. See `feedback_photo_batch_cost` in Claude's memory.
 
 ### Manually trigger an Instagram post
 `gh workflow run instagram-post.yml --repo marcevo190/website`
