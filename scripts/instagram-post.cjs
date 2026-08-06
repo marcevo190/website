@@ -206,7 +206,14 @@ function generateTagsAndMentions(title, caption, category) {
 // category still gets mixed in via the normal rotation below, so it's a mix,
 // not a full cutover. Update this after each new event — add the new
 // category, and drop old ones once their backlog has been worked through.
-const PRIORITY_CATEGORIES = ['iccr', 'bimmerfest'];
+// Order matters: on a tie, earlier entries get first pick. Newest/most
+// time-sensitive event goes first, since a big older backlog (e.g. iccr)
+// would otherwise crowd out a smaller, fresher one on every priority turn —
+// this happened for real: iccr (100 pending) was taking 100% of priority
+// slots, leaving bimmerfest (40 pending, the newer event) zero despite being
+// in this list. The round-robin below fixes the starvation; the ordering
+// here just breaks first-pick ties in favour of whichever is freshest.
+const PRIORITY_CATEGORIES = ['bimmerfest', 'iccr'];
 
 // ── Pick next image ────────────────────────────────────────────────────────
 function pickNext(images, posted) {
@@ -214,13 +221,24 @@ function pickNext(images, posted) {
   const pending   = images.filter(img => !postedSet.has(img.filename));
   if (pending.length === 0) return null;
 
-  // Every other post favours a priority category (if it still has pending
+  // Every other post favours a priority category (if any still has pending
   // photos); the rest fall through to normal category-alternating rotation,
   // which still includes priority categories in its own mix.
   const favourPriority = posted.length % 2 === 0;
   if (favourPriority) {
-    const priorityPending = pending.filter(i => PRIORITY_CATEGORIES.includes(i.category));
-    if (priorityPending.length > 0) return priorityPending[0];
+    // Round-robin across priority categories themselves, so a large backlog
+    // in one can't starve a smaller one — find the last-posted priority
+    // category and move on to the next one in the list that still has
+    // pending photos, cycling back to the start if needed.
+    const lastPriorityCat = [...posted].reverse()
+      .map(f => images.find(i => i.filename === f)?.category)
+      .find(c => PRIORITY_CATEGORIES.includes(c));
+    const startIdx = lastPriorityCat ? (PRIORITY_CATEGORIES.indexOf(lastPriorityCat) + 1) % PRIORITY_CATEGORIES.length : 0;
+    for (let i = 0; i < PRIORITY_CATEGORIES.length; i++) {
+      const cat = PRIORITY_CATEGORIES[(startIdx + i) % PRIORITY_CATEGORIES.length];
+      const match = pending.find(p => p.category === cat);
+      if (match) return match;
+    }
   }
 
   const lastCat = images.find(i => i.filename === posted[posted.length - 1])?.category;
