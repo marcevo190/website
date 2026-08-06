@@ -11,7 +11,7 @@ import ShareButtons from '../../components/ShareButtons.astro';
 // prev/next links that give crawlers a path through the whole archive.
 export function getStaticPaths() {
   const imageModules = import.meta.glob<{ default: ImageMetadata }>(
-    '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows,iccr}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+    '/src/assets/watermarked/{formula,endurance,rally,gt,car-shows,iccr,bimmerfest}/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
     { eager: true }
   );
 

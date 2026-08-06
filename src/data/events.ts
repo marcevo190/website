@@ -49,6 +49,20 @@ export const events: EventDef[] = [
     classes: ['Formula Vee', 'Formula Sheane', 'Junior Mini Challenge', 'Fiesta Zetec', 'Fiesta ST', 'Sports 2000 (SRCC)'],
     description: 'Photo coverage of an Irish Championship Circuit Racing (ICCR) meeting at Mondello Park by Marc Ronan — Formula Vee, Formula Sheane, Junior Mini Challenge, Fiesta championships and Sports 2000.',
   },
+  {
+    slug: 'bimmerfest-2026',
+    name: 'Bimmerfest 2026',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: '2026',
+    categories: ['bimmerfest'],
+    hero: 'DSC_5722.jpg',
+    intro: [
+      'A trackday and car meet at Mondello Park under the Bimmerfest banner, with BMW\'s M division taking centre stage — E36, E46, E92 and F80 M3s, the M2 and M4 in half a dozen colours, and a brand new M5 all turning laps and filling the paddock.',
+      'The BMW theme didn\'t stop other marques joining in: a Subaru Impreza, a Skoda Fabia rally car, a run of Renault Clio and Mégane RS track cars, a Ford Fiesta racer and a SEAT Leon Cupra all shared the circuit, alongside lightweight specials and open-cockpit prototypes. A proper BMW Motorsport tribute livery and Austin O\'Brien\'s Jägermeister-liveried Irish Touring Car Championship E36 flew the flag for the marque\'s racing history.',
+    ],
+    classes: ['BMW M2', 'BMW M3', 'BMW M4', 'BMW M5', 'ITCC', 'Track Day'],
+    description: 'Photo coverage of Bimmerfest 2026 at Mondello Park by Marc Ronan — BMW M cars, an ITCC touring car, and a mixed trackday paddock.',
+  },
 ];
 
 export function getEvent(slug: string): EventDef | undefined {

@@ -22,7 +22,7 @@ function loadInstagramCaptions() {
 // ── Collect all images from asset folders ────────────────────────────────────
 function collectImages() {
   const base       = 'src/assets/images';
-  const categories = ['endurance', 'car-shows', 'formula', 'rally', 'gt', 'iccr', 'instagram-only'];
+  const categories = ['endurance', 'car-shows', 'formula', 'rally', 'gt', 'iccr', 'bimmerfest', 'instagram-only'];
   const images     = [];
   for (const cat of categories) {
     const dir = path.join(base, cat);
@@ -206,7 +206,7 @@ function generateTagsAndMentions(title, caption, category) {
 // category still gets mixed in via the normal rotation below, so it's a mix,
 // not a full cutover. Update this after each new event — add the new
 // category, and drop old ones once their backlog has been worked through.
-const PRIORITY_CATEGORIES = ['iccr'];
+const PRIORITY_CATEGORIES = ['iccr', 'bimmerfest'];
 
 // ── Pick next image ────────────────────────────────────────────────────────
 function pickNext(images, posted) {
