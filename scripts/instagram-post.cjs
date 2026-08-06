@@ -281,7 +281,13 @@ function pickFollowCta(postedCount) {
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
+// Optional CLI arg: a category name restricts posting to just that category,
+// bypassing the normal rotation entirely — used by the temporary "boost"
+// workflow to guarantee a fresh event actually gets extra posts today rather
+// than only nudging its odds within the general rotation.
 async function main() {
+  const categoryOverride = process.argv[2] || null;
+
   const queuePath = 'post-queue.json';
   const queue     = fs.existsSync(queuePath)
     ? JSON.parse(fs.readFileSync(queuePath, 'utf8'))
@@ -289,8 +295,17 @@ async function main() {
 
   const captions   = loadCaptions();
   const igCaptions = loadInstagramCaptions();
-  const images     = collectImages();
-  const next       = pickNext(images, queue.posted);
+  let images       = collectImages();
+  if (categoryOverride) {
+    images = images.filter(i => i.category === categoryOverride);
+    if (!images.length) {
+      console.log(`No images found in category "${categoryOverride}".`);
+      return;
+    }
+  }
+  const next = categoryOverride
+    ? images.find(i => !queue.posted.includes(i.filename)) ?? null
+    : pickNext(images, queue.posted);
 
   if (!next) {
     console.log('All images have been posted — queue complete.');

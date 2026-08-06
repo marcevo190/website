@@ -54,6 +54,16 @@ things plainly and do the technical work for him.
   whenever a new event's photos are added**, and drop old ones once their backlog clears.
 - `post-queue.json` — tracks posted filenames (committed to repo, updated by the Action).
 - `.github/workflows/instagram-post.yml` — runs **twice daily, 8am and 5pm UTC** (enough photo backlog now to support two posts a day).
+- `instagram-post.cjs` accepts an optional category name as a CLI arg (e.g.
+  `node scripts/instagram-post.cjs bimmerfest`) to post from just that category, bypassing
+  the normal rotation — used for temporary "boost" workflows below.
+- `.github/workflows/instagram-post-boost.yml` — **TEMPORARY, added 2026-08-06, self-expires
+  2026-08-20.** Posts Bimmerfest photos specifically 3x/day on top of the normal schedule, so
+  a fresh event gets real traction instead of trickling out over the ~2-month general
+  rotation. Delete this file once the bimmerfest category is exhausted or the expiry date
+  passes (it no-ops past expiry rather than erroring, but clean it up rather than leaving a
+  dead workflow around). This is the pattern to reuse for any future "just happened, needs a
+  push" event — copy the file, swap the category and expiry date.
 
 ### Events & photo pages
 - `src/data/events.ts` — event definitions; each event page at `/events/<slug>` pulls photos
