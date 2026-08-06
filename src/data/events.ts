@@ -57,11 +57,11 @@ export const events: EventDef[] = [
     categories: ['bimmerfest'],
     hero: 'DSC_5722.jpg',
     intro: [
-      'A trackday and car meet at Mondello Park under the Bimmerfest banner, with BMW\'s M division taking centre stage — E36, E46, E92 and F80 M3s, the M2 and M4 in half a dozen colours, and a brand new M5 all turning laps and filling the paddock.',
-      'The BMW theme didn\'t stop other marques joining in: a Subaru Impreza, a Skoda Fabia rally car, a run of Renault Clio and Mégane RS track cars, a Ford Fiesta racer and a SEAT Leon Cupra all shared the circuit, alongside lightweight specials and open-cockpit prototypes. A proper BMW Motorsport tribute livery and Austin O\'Brien\'s Jägermeister-liveried Irish Touring Car Championship E36 flew the flag for the marque\'s racing history.',
+      'An open-pitlane trackday at Mondello Park, run by trackdays.ie under the Bimmerfest banner, with BMW\'s M division taking centre stage — E36, E46, E92 and F80 M3s, the M2 and M4 in half a dozen colours, and a brand new M5 all turning laps and filling the paddock.',
+      'The BMW theme didn\'t stop other marques joining in: a Subaru Impreza, a Skoda Fabia rally car, a run of Renault Clio and Mégane RS track cars, a Ford Fiesta and a SEAT Leon Cupra all shared the circuit, alongside lightweight specials and open-cockpit prototypes. A BMW Motorsport tribute livery and Austin O\'Brien\'s Jägermeister-liveried E36, built for the Irish Touring Car Championship, drew plenty of attention in the paddock.',
     ],
-    classes: ['BMW M2', 'BMW M3', 'BMW M4', 'BMW M5', 'ITCC', 'Track Day'],
-    description: 'Photo coverage of Bimmerfest 2026 at Mondello Park by Marc Ronan — BMW M cars, an ITCC touring car, and a mixed trackday paddock.',
+    classes: ['BMW M2', 'BMW M3', 'BMW M4', 'BMW M5', 'Hot Hatches', 'Trackday'],
+    description: 'Photo coverage of the Bimmerfest 2026 trackday at Mondello Park by Marc Ronan — BMW M cars and a mixed open-pitlane paddock, run by trackdays.ie.',
   },
 ];
 

@@ -734,7 +734,6 @@ export const captions: Record<string, CaptionEntry> = {
   'DSC_4544.jpg': { title: 'Ferrari 296 Challenge #130 Branson Past the Crowd — Le Mans 2026', caption: 'The #130 Branson Motorsports Ferrari 296 Challenge runs past a packed grandstand hill, Race for RP charity branding visible on the door.' },
 
   // ── ICCR (src/assets/images/iccr/) — Irish Championship Circuit Racing, Mondello Park ──
-  'DSC_5117.jpg': { title: 'Fiesta Zetec Championship in the Wet — Mondello Park', caption: 'The #42 AV1 Tiles & Bathrooms Fiesta and the #65 Wrightz Fiesta run through standing water during an ICCR Fiesta Zetec Championship race at Mondello Park.' },
   'DSC_5134.jpg': { title: 'Hesketh-Liveried Single-Seater in the Paddock — Mondello Park', caption: 'A black and gold single-seater in Hesketh-style "Hollywood" livery sits in the Mondello Park paddock, a "Winner, Driver of the Day" sticker from Brands Hatch GP 2023 on the nose and driver Ash Law named on the cockpit surround.' },
   'DSC_5136.jpg': { title: 'Sports 2000 #12 — Mondello Park', caption: 'The #12 Sports 2000 SRCC car of Clive Hayes in the Mondello Park paddock, one of the guest classes running alongside the ICCR championship.' },
   'DSC_5137.jpg': { title: 'Sports Prototype in the Paddock — Mondello Park', caption: 'A purple and white sports prototype sits nose-in in the Mondello Park paddock, its rear-mounted engine and cockpit visible from this angle.' },
@@ -862,11 +861,10 @@ export const captions: Record<string, CaptionEntry> = {
   'DSC_5742.jpg': { title: 'BMW E36 M3, #96 — Bimmerfest, Mondello Park', caption: 'The matte black #96 BMW E36 M3, orange checkered graphics and an Irish tricolour, backed by Mishimoto, at Bimmerfest, Mondello Park.' },
   'DSC_5743.jpg': { title: 'BMW M2, Teal — Bimmerfest, Mondello Park', caption: 'A teal BMW M2 with a prominent rear wing, backed by Division88 Performance Car Specialists, at Bimmerfest, Mondello Park.' },
   'DSC_5746.jpg': { title: 'BMW M3 (F80) — Bimmerfest, Mondello Park', caption: 'A dark blue BMW M3 (F80) sedan on static display at Bimmerfest, Mondello Park.' },
-  'DSC_5748.jpg': { title: 'Sports Prototype #10 — Bimmerfest, Mondello Park', caption: 'The red and white #10 open-cockpit sports prototype, backed by BAHA, joins the mixed grid at Bimmerfest, Mondello Park.' },
   'DSC_5749.jpg': { title: 'Renault Clio RS — Bimmerfest, Mondello Park', caption: 'A white Renault Clio RS, backed by Track Attack Race Club, at Bimmerfest, Mondello Park.' },
   'DSC_5750.jpg': { title: 'Renault Clio RS, CB Autosales — Bimmerfest, Mondello Park', caption: 'The orange and black Renault Clio RS, backed by CB Autosales and Bosch, at Bimmerfest, Mondello Park.' },
   'DSC_5751.jpg': { title: 'BMW M4, Gold — Bimmerfest, Mondello Park', caption: 'A gold BMW M4, backed by SRG Motors, at Bimmerfest, Mondello Park.' },
-  'DSC_5752.jpg': { title: 'Fitzgerald\'s Ford Fiesta — Bimmerfest, Mondello Park', caption: 'Fitzgerald\'s yellow and black bee-striped Ford Fiesta, backed by Lucan Windows & Doors, running in a Fiesta Championship support race at Bimmerfest, Mondello Park.' },
+  'DSC_5752.jpg': { title: 'Fitzgerald\'s Ford Fiesta — Bimmerfest, Mondello Park', caption: 'Fitzgerald\'s yellow and black bee-striped Ford Fiesta, backed by Lucan Windows & Doors, on circuit at the Bimmerfest trackday, Mondello Park.' },
   'DSC_5754.jpg': { title: 'Jägermeister BMW Chases an Open-Wheel Buggy — Bimmerfest, Mondello Park', caption: 'Austin O\'Brien\'s #64 Jägermeister BMW E36 chases a black and green open-wheel buggy through a Mondello Park corner at Bimmerfest.' },
   'DSC_5758.jpg': { title: 'BMW M2, Black — Bimmerfest, Mondello Park', caption: 'A black BMW M2, Division88 windscreen banner, on circuit at Bimmerfest, Mondello Park.' },
   'DSC_5761.jpg': { title: 'BMW E46 M3 on Circuit — Bimmerfest, Mondello Park', caption: 'The grey BMW E46 M3 on circuit at Bimmerfest, Mondello Park, spectators watching from the trackside wall.' },
