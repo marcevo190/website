@@ -58,12 +58,14 @@ things plainly and do the technical work for him.
   `node scripts/instagram-post.cjs bimmerfest`) to post from just that category, bypassing
   the normal rotation — used for temporary "boost" workflows below.
 - `.github/workflows/instagram-post-boost.yml` — **TEMPORARY, added 2026-08-06, self-expires
-  2026-08-20.** Posts Bimmerfest photos specifically 3x/day on top of the normal schedule, so
-  a fresh event gets real traction instead of trickling out over the ~2-month general
-  rotation. Delete this file once the bimmerfest category is exhausted or the expiry date
-  passes (it no-ops past expiry rather than erroring, but clean it up rather than leaving a
-  dead workflow around). This is the pattern to reuse for any future "just happened, needs a
-  push" event — copy the file, swap the category and expiry date.
+  2026-08-20.** Posts Bimmerfest photos specifically 4x/day (5:30/10:30/14:30/20:30 UTC) on
+  top of the normal schedule, so a fresh event gets real traction instead of trickling out
+  over the ~2-month general rotation. More bimmerfest photos are expected — if the batch
+  isn't finished by the expiry date, push the date further out rather than letting it lapse
+  (it no-ops past expiry rather than erroring, so nothing breaks either way — just remember
+  to check whether it's still needed). Delete this file entirely once the bimmerfest category
+  is fully exhausted. This is the pattern to reuse for any future "just happened, needs a
+  push" event — copy the file, swap the category, cron times and expiry date.
 
 ### Events & photo pages
 - `src/data/events.ts` — event definitions; each event page at `/events/<slug>` pulls photos
