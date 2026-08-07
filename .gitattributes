@@ -11,3 +11,11 @@
 *.TIFF filter=lfs diff=lfs merge=lfs -text
 *.gif filter=lfs diff=lfs merge=lfs -text
 *.GIF filter=lfs diff=lfs merge=lfs -text
+
+# Small static site asset committed directly, not through LFS. Must come
+# after every pattern above (attribute matching here is case-insensitive
+# on Windows, so even *.JPG etc. would otherwise re-match and win) so this
+# is the last word on this one path. Without it, checkouts see this file
+# as a broken LFS pointer and it shows as locally modified, which breaks
+# `git pull --rebase` in instagram-post-boost.yml.
+/public/og-default.jpg -filter -diff -merge -text
