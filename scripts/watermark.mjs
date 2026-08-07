@@ -24,25 +24,25 @@ const IG_ONLY_CATEGORIES = ['instagram-only'];
 const EXTS        = '{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}';
 
 function watermarkSVG(w, h) {
-  const size   = Math.max(14, Math.round(w * 0.022));
+  const size   = Math.max(13, Math.round(w * 0.018));
   const padX   = Math.round(w * 0.025);
   const padY   = Math.round(h * 0.025);
-  const text   = '© MARC RONAN / TRACKMARC';
+  const text   = 'trackmarc.com';
   return Buffer.from(`
     <svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="s">
-          <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#000" flood-opacity="0.9"/>
+          <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#000" flood-opacity="0.85"/>
         </filter>
       </defs>
       <text
         x="${w - padX}" y="${h - padY}"
         text-anchor="end"
-        font-family="Arial, sans-serif"
+        font-family="Helvetica Neue, Arial, sans-serif"
         font-size="${size}"
-        font-weight="700"
-        letter-spacing="${Math.round(size * 0.12)}"
-        fill="rgba(255,255,255,0.82)"
+        font-weight="300"
+        letter-spacing="${Math.round(size * 0.28)}"
+        fill="rgba(255,255,255,0.75)"
         filter="url(#s)"
       >${text}</text>
     </svg>`);
