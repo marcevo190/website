@@ -31,5 +31,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add post-queue.json
-          git diff --staged --quiet || git commit -m "chore: update Instagram post queue [skip ci]"
+          git diff --staged --quiet || git commit -m "[CI Skip] chore: update Instagram post queue"
           git push
