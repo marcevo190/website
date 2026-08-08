@@ -65,7 +65,7 @@ things plainly and do the technical work for him.
   `node scripts/instagram-post.cjs bimmerfest`) to post from just that category, bypassing
   the normal rotation — used for temporary "boost" workflows below.
 - `.github/workflows/instagram-post-boost.yml` — **TEMPORARY, added 2026-08-06, self-expires
-  2026-08-20.** Posts Bimmerfest photos specifically 4x/day (5:30/10:30/14:30/20:30 UTC) on
+  2026-09-20** (extended 2026-08-08 for the second batch). Posts Bimmerfest photos specifically 4x/day (5:30/10:30/14:30/20:30 UTC) on
   top of the normal schedule, so a fresh event gets real traction instead of trickling out
   over the ~2-month general rotation. More bimmerfest photos are expected — if the batch
   isn't finished by the expiry date, push the date further out rather than letting it lapse
