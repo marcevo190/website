@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { events } from '../data/events';
+import { getCaption } from '../data/captions';
 
 // Gallery images for carousel rotation — shuffled across all categories.
 // Glob covers all of watermarked/ (generated from src/data/categories.json).
@@ -26,15 +27,19 @@ const eventCards = events.map(event => {
   return { event, cover, count };
 });
 
-const allImages = Object.values(galleryModules).map(m => m.default);
+// Keep a caption alongside each slide so hero <img> alt text stays meaningful
+const slideEntries = Object.entries(galleryModules).map(([path, mod]) => {
+  const parts = path.split('/');
+  const filename = parts[parts.length - 1];
+  return { src: mod.default, filename };
+});
 // Fisher-Yates shuffle
-for (let i = allImages.length - 1; i > 0; i--) {
+for (let i = slideEntries.length - 1; i > 0; i--) {
   const j = Math.floor(Math.random() * (i + 1));
-  [allImages[i], allImages[j]] = [allImages[j], allImages[i]];
+  [slideEntries[i], slideEntries[j]] = [slideEntries[j], slideEntries[i]];
 }
-// Cap the hero carousel — rendering all ~200 photos here bloats the homepage
-// DOM/payload and makes for an absurdly long cycle. A handful is plenty.
-const slides = allImages.slice(0, 10);
+// Cap the hero carousel to rendering all ~135 photos; a handful is plenty.
+const slides = slideEntries.slice(0, 10);
 ---
 
 <Layout title="TrackMarc — Irish Motorsport Photography | Marc Ronan">
@@ -45,11 +50,11 @@ const slides = allImages.slice(0, 10);
     <!-- Carousel -->
     {slides.length > 0 && (
       <div class="hero-carousel" id="hero-carousel">
-        {slides.map((img, i) => (
+        {slides.map((slide, i) => (
           <div class:list={['carousel-slide', { active: i === 0 }]}>
             <Image
-              src={img}
-              alt="Motorsport photography by TrackMarc"
+              src={slide.src}
+              alt={getCaption(slide.filename)?.title ?? 'Motorsport photography by TrackMarc'}
               class="carousel-img"
               widths={[800, 1440, 1920]}
               sizes="100vw"

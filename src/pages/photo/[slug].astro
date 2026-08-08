@@ -56,6 +56,22 @@ const event = events.find(e => e.categories.includes(photo.category));
 const imageAbsoluteUrl = new URL(photo.src.src, Astro.site).href;
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 
+// Keywords drive Google Images matching — derived from the visible caption,
+// the event name and the category label, so searches like "Corvette GT3 Le Mans"
+// can actually resolve to this page.
+const categoryLabel = event?.name ?? events.find(e => e.categories.includes(photo.category))?.name ?? photo.category;
+const stopwords = new Set([
+  'is', 'the', 'a', 'an', 'in', 'at', 'on', 'under', 'with', 'of', 'and',
+  'for', 'from', 'that', 'this', 'its', 'you', 'your', 'it', 's', 'to', 'be',
+]);
+const keywords = Array.from(new Set(
+  (title + ' ' + caption + ' ' + categoryLabel + ' ' + photo.category)
+    .toLowerCase()
+    .replace(/[^a-z0-9\s#]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length > 2 && !stopwords.has(w))
+)).slice(0, 12);
+
 const imageSchema = {
   '@context': 'https://schema.org',
   '@type': 'ImageObject',
@@ -63,6 +79,7 @@ const imageSchema = {
   url: pageUrl,
   name: title,
   description: caption,
+  keywords: keywords.join(', '),
   creator: { '@type': 'Person', name: 'Marc Ronan' },
   creditText: 'Marc Ronan / TrackMarc',
   copyrightNotice: `© ${new Date().getFullYear()} Marc Ronan`,
