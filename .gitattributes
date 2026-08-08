@@ -19,3 +19,11 @@
 # as a broken LFS pointer and it shows as locally modified, which breaks
 # `git pull --rebase` in instagram-post-boost.yml.
 /public/og-default.jpg -filter -diff -merge -text
+
+# Weekly reel video — regenerated every Sunday. Git LFS keeps the ~20MB
+# mp4 out of git history entirely (pointer in repo, blob on GitHub LFS).
+# The reel workflow runs `git lfs install --local` so the pre-push hook
+# uploads the blob; Cloudflare Pages fetches LFS content on build like the
+# photos. Invisible to the image patterns above.
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.MP4 filter=lfs diff=lfs merge=lfs -text

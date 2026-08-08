@@ -5,6 +5,12 @@ on:
     - cron: '30 17 * * 0'  # Sundays at 5:30pm UTC — catch the race-day crowd
   workflow_dispatch:         # Manual trigger from GitHub UI (builds even without the webhook secret)
 
+# Serialize with the post/boost/auto-captions workflows — this job also
+# commits and pushes to main (the reel video). See instagram-post.yml.
+concurrency:
+  group: track-bot-commits
+  cancel-in-progress: false
+
 jobs:
   reel:
     runs-on: ubuntu-latest
@@ -38,11 +44,18 @@ jobs:
       - uses: actions/setup-node@v4
         if: steps.config.outputs.build == 'true'
         with:
-          node-version: "24"
+          node-version: "22"
 
       - name: Install ffmpeg
         if: steps.config.outputs.build == 'true'
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      # weekly.mp4 is Git LFS-tracked (keeps it out of git history). Install
+      # the local hooks so the pre-push hook uploads the LFS blob on `git push`
+      # below — otherwise Cloudflare would receive a bare pointer and fail.
+      - name: Enable Git LFS
+        if: steps.config.outputs.build == 'true'
+        run: git lfs install --local
 
       - name: Build weekly reel
         if: steps.config.outputs.build == 'true'

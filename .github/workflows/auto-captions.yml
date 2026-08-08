@@ -5,6 +5,12 @@ on:
     paths:
       - 'src/assets/images/**'
 
+# Serialize with the post/boost/reel workflows — see concurrency note in
+# instagram-post.yml.
+concurrency:
+  group: track-bot-commits
+  cancel-in-progress: false
+
 jobs:
   captions:
     runs-on: ubuntu-latest
@@ -18,7 +24,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "22"
 
       - name: Add placeholders for uncaptioned images
         run: node scripts/auto-captions.cjs
@@ -29,4 +35,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git add src/data/captions.ts
           git diff --staged --quiet || git commit -m "[CI Skip] chore: add caption placeholders for new images"
+          git pull --rebase origin main
           git push

@@ -1,0 +1,26 @@
+name: Validate category wiring
+
+# Guards the "new event" checklist — catches photo folders that were added to
+# src/assets/images but never wired into the shared category list or events.
+# Fails the check on errors; warnings (e.g. captions not yet written) pass.
+
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - '.github/workflows/validate.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false  # filenames only — we never need the image bytes
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run validation
+        run: node scripts/validate.cjs

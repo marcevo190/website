@@ -21,6 +21,20 @@ export default {
       const feedUrl = url.searchParams.get('url');
       if (!feedUrl) return new Response('Missing url param', { status: 400 });
 
+      // SSRF guard: this proxy is publicly reachable, so only ever fetch from
+      // the news sources the site actually uses (see the /motorsport feeds).
+      // A bare fetch(-)-url lets anyone probe for internal resources.
+      const rssAllowHosts = ['news.google.com'];
+      let feed;
+      try {
+        feed = new URL(feedUrl);
+      } catch {
+        return new Response('Invalid url param', { status: 400 });
+      }
+      if (feed.protocol !== 'https:' || !rssAllowHosts.includes(feed.hostname)) {
+        return new Response('Unsupported feed host', { status: 403 });
+      }
+
       try {
         const upstream = await fetch(feedUrl, {
           headers: {

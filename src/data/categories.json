@@ -1,0 +1,13 @@
+{
+  "website": ["formula", "endurance", "rally", "gt", "car-shows", "iccr", "bimmerfest"],
+  "instagramOnly": ["instagram-only"],
+  "labels": {
+    "formula": "Formula",
+    "endurance": "Endurance",
+    "rally": "Rally",
+    "gt": "GT",
+    "car-shows": "Car Shows",
+    "iccr": "ICCR",
+    "bimmerfest": "Bimmerfest"
+  }
+}

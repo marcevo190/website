@@ -18,9 +18,15 @@ function findImages(dir, results = []) {
 const INPUT_BASE  = 'src/assets/images';
 const OUTPUT_BASE = 'src/assets/watermarked';
 const IG_BASE     = 'public/ig';
-const CATEGORIES  = ['formula', 'endurance', 'rally', 'gt', 'car-shows', 'iccr', 'bimmerfest'];
-// Posted to Instagram only — excluded from gallery.astro's glob, so no watermarked/ copy is made.
-const IG_ONLY_CATEGORIES = ['instagram-only'];
+// Category lists come from the single source of truth — src/data/categories.json.
+// Any change to categories is made there and picked up by every script/page.
+function loadCategories() {
+  const raw = fs.readFileSync(new URL('../src/data/categories.json', import.meta.url), 'utf8');
+  return JSON.parse(raw);
+}
+const categoriesFile = loadCategories();
+const CATEGORIES  = categoriesFile.website;
+const IG_ONLY_CATEGORIES = categoriesFile.instagramOnly;
 const EXTS        = '{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}';
 
 function watermarkSVG(w, h) {

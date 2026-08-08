@@ -63,6 +63,7 @@ function postJson(webhookUrl, payload) {
     const req  = https.request({
       hostname: url.hostname,
       path:     url.pathname,
+      port:     url.port || undefined,
       method:   'POST',
       headers:  { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
     }, res => {

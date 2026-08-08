@@ -21,8 +21,12 @@ function loadInstagramCaptions() {
 
 // ── Collect all images from asset folders ────────────────────────────────────
 function collectImages() {
-  const base       = 'src/assets/images';
-  const categories = ['endurance', 'car-shows', 'formula', 'rally', 'gt', 'iccr', 'bimmerfest', 'instagram-only'];
+  const base = 'src/assets/images';
+  // Category lists from the single source of truth — src/data/categories.json.
+  // Website categories post to both site + Instagram rotation; instagram-only
+  // images are posted to Instagram from their own folder.
+  const categoriesFile = require('../src/data/categories.json');
+  const categories     = [...categoriesFile.website, ...categoriesFile.instagramOnly];
   const images     = [];
   for (const cat of categories) {
     const dir = path.join(base, cat);
@@ -254,6 +258,7 @@ function fireWebhook(payload) {
     const req  = https.request({
       hostname: url.hostname,
       path:     url.pathname,
+      port:     url.port || undefined,
       method:   'POST',
       headers:  { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
     }, res => {
@@ -322,6 +327,13 @@ async function main() {
 
   // Use Instagram-specific caption if available, fall back to website caption
   const captionText     = igCaptions[next.filename] || cap.caption;
+  if (!captionText.trim()) {
+    // auto-captions creates placeholder entries with an empty caption. Don't
+    // post a shell (follow-CTA + hashtags alone); skip so the photo is picked
+    // up later once a real caption is written. Not marked as posted.
+    console.log(`No caption yet for ${next.filename} — skipping (will retry once captioned).`);
+    return;
+  }
   const followCta       = pickFollowCta(queue.posted.length);
   const tagsAndMentions = generateTagsAndMentions(cap.title, cap.caption, next.category);
   const igCaption       = `${captionText}\n\n${followCta}\n\n${tagsAndMentions}`;

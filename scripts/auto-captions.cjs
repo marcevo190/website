@@ -3,7 +3,8 @@ const path = require('path');
 
 const IMAGES_BASE = 'src/assets/images';
 const CAPTIONS_FILE = 'src/data/captions.ts';
-const CATEGORIES = ['formula', 'endurance', 'rally', 'gt', 'car-shows', 'iccr', 'bimmerfest'];
+// Categories come from the single source of truth — src/data/categories.json.
+const CATEGORIES = require('../src/data/categories.json').website;
 
 // Collect all image filenames in the repo
 function collectImages() {

@@ -28,7 +28,14 @@ things plainly and do the technical work for him.
 ## Key files
 
 ### Images
-- `src/assets/images/{formula,endurance,rally,gt,car-shows}/` — originals (Git LFS)
+- `src/assets/images/<category>/` — originals (Git LFS), grouped per event
+- `src/data/categories.json` — **single source of truth for category wiring.** Lists
+  `website` (folders that appear on the site + in the Instagram rotation) and
+  `instagramOnly` (posted to Instagram only), plus human `labels`. Every script
+  (`scripts/watermark.mjs`, `scripts/auto-captions.cjs`, `scripts/instagram-post.cjs`)
+  and every page glob reads from here, so a new category needs ONLY this file (plus an
+  `events.ts` entry and a priority decision). `.github/workflows/validate.yml` fails the
+  build if a photo folder or event references a category missing from this file.
 - `src/assets/watermarked/` — watermarked copies, generated at build, git-ignored
 - `public/ig/{category}/` — clean (no watermark) 1080px Instagram versions, git-ignored
 
@@ -84,10 +91,20 @@ things plainly and do the technical work for him.
   no-op until the `MAKE_REEL_WEBHOOK_URL` repo secret exists; manual dispatch builds anyway
   for testing. Requires a separate Make.com scenario with an "Instagram — Create a Reel"
   module (the daily photo scenario cannot post video).
+- `weekly.mp4` is **Git LFS-tracked** (`*.mp4` in `.gitattributes`) so the ~20MB video never
+  accumulates in git history — the workflow runs `git lfs install --local` before committing
+  so the LFS blob uploads on push, and Cloudflare fetches it at build like the photos.
 
 ### Auto-captioning
 - `scripts/auto-captions.cjs` — scans for images with no caption entry, adds placeholders to `captions.ts`.
 - `.github/workflows/auto-captions.yml` — triggers on push to `src/assets/images/**`.
+
+### Category wiring validation
+- `scripts/validate.cjs` + `.github/workflows/validate.yml` — runs on every push to `src/**`
+  or `scripts/**` (no commits, no LFS). Fails the check if a photo folder or an event
+  references a category missing from `src/data/categories.json`; warns about photos with no
+  or empty captions (placeholders won't post to Instagram). `instagram-post.cjs` skips images
+  whose caption is still empty rather than posting a shell post.
 
 > Note: scripts use the `.cjs` extension because `package.json` has `"type": "module"`.
 > CommonJS `require()` scripts must be `.cjs`, not `.js`.
@@ -150,14 +167,16 @@ Make.com handles auth cleanly. Keep the Meta app in Development mode.
 4. **Read each (downscaled) image** and identify the car visually
 5. Add entries to `captions.ts` under the correct section, and to `instagram-captions.json`
 6. Commit and push
-7. **New event/category?** (not just adding to an existing one) — also wire the category name
-   into all these spots: `scripts/watermark.mjs` (`CATEGORIES`), `scripts/auto-captions.cjs`
-   (`CATEGORIES`), `scripts/instagram-post.cjs` (`categories` array, and consider adding to
-   `PRIORITY_CATEGORIES` while the event is fresh), `src/pages/gallery.astro` (glob +
-   `categories` + `categoryLabels`), `src/pages/index.astro` (glob), `src/pages/events/
-   index.astro` (glob), `src/pages/events/[slug].astro` (glob), `src/pages/photo/[slug].astro`
-   (glob), plus a new entry in `src/data/events.ts`. See the `iccr`/`bimmerfest` additions in
-   git history for the exact pattern.
+7. **New event/category?** (not just adding to an existing one) — add the category to
+   `src/data/categories.json` (the single source of truth: `website` list + a `labels`
+   entry; use `instagramOnly` for Instagram-only folders), plus a new entry in
+   `src/data/events.ts`. Everything else picks the new category up automatically:
+   `scripts/watermark.mjs`, `scripts/auto-captions.cjs`, `scripts/instagram-post.cjs` and
+   every page glob all read the same JSON, so there are no per-page lists to edit.
+   Consider adding the fresh category to `PRIORITY_CATEGORIES` in `scripts/instagram-post.cjs`
+   while the event is fresh. `.github/workflows/validate.yml` fails CI if a photo folder or
+   an event references a category that isn't in `categories.json`. See the `iccr`/`bimmerfest`
+   additions in git history for the pattern.
 
 **Cost note (2026-08-05):** for a brand new photo batch, prefer starting a **fresh chat
 session** over continuing a long-running one — a fresh session only needs this file, not

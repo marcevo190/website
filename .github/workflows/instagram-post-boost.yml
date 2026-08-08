@@ -9,6 +9,10 @@ name: Instagram Bimmerfest Boost
 # More bimmerfest photos are expected soon — if the batch isn't done by the
 # expiry date, just push the date further out rather than letting it lapse.
 
+concurrency:
+  group: track-bot-commits
+  cancel-in-progress: false
+
 on:
   schedule:
     - cron: '30 5 * * *'   # 5:30am UTC
@@ -44,7 +48,7 @@ jobs:
       - uses: actions/setup-node@v4
         if: steps.expiry.outputs.active == 'true'
         with:
-          node-version: "24"
+          node-version: "22"
 
       - name: Post next Bimmerfest photo to Instagram
         if: steps.expiry.outputs.active == 'true'
