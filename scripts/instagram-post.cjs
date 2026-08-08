@@ -203,20 +203,16 @@ function generateTagsAndMentions(title, caption, category) {
 }
 
 // ── Categories currently getting a recency boost ──────────────────────────────
-// Plain category-order rotation buries a fresh event under whatever backlog
+// Plain category-rotation buries a fresh event under whatever backlog
 // happens to sort first (endurance/Le Mans, ~170 photos) — stale content gets
 // equal footing with a just-shot event while its audience is still paying
-// attention. List categories here to give them priority picks; every other
-// category still gets mixed in via the normal rotation below, so it's a mix,
-// not a full cutover. Update this after each new event — add the new
-// category, and drop old ones once their backlog has been worked through.
-// Order matters: on a tie, earlier entries get first pick. Newest/most
-// time-sensitive event goes first, since a big older backlog (e.g. iccr)
-// would otherwise crowd out a smaller, fresher one on every priority turn —
-// this happened for real: iccr (100 pending) was taking 100% of priority
-// slots, leaving bimmerfest (40 pending, the newer event) zero despite being
-// in this list. The round-robin below fixes the starvation; the ordering
-// here just breaks first-pick ties in favour of whichever is freshest.
+// attention. List categories here: while any listed category still has
+// pending photos, EVERY pick goes to the first one in this list that has
+// photos left — so the freshest event (bimmerfest) dominates the feed until
+// its backlog clears, then falls through to the next category, then to the
+// normal rotation once all are worked through. Keep the newest/most
+// time-sensitive event first. Update this after each new event — add the
+// new category, and drop old ones once their backlogs have cleared.
 const PRIORITY_CATEGORIES = ['bimmerfest', 'iccr'];
 
 // ── Pick next image ────────────────────────────────────────────────────────
@@ -225,21 +221,16 @@ function pickNext(images, posted) {
   const pending   = images.filter(img => !postedSet.has(img.filename));
   if (pending.length === 0) return null;
 
-  // Every other post favours a priority category (if any still has pending
-  // photos); the rest fall through to normal category-alternating rotation,
-  // which still includes priority categories in its own mix.
-  const favourPriority = posted.length % 2 === 0;
-  if (favourPriority) {
-    // Round-robin across priority categories themselves, so a large backlog
-    // in one can't starve a smaller one — find the last-posted priority
-    // category and move on to the next one in the list that still has
-    // pending photos, cycling back to the start if needed.
-    const lastPriorityCat = [...posted].reverse()
-      .map(f => images.find(i => i.filename === f)?.category)
-      .find(c => PRIORITY_CATEGORIES.includes(c));
-    const startIdx = lastPriorityCat ? (PRIORITY_CATEGORIES.indexOf(lastPriorityCat) + 1) % PRIORITY_CATEGORIES.length : 0;
-    for (let i = 0; i < PRIORITY_CATEGORIES.length; i++) {
-      const cat = PRIORITY_CATEGORIES[(startIdx + i) % PRIORITY_CATEGORIES.length];
+  // A priority category wins EVERY pick as long as it still has pending
+  // photos, so a just-shot event keeps dominating the feed until its backlog
+  // clears instead of flipping back and forth with the general rotation
+  // (which boost/other posts can skew). Normal category-alternating rotation
+  // only kicks in once every priority category is worked through.
+  if (PRIORITY_CATEGORIES.some(c => pending.some(p => p.category === c))) {
+    // Order matters: earlier entries win first, so the freshest event
+    // (bimmerfest) keeps taking the slot while it has pending photos; a
+    // secondary priority category only gets a pick when that's exhausted.
+    for (const cat of PRIORITY_CATEGORIES) {
       const match = pending.find(p => p.category === cat);
       if (match) return match;
     }
