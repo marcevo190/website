@@ -39,5 +39,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git add post-queue.json
           git diff --staged --quiet || git commit -m "[CI Skip] chore: update Instagram post queue"
-          git pull --rebase origin main
+          # No pull --rebase here: with lfs:false checkouts git misreads the
+          # LFS-tracked weekly.mp4 as unstaged changes and refuses to rebase.
+          # The shared concurrency group (track-bot-commits) serializes bot
+          # commits, so a plain push can't race another one.
           git push

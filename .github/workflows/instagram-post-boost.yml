@@ -63,5 +63,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git add post-queue.json
           git diff --staged --quiet || git commit -m "[CI Skip] chore: update Instagram post queue (bimmerfest boost)"
-          git pull --rebase origin main
+          # No pull --rebase here — same LFS pointer reason as instagram-post.yml.
           git push
