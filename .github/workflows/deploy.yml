@@ -28,6 +28,21 @@ jobs:
       - name: Setup Git LFS
         run: git lfs install
 
+      # Cache the watermark outputs between runs. src/assets/watermarked/ and
+      # public/ig/ are git-ignored (regenerated at build), so without this the
+      # watermark script re-stamps ALL images every deploy (~15 min for 470+).
+      # Restoring the cache lets watermark.mjs's mtime check skip everything
+      # unchanged and only process new/edited photos.
+      - name: Cache watermarked + ig outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            src/assets/watermarked
+            public/ig
+          key: watermark-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
+          restore-keys: |
+            watermark-${{ runner.os }}-
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
