@@ -1,0 +1,46 @@
+name: Deploy to Cloudflare
+
+# Builds the site (watermark + astro) and uploads to the Cloudflare Worker
+# (wrangler.json) on every push to main. The site is a Wrangler-deployed
+# Worker, NOT Cloudflare Pages, so pushes never auto-build without this —
+# before this workflow existed, deployment was a manual `npm run deploy`.
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: track-bot-commits
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true  # Build needs the real image bytes, not LFS pointers
+
+      - name: Setup Git LFS
+        run: git lfs install
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Deploy to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: deploy
