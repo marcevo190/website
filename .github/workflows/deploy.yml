@@ -31,17 +31,25 @@ jobs:
       # Cache the watermark outputs between runs. src/assets/watermarked/ and
       # public/ig/ are git-ignored (regenerated at build), so without this the
       # watermark script re-stamps ALL images every deploy (~15 min for 470+).
-      # Restoring the cache lets watermark.mjs's mtime check skip everything
-      # unchanged and only process new/edited photos.
+      # Restoring the cache lets watermark.mjs's content-hash manifest skip
+      # everything unchanged and only process new/edited photos.
+      #
+      # "-v2" in the key: cache keys are immutable once created — a save
+      # under an existing key silently no-ops. A "watermark-..." cache
+      # already existed from before watermark.mjs tracked a manifest file,
+      # so every run kept restoring that manifest-less cache and could never
+      # save its freshly-built manifest back under the same key, defeating
+      # the skip logic completely. Bump this suffix again if the cache
+      # scheme changes and needs a clean slate.
       - name: Cache watermarked + ig outputs
         uses: actions/cache@v4
         with:
           path: |
             src/assets/watermarked
             public/ig
-          key: watermark-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
+          key: watermark-v2-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
           restore-keys: |
-            watermark-${{ runner.os }}-
+            watermark-v2-${{ runner.os }}-
 
       - uses: actions/setup-node@v4
         with:
