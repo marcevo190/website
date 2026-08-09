@@ -13,10 +13,35 @@ things plainly and do the technical work for him.
 ## Stack
 
 - **Framework:** Astro (static site generator)
-- **Hosting:** Cloudflare Pages (auto-builds and deploys on push to `main`)
-- **Images:** Git LFS (large files)
+- **Hosting:** Cloudflare **Worker** (Wrangler deploy), NOT Cloudflare Pages.
+  `wrangler.json` defines a Worker named `website` serving `./dist` as static assets
+  (`ASSETS` binding) with a `VISITS` KV namespace. Deployment is **NOT automatic from
+  GitHub** — see `.github/workflows/deploy.yml` below.
+- **Images:** Git LFS (large files). **Important:** if `git-lfs` isn't installed locally,
+  new images get committed as raw files instead of LFS pointers (the `.gitattributes`
+  clean filter silently no-ops). This is fine for builds (the bytes are in the repo) but
+  old pointer-based images still need LFS to download. Mixed repos work either way.
 - **Image processing:** Sharp (watermarking + resizing)
 - **Instagram automation:** GitHub Actions → Make.com webhook → Instagram
+
+## Deployment — CRITICAL
+
+**The site is a Cloudflare Worker deployed via Wrangler, NOT Cloudflare Pages.**
+Pushing to GitHub does nothing on its own. History: Cloudflare "Deployments" show
+"Wrangler" as the source — every deploy was a manual `npm run deploy`
+(`node scripts/watermark.mjs && astro build && wrangler deploy`) from a machine with
+Node + a logged-in Cloudflare CLI. A push to `main` only goes live if:
+  1. `.github/workflows/deploy.yml` runs `wrangler deploy` (needs the `CLOUDFLARE_API_TOKEN`
+     secret — set on the repo), **and** the token has permission for the Worker + the
+     `VISITS` KV namespace + the zone. If deploy fails, check the token's account/scopes
+     first — the "Edit Cloudflare Workers" template usually works.
+  2. Someone manually deploys.
+
+**`deploy.yml` caches the watermark outputs** (`src/assets/watermarked/` + `public/ig/`)
+via `actions/cache`. Without the cache, `watermark.mjs` re-stamps ALL ~470 images every
+build (~15 min on CI) because those dirs are git-ignored and start empty. With the cache,
+the mtime check in `watermark.mjs` skips unchanged images and only processes new/edited
+ones. Do not remove the cache step.
 
 ## Repository
 
@@ -24,6 +49,32 @@ things plainly and do the technical work for him.
 - Local working copy in this environment: `/tmp/website-fresh`
 - Push over HTTPS with a GitHub token. If a push is rejected, run
   `git pull --rebase` then push again (Cloudflare/Actions may have pushed queue updates).
+
+## Captioning pipeline (batteries included)
+
+Big photo batches are captioned via a **Gemini vision model** (`gemini-3.1-flash-lite`,
+called through the `generativelanguage.googleapis.com/v1beta` API). The workflow:
+
+1. Send each image base64-encoded with a prompt that includes the caption STYLE rules
+   and 3 worked examples from the existing corpus (see "Caption style rules" below).
+2. Gemini returns `{"title": ..., "caption": ...}` — parse the JSON out of the
+   fenced code block (it wraps answers in ` ```json `).
+3. Write the entry to BOTH `src/data/captions.ts` and `scripts/instagram-captions.json`.
+
+**Gotchas learned the hard way:**
+- `gemini-3.5-flash` (and most free-tier models) hit a ~20-request/day free quota.
+  `gemini-3.1-flash-lite` has a separate quota — switch to it when 3.5 runs dry.
+  The `gemini-3.5-flash` model worked but free tier limits bind fast; 429 errors mean
+  wait and retry.
+- **Never paste base64 into a shell argument** — "argument list too long". Write the
+  payload JSON to a file and `-d @file`.
+- Generic prompts produce generic captions ("Blue BMW E46 drifting"). The prompt MUST
+  include the style rules + real examples or you get bland, unusable text.
+- When merging generated entries into `captions.ts`, each line MUST end with a comma.
+  A missing comma fails the whole `astro build` with
+  `Expected "}" but found "'DSC_xxxx..."` in `src/data/captions.ts`.
+- The generation loop writes results to a JSON file after every image so an aborted
+  run can resume (skip files already done) instead of restarting 73 requests.
 
 ## Key files
 
@@ -67,14 +118,27 @@ things plainly and do the technical work for him.
 - ~~`instagram-post-boost.yml`~~ — **DELETED 2026-08-09** after all 87 bimmerfest photos were committed.
   This was the pattern for "just happened, needs a push" events: temporary 4x/day posting
   for a fresh category, self-expiring after the backlog clears.
+- `.github/workflows/deploy.yml` — **added 2026-08-09** to deploy the Worker on every push
+  to `main` (build + `wrangler deploy`). Needs the `CLOUDFLARE_API_TOKEN` repo secret. See
+  "Deployment — CRITICAL" above. Without this workflow (or a manual `npm run deploy`),
+  pushes to GitHub never go live.
 
 ### Events & photo pages
 - `src/data/events.ts` — event definitions; each event page at `/events/<slug>` pulls photos
   by category. New event = new entry here.
 - `src/pages/photo/[slug].astro` — one page per photo (slug = filename, lowercased,
   non-alphanumerics → `-`). Carries ImageObject JSON-LD (license + acquireLicensePage) for
-  Google Images' "Licensable" badge. `watermark.mjs` also embeds EXIF Copyright/Artist into
-  every served image.
+  Google Images' "Licensable" badge. **The JSON-LD includes `keywords` derived from the
+  caption title + caption body + event name + category** (added 2026-08-09), so Google
+  Images can match queries like "Corvette GT3 Le Mans" to the right photo page. Keep
+  this keyword block if you edit the page. `watermark.mjs` also embeds EXIF
+  Copyright/Artist into every served image.
+
+### SEO
+- `src/pages/index.astro` hero carousel renders `alt` from each slide's caption title
+  (added 2026-08-09), not a generic "Motorsport photography by TrackMarc". This helps
+  Google Images index the homepage slides. The hero shuffles to a 10-photo subset each
+  build; the `alt` lookup uses `getCaption(filename)`.
 
 ### Weekly Instagram Reel
 - `scripts/instagram-reel.cjs` — `build` phase makes a 9:16 slideshow (ffmpeg) from the last
@@ -140,6 +204,8 @@ Write like a real person, not a press release or AI.
   `https://trackmarc.com/ig/{category}/{filename-as-jpg}`
 - **Build timing matters:** after pushing image/watermark changes, wait for the Cloudflare
   build (~3–5 min) before triggering a post, or Make.com fetches a stale/404 image.
+  **Note:** deploys only happen via `.github/workflows/deploy.yml` (push to `main`) or a
+  manual `npm run deploy`. Check the Actions tab, not the site, for build status.
 - Hashtags/@mentions are auto-generated in `generateTagsAndMentions()` from the title/caption
   text — includes manufacturer tags AND model-specific tags (GT-R, Emira, 911, 963, GR010,
   V-Series.R, Valkyrie, Zonda, etc.).
