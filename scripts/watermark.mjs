@@ -1,6 +1,7 @@
 import sharp from 'sharp';
 import path from 'path';
 import fs from 'fs';
+import crypto from 'crypto';
 
 function findImages(dir, results = []) {
   if (!fs.existsSync(dir)) return results;
@@ -28,6 +29,24 @@ const categoriesFile = loadCategories();
 const CATEGORIES  = categoriesFile.website;
 const IG_ONLY_CATEGORIES = categoriesFile.instagramOnly;
 const EXTS        = '{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}';
+
+// Tracks a content hash per source file so re-runs can tell "unchanged" from
+// "new/edited" without relying on file mtimes — CI checkouts reset every
+// file's mtime to the checkout time, which defeats a timestamp-based check
+// even when the cached outputs are perfectly valid. Lives inside
+// OUTPUT_BASE so it round-trips through the same GitHub Actions cache as
+// the watermarked/ig images it describes.
+const MANIFEST_PATH = path.join(OUTPUT_BASE, '.manifest.json');
+function loadManifest() {
+  try { return JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8')); } catch { return {}; }
+}
+function saveManifest(manifest) {
+  fs.mkdirSync(OUTPUT_BASE, { recursive: true });
+  fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest));
+}
+function hashFile(p) {
+  return crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+}
 
 function watermarkSVG(w, h) {
   const size   = Math.max(13, Math.round(w * 0.018));
@@ -72,6 +91,7 @@ if (!files.length && !igOnlyFiles.length) {
 }
 
 let stamped = 0, skipped = 0;
+const manifest = loadManifest();
 
 // Instagram requires aspect ratio between 0.8 (4:5 portrait) and 1.91:1 (landscape)
 async function writeIgVersion(src, igDest) {
@@ -87,51 +107,59 @@ async function writeIgVersion(src, igDest) {
   return meta;
 }
 
-for (const src of files) {
-  const rel  = path.relative(INPUT_BASE, src);
-  const dest = path.join(OUTPUT_BASE, rel).replace(/\.[^.]+$/, '.jpg');
+// Manifest is saved in `finally` so a crash partway through (bad image, etc.)
+// still keeps credit for whatever was already processed this run.
+try {
+  for (const src of files) {
+    const rel  = path.relative(INPUT_BASE, src);
+    const dest = path.join(OUTPUT_BASE, rel).replace(/\.[^.]+$/, '.jpg');
 
-  // Skip if dest is newer than source AND ig version already exists
-  const igDest0 = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
-  if (fs.existsSync(dest) && fs.existsSync(igDest0)) {
-    const srcMtime  = fs.statSync(src).mtimeMs;
-    const destMtime = fs.statSync(dest).mtimeMs;
-    if (destMtime >= srcMtime) { skipped++; continue; }
+    // Skip if the source's content hash matches the last processed run AND
+    // both outputs already exist (manifest key: bare rel path)
+    const igDest0 = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
+    const hash = hashFile(src);
+    if (manifest[rel] === hash && fs.existsSync(dest) && fs.existsSync(igDest0)) {
+      skipped++; continue;
+    }
+
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+
+    const img  = sharp(src);
+    const meta = await img.metadata();
+    const wm   = watermarkSVG(meta.width, meta.height);
+
+    await img
+      .composite([{ input: wm, blend: 'over' }])
+      .withMetadata({ exif: EXIF_METADATA })
+      .jpeg({ quality: 88 })
+      .toFile(dest);
+
+    // Also write a 1080px-wide clean version to public/ig/ for Instagram posts
+    await writeIgVersion(src, igDest0);
+
+    manifest[rel] = hash;
+    console.log(`[watermark] ✓ ${rel}`);
+    stamped++;
   }
 
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  // Instagram-only images: no watermarked/ copy, so they never appear in the website gallery.
+  for (const src of igOnlyFiles) {
+    const rel         = path.relative(INPUT_BASE, src);
+    const igDest0     = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
+    const manifestKey = `igonly:${rel}`;
+    const hash        = hashFile(src);
 
-  const img  = sharp(src);
-  const meta = await img.metadata();
-  const wm   = watermarkSVG(meta.width, meta.height);
+    if (manifest[manifestKey] === hash && fs.existsSync(igDest0)) {
+      skipped++; continue;
+    }
 
-  await img
-    .composite([{ input: wm, blend: 'over' }])
-    .withMetadata({ exif: EXIF_METADATA })
-    .jpeg({ quality: 88 })
-    .toFile(dest);
-
-  // Also write a 1080px-wide clean version to public/ig/ for Instagram posts
-  await writeIgVersion(src, igDest0);
-
-  console.log(`[watermark] ✓ ${rel}`);
-  stamped++;
-}
-
-// Instagram-only images: no watermarked/ copy, so they never appear in the website gallery.
-for (const src of igOnlyFiles) {
-  const rel     = path.relative(INPUT_BASE, src);
-  const igDest0 = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
-
-  if (fs.existsSync(igDest0)) {
-    const srcMtime = fs.statSync(src).mtimeMs;
-    const igMtime  = fs.statSync(igDest0).mtimeMs;
-    if (igMtime >= srcMtime) { skipped++; continue; }
+    await writeIgVersion(src, igDest0);
+    manifest[manifestKey] = hash;
+    console.log(`[watermark] ✓ ${rel} (Instagram-only)`);
+    stamped++;
   }
-
-  await writeIgVersion(src, igDest0);
-  console.log(`[watermark] ✓ ${rel} (Instagram-only)`);
-  stamped++;
+} finally {
+  saveManifest(manifest);
 }
 
 console.log(`[watermark] Done — ${stamped} stamped, ${skipped} unchanged.`);
