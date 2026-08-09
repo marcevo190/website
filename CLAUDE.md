@@ -64,15 +64,9 @@ things plainly and do the technical work for him.
 - `instagram-post.cjs` accepts an optional category name as a CLI arg (e.g.
   `node scripts/instagram-post.cjs bimmerfest`) to post from just that category, bypassing
   the normal rotation — used for temporary "boost" workflows below.
-- `.github/workflows/instagram-post-boost.yml` — **TEMPORARY, added 2026-08-06, self-expires
-  2026-09-20** (extended 2026-08-08 for the second batch). Posts Bimmerfest photos specifically 4x/day (5:30/10:30/14:30/20:30 UTC) on
-  top of the normal schedule, so a fresh event gets real traction instead of trickling out
-  over the ~2-month general rotation. More bimmerfest photos are expected — if the batch
-  isn't finished by the expiry date, push the date further out rather than letting it lapse
-  (it no-ops past expiry rather than erroring, so nothing breaks either way — just remember
-  to check whether it's still needed). Delete this file entirely once the bimmerfest category
-  is fully exhausted. This is the pattern to reuse for any future "just happened, needs a
-  push" event — copy the file, swap the category, cron times and expiry date.
+- ~~`instagram-post-boost.yml`~~ — **DELETED 2026-08-09** after all 87 bimmerfest photos were committed.
+  This was the pattern for "just happened, needs a push" events: temporary 4x/day posting
+  for a fresh category, self-expiring after the backlog clears.
 
 ### Events & photo pages
 - `src/data/events.ts` — event definitions; each event page at `/events/<slug>` pulls photos
