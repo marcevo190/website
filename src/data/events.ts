@@ -63,6 +63,20 @@ export const events: EventDef[] = [
     classes: ['BMW M2', 'BMW M3', 'BMW M4', 'BMW M5', 'Hot Hatches', 'Trackday'],
     description: 'Photo coverage of the Bimmerfest 2026 trackday at Mondello Park by Marc Ronan — BMW M cars and a mixed open-pitlane paddock, run by trackdays.ie.',
   },
+  {
+    slug: 'retrostock-2026',
+    name: 'Retrostock 2026',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: 'August 2026',
+    categories: ['retrostock'],
+    hero: 'TODO.jpg', // set once photos are added — falls back to first photo until then
+    intro: [
+      'A day of old-school motorsport at Mondello Park, built entirely around pre-1994 machinery — rally, road and sprint cars turning laps on the full circuit.',
+      'Sessions rotated every 20 minutes between drifting and grip driving, giving a mix of sideways action and tight, committed racing lines throughout the day, all from cars built well before modern electronics and aids.',
+    ],
+    classes: ['Pre-1994 Rally', 'Pre-1994 Road', 'Pre-1994 Sprint', 'Drifting', 'Grip Driving'],
+    description: 'Photo coverage of Retrostock 2026 at Mondello Park by Marc Ronan — pre-1994 rally, road and sprint cars across drifting and grip driving sessions.',
+  },
 ];
 
 export function getEvent(slug: string): EventDef | undefined {
