@@ -50,31 +50,33 @@ ones. Do not remove the cache step.
 - Push over HTTPS with a GitHub token. If a push is rejected, run
   `git pull --rebase` then push again (Cloudflare/Actions may have pushed queue updates).
 
-## Captioning pipeline (batteries included)
+## Captioning pipeline (batteries included) — USE THIS, NOT manual Claude vision
 
-Big photo batches are captioned via a **Gemini vision model** (`gemini-3.1-flash-lite`,
-called through the `generativelanguage.googleapis.com/v1beta` API). The workflow:
+**`scripts/caption-batch.mjs` is the real, committed script — use it for every new batch.**
+Reading and writing a caption for each photo directly (Claude looking at every image in one
+session) is what burned a week's Claude token allowance in early August 2026 — this script
+offloads that per-photo vision work to **Gemini's** free tier instead, which has its own
+separate quota, not Claude's.
 
-1. Send each image base64-encoded with a prompt that includes the caption STYLE rules
-   and 3 worked examples from the existing corpus (see "Caption style rules" below).
-2. Gemini returns `{"title": ..., "caption": ...}` — parse the JSON out of the
-   fenced code block (it wraps answers in ` ```json `).
-3. Write the entry to BOTH `src/data/captions.ts` and `scripts/instagram-captions.json`.
+```
+GEMINI_API_KEY=... node scripts/caption-batch.mjs <category> <imageDir>
+```
 
-**Gotchas learned the hard way:**
-- `gemini-3.5-flash` (and most free-tier models) hit a ~20-request/day free quota.
-  `gemini-3.1-flash-lite` has a separate quota — switch to it when 3.5 runs dry.
-  The `gemini-3.5-flash` model worked but free tier limits bind fast; 429 errors mean
-  wait and retry.
-- **Never paste base64 into a shell argument** — "argument list too long". Write the
-  payload JSON to a file and `-d @file`.
-- Generic prompts produce generic captions ("Blue BMW E46 drifting"). The prompt MUST
-  include the style rules + real examples or you get bland, unusable text.
-- When merging generated entries into `captions.ts`, each line MUST end with a comma.
-  A missing comma fails the whole `astro build` with
-  `Expected "}" but found "'DSC_xxxx..."` in `src/data/captions.ts`.
-- The generation loop writes results to a JSON file after every image so an aborted
-  run can resume (skip files already done) instead of restarting 73 requests.
+- `<category>` is a key from `src/data/categories.json`. `<imageDir>` should be the
+  *downscaled* review copies (`resize-for-review.ps1`), not full-res originals.
+- It skips filenames that already have a non-empty caption, is resumable (writes progress
+  to `scripts/.caption-batch-progress.json` after every photo), rotates through
+  `gemini-3.5-flash` → `gemini-3.1-flash-lite` on a 429 (free-tier daily quotas are small,
+  ~20 requests/day on some models — this is why more than one model is tried), and writes
+  both `src/data/captions.ts` and `scripts/instagram-captions.json` in one pass (website
+  caption vs. Instagram caption are different styles — hook + question for Instagram, plain
+  1-2 sentences for the site — the script asks Gemini for both explicitly).
+- The API key lives in this Mac's keychain (`security find-generic-password -s
+  trackmarc-gemini-api-key -a marcevo190 -w`) and as the `GEMINI_API_KEY` GitHub repo secret.
+
+**Still spot-check identifications before pushing.** Gemini is looking at actual pixels, not
+filenames, but it's not infallible — see the CRITICAL RULE below, which applies here just as
+much as it did to manual captioning.
 
 ## Key files
 
@@ -222,14 +224,17 @@ Make.com handles auth cleanly. Keep the Meta app in Development mode.
 ### New photos pushed by Marc
 1. `git pull` (make sure LFS pulls the actual image files, not just pointers)
 2. Find filenames missing from `captions.ts` (the auto-captions Action adds placeholders)
-3. **Downscale before reading** — run
+3. **Downscale before captioning** — run
    `powershell -ExecutionPolicy Bypass -File scripts/resize-for-review.ps1 -SrcDir <source> -OutDir <scratch-dir>`
-   (uses .NET System.Drawing, no npm install needed) and read the ~1800px copies from
-   `<scratch-dir>` instead of the full-res originals. The site never serves anything above
-   1920px anyway, so full-res is wasted vision tokens for identification purposes. Cuts a
-   typical 40-photo batch from ~270MB to ~15MB. Delete the scratch dir when done.
-4. **Read each (downscaled) image** and identify the car visually
-5. Add entries to `captions.ts` under the correct section, and to `instagram-captions.json`
+   (uses .NET System.Drawing, no npm install needed). The site never serves anything above
+   1920px anyway, so full-res is wasted effort for identification purposes. Cuts a typical
+   40-photo batch from ~270MB to ~15MB. Delete the scratch dir when done.
+4. **Caption via `scripts/caption-batch.mjs`, not by reading each photo directly** — see
+   "Captioning pipeline" above. This is the step that burned a week's Claude token budget
+   before the script existed; don't fall back to reading every image by hand unless the
+   script is broken and there's no time to fix it.
+5. **Spot-check the generated captions** against the actual photos before pushing — open a
+   handful (especially unusual cars) and confirm Gemini got them right; fix any it didn't.
 6. Commit and push
 7. **New event/category?** (not just adding to an existing one) — add the category to
    `src/data/categories.json` (the single source of truth: `website` list + a `labels`
@@ -242,9 +247,11 @@ Make.com handles auth cleanly. Keep the Meta app in Development mode.
    an event references a category that isn't in `categories.json`. See the `iccr`/`bimmerfest`
    additions in git history for the pattern.
 
-**Cost note (2026-08-05):** for a brand new photo batch, prefer starting a **fresh chat
-session** over continuing a long-running one — a fresh session only needs this file, not
-hundreds of prior tool calls/images. See `feedback_photo_batch_cost` in Claude's memory.
+**Cost note (2026-08-05, still applies):** prefer starting a **fresh chat session** for a new
+photo batch rather than continuing a long-running one — a fresh session only needs this file,
+not hundreds of prior tool calls/images. With captioning now offloaded to
+`scripts/caption-batch.mjs` (see above), a session doing a photo batch mainly needs to run the
+script, spot-check a sample of results, commit, and push — not read every photo itself.
 
 ### Manually trigger an Instagram post
 `gh workflow run instagram-post.yml --repo marcevo190/website`
