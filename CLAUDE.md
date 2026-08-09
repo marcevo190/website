@@ -115,9 +115,13 @@ called through the `generativelanguage.googleapis.com/v1beta` API). The workflow
 - `instagram-post.cjs` accepts an optional category name as a CLI arg (e.g.
   `node scripts/instagram-post.cjs bimmerfest`) to post from just that category, bypassing
   the normal rotation — used for temporary "boost" workflows below.
-- ~~`instagram-post-boost.yml`~~ — **DELETED 2026-08-09** after all 87 bimmerfest photos were committed.
-  This was the pattern for "just happened, needs a push" events: temporary 4x/day posting
-  for a fresh category, self-expiring after the backlog clears.
+- `.github/workflows/instagram-post-boost.yml` — temporary 5x/day posting for a fresh
+  category (currently `bimmerfest`), on top of the normal 2x/day rotation, self-expiring
+  after the backlog clears or the expiry date passes. **Was deleted 2026-08-09, then
+  restored the same day** — the deletion was based on "all photos committed to the repo",
+  which was wrongly read as "all photos posted"; only 11 of 127 bimmerfest photos had
+  actually posted. Check `post-queue.json` against the category's source folder before
+  ever deleting this again — don't infer posted-count from commit messages.
 - `.github/workflows/deploy.yml` — **added 2026-08-09** to deploy the Worker on every push
   to `main` (build + `wrangler deploy`). Needs the `CLOUDFLARE_API_TOKEN` repo secret. See
   "Deployment — CRITICAL" above. Without this workflow (or a manual `npm run deploy`),
