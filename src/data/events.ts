@@ -5,6 +5,8 @@
 export interface EventDef {
   slug: string;
   name: string;
+  /** Short form for tight spaces like /gallery filter chips, e.g. "Le Mans 2026" for "24 Heures du Mans 2026" */
+  shortLabel: string;
   venue: string;
   season: string;
   /** Asset folders (src/assets/watermarked/<category>) that make up this event */
@@ -23,6 +25,7 @@ export const events: EventDef[] = [
   {
     slug: 'le-mans-2026',
     name: '24 Heures du Mans 2026',
+    shortLabel: 'Le Mans 2026',
     venue: 'Circuit de la Sarthe, Le Mans, France',
     season: 'June 2026',
     categories: ['endurance'],
@@ -38,6 +41,7 @@ export const events: EventDef[] = [
   {
     slug: 'iccr-mondello-2026',
     name: 'ICCR at Mondello Park',
+    shortLabel: 'ICCR',
     venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
     season: '2026 season',
     categories: ['iccr'],
@@ -52,6 +56,7 @@ export const events: EventDef[] = [
   {
     slug: 'bimmerfest-2026',
     name: 'Bimmerfest 2026',
+    shortLabel: 'Bimmerfest',
     venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
     season: '2026',
     categories: ['bimmerfest'],
@@ -66,6 +71,7 @@ export const events: EventDef[] = [
   {
     slug: 'retrostock-2026',
     name: 'Retrostock 2026',
+    shortLabel: 'Retrostock',
     venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
     season: 'August 2026',
     categories: ['retrostock'],
