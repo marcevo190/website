@@ -1045,7 +1045,6 @@ export const captions: Record<string, CaptionEntry> = {
   'DSC_6508-Enhanced-NR.jpg': { title: "Lancia Stratos at Retrostock", caption: "A blue Lancia Stratos on track at Retrostock. The classic rally shape looks as good on circuit as it does on a stage." },
   'DSC_6415-Enhanced-NR.jpg': { title: "BMW E30, Warsteiner Livery — Retrostock", caption: "A white BMW E30 in Warsteiner livery, drifting at Retrostock." },
   'DSC_6431-Enhanced-NR.jpg': { title: "Nissan Saloon, Wonder Livery — Retrostock", caption: "A red Nissan saloon in Wonder livery at Retrostock, smoke pouring off the rear tyres with some battle damage on the quarter panel." },
-  'DSC_6431.jpg': { title: "Nissan Saloon Sideways — Retrostock", caption: "The same Wonder-liveried Nissan saloon, fully sideways at Retrostock." },
   'DSC_6436-Enhanced-NR.jpg': { title: "BMW E30 Sideways — Retrostock", caption: "The Warsteiner-liveried BMW E30 fully sideways at Mondello Park." },
   'DSC_6460-Enhanced-NR.jpg': { title: "Yellow Ford Escort Mk2 — Retrostock", caption: "A yellow Ford Escort Mk2 with wide arches at Retrostock, tow strap fitted up front." },
   'DSC_6510-Enhanced-NR.jpg': { title: "Nissan 180SX, MPAC Livery — Retrostock", caption: "The MPAC-liveried Nissan 180SX with the bonnet up in the paddock at Retrostock, showing off the turbo setup." },

@@ -162,4 +162,29 @@ try {
   saveManifest(manifest);
 }
 
-console.log(`[watermark] Done — ${stamped} stamped, ${skipped} unchanged.`);
+// Prune outputs whose source photo no longer exists (deleted/renamed originals).
+// Without this, a removed duplicate keeps showing on the site forever — the
+// GitHub Actions cache round-trips whatever's in these directories regardless
+// of whether src/assets/images still has a matching file, and Astro's gallery
+// glob reads straight from here, not from the source list.
+function pruneOrphans(base, expectedRelPaths) {
+  if (!fs.existsSync(base)) return 0;
+  let pruned = 0;
+  for (const full of findImages(base)) {
+    const rel = path.relative(base, full);
+    if (!expectedRelPaths.has(rel)) {
+      fs.rmSync(full);
+      console.log(`[watermark] ✗ pruned orphan ${path.relative('.', full)}`);
+      pruned++;
+    }
+  }
+  return pruned;
+}
+
+const expectedDest   = new Set(files.map(src => path.relative(INPUT_BASE, src).replace(/\.[^.]+$/, '.jpg')));
+const expectedIgDest = new Set(
+  [...files, ...igOnlyFiles].map(src => path.relative(INPUT_BASE, src).replace(/\.[^.]+$/, '.jpg'))
+);
+const prunedCount = pruneOrphans(OUTPUT_BASE, expectedDest) + pruneOrphans(IG_BASE, expectedIgDest);
+
+console.log(`[watermark] Done — ${stamped} stamped, ${skipped} unchanged, ${prunedCount} pruned.`);
