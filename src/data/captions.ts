@@ -1080,7 +1080,7 @@ export const captions: Record<string, CaptionEntry> = {
   'DSC_6631-Enhanced-NR.jpg': { title: "Nissan 200SX Drifting — Retrostock", caption: "The MPAC-liveried Nissan 200SX drifting past the Southside Motor Factors board at Retrostock." },
   'DSC_6637-Enhanced-NR.jpg': { title: "Toyota Corolla, Boxy Sedan — Retrostock", caption: "A dark green Toyota Corolla sedan drifting at Retrostock, a red AE86 following behind." },
   'DSC_6640-Enhanced-NR.jpg': { title: "Ford Escort Mk2, Gold Wheels — Retrostock", caption: "The yellow \"Havin the Crack\" Escort Mk2 on gold wheels, sideways at Retrostock." },
-  'DSC_6643-Enhanced-NR.jpg': { title: "Nissan Saloon, Paul's Auto — Retrostock", caption: "A pink Nissan saloon in Paul's Auto livery, drifting with a black bonnet at Retrostock." },
+  'DSC_6643-Enhanced-NR.jpg': { title: "Nissan A31 Cefiro, Paul's Auto — Retrostock", caption: "A red Nissan A31 Cefiro in Paul's Auto livery, drifting with a black bonnet at Retrostock." },
   'DSC_6655-Enhanced-NR.jpg': { title: "BMW E36 Compact, Drift Matsuri — Retrostock", caption: "A copper BMW E36 Compact with taped headlights, drifting at Retrostock." },
   'DSC_6664-Enhanced-NR.jpg': { title: "Toyota Starlet, Rally Connection — Retrostock", caption: "A red Toyota Starlet with a Rally Connection sticker, drifting at Retrostock." },
   'DSC_6667-Enhanced-NR.jpg': { title: "Toyota AE86 Levin, Driver's Eye View — Retrostock", caption: "A close look at the red and black AE86 Levin and its driver mid-slide at Retrostock." },
