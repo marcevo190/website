@@ -1,0 +1,171 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { getCaption } from '../../data/captions';
+import categoriesData from '../../data/categories.json';
+import { TAGS, extractTags, tagSlug } from '../../data/tags';
+import ShareButtons from '../../components/ShareButtons.astro';
+
+// getStaticPaths runs in an isolated scope during route collection and can't
+// reliably call helper functions declared elsewhere in this frontmatter, so
+// it's fully self-contained here — same pattern as photo/[slug].astro. The
+// computed photo list is passed through as a prop rather than recomputed in
+// the page body.
+export function getStaticPaths() {
+  const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+    '/src/assets/watermarked/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+    { eager: true }
+  );
+  const categories = categoriesData.website as readonly string[];
+
+  const allPhotos = Object.entries(imageModules)
+    .map(([path, mod]) => {
+      const parts = path.split('/');
+      const filename = parts[parts.length - 1];
+      const folder = parts[parts.length - 2];
+      const cap = getCaption(filename);
+      return {
+        src: mod.default,
+        category: folder,
+        filename,
+        title: cap?.title ?? filename.replace(/\.[^.]+$/, ''),
+        caption: cap?.caption ?? '',
+        pageSlug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      };
+    })
+    .filter(p => categories.includes(p.category))
+    .sort((a, b) => a.filename.localeCompare(b.filename));
+
+  return TAGS
+    .map(tag => ({ tag, photos: allPhotos.filter(p => extractTags(p.title).includes(tag)) }))
+    .filter(({ photos }) => photos.length > 0)
+    .map(({ tag, photos }) => ({ params: { tag: tagSlug(tag) }, props: { tag, photos } }));
+}
+
+const { tag, photos } = Astro.props;
+const tagPageUrl = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<Layout
+  title={`${tag} — TrackMarc Motorsport Photography`}
+  description={`Every ${tag} photo across TrackMarc's galleries by Marc Ronan.`}
+>
+  <div style="padding-top: var(--nav-height);">
+    <div class="section">
+      <div class="section-header">
+        <p class="section-eyebrow">Tagged</p>
+        <h1 class="section-title">{tag}</h1>
+        <p class="section-subtitle">
+          {photos.length} photograph{photos.length !== 1 ? 's' : ''} across every gallery.
+        </p>
+        <p class="tag-back"><a href="/gallery">&larr; Back to the full gallery</a></p>
+        <p class="share-label">Share this search</p>
+        <ShareButtons url={tagPageUrl} title={`${tag} — TrackMarc`} text={`Every ${tag} photo on TrackMarc`} />
+      </div>
+
+      <div class="gallery-masonry" id="gallery">
+        {photos.map(photo => (
+          <div
+            class="photo-card"
+            data-title={photo.title}
+            data-caption={photo.caption}
+            data-slug={photo.pageSlug}
+          >
+            <Image
+              src={photo.src}
+              alt={photo.title}
+              widths={[400, 800, 1200]}
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <div class="photo-card-overlay">
+              <div class="photo-card-meta">
+                <a class="photo-card-title" href={`/photo/${photo.pageSlug}`} style="color:inherit;text-decoration:none;">{photo.title}</a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">&#x2715; Close</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous">&#8592;</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next">&#8594;</button>
+    <div class="lightbox-meta">
+      <div class="photo-card-title" id="lightbox-title"></div>
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll<HTMLElement>('#gallery .photo-card');
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const lbTitle = document.getElementById('lightbox-title');
+    const lbCaption = document.getElementById('lightbox-caption');
+    const lbClose = document.getElementById('lightbox-close');
+    const lbPrev = document.getElementById('lightbox-prev');
+    const lbNext = document.getElementById('lightbox-next');
+
+    let currentIndex = 0;
+    const cardList = Array.from(cards);
+
+    function showCard(index: number) {
+      if (!cardList.length) return;
+      currentIndex = (index + cardList.length) % cardList.length;
+      const card = cardList[currentIndex];
+      const img = card.querySelector('img');
+      if (lbImg && img) { lbImg.src = img.src; lbImg.alt = img.alt; }
+      if (lbTitle) lbTitle.textContent = card.dataset.title ?? '';
+      if (lbCaption) lbCaption.textContent = card.dataset.caption ?? '';
+    }
+
+    cardList.forEach(card => {
+      card.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('a')) return;
+        currentIndex = cardList.indexOf(card);
+        showCard(currentIndex);
+        lightbox?.classList.add('open');
+      });
+    });
+
+    lbPrev?.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex - 1); });
+    lbNext?.addEventListener('click', (e) => { e.stopPropagation(); showCard(currentIndex + 1); });
+    lbClose?.addEventListener('click', () => lightbox?.classList.remove('open'));
+    lightbox?.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.classList.remove('open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox?.classList.contains('open')) return;
+      if (e.key === 'Escape') lightbox.classList.remove('open');
+      if (e.key === 'ArrowLeft') showCard(currentIndex - 1);
+      if (e.key === 'ArrowRight') showCard(currentIndex + 1);
+    });
+  </script>
+
+  <style>
+    .tag-back {
+      margin-top: 0.5rem;
+    }
+    .tag-back a {
+      font-size: 0.8rem;
+      color: var(--text-dim, var(--text-muted));
+    }
+    .tag-back a:hover {
+      color: var(--accent);
+    }
+    .share-label {
+      font-family: var(--font-heading);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim, var(--text-muted));
+      margin-top: 1.4rem;
+      margin-bottom: 0.4rem;
+    }
+  </style>
+</Layout>

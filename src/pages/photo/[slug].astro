@@ -5,6 +5,7 @@ import type { ImageMetadata } from 'astro';
 import { getCaption } from '../../data/captions';
 import { events } from '../../data/events';
 import ShareButtons from '../../components/ShareButtons.astro';
+import { extractTags, tagSlug } from '../../data/tags';
 
 // One indexable page per photo — unique title/description, ImageObject
 // structured data (drives Google Images' "Licensable" badge), and
@@ -72,6 +73,8 @@ const keywords = Array.from(new Set(
     .filter(w => w.length > 2 && !stopwords.has(w))
 )).slice(0, 12);
 
+const photoTags = extractTags(title);
+
 const imageSchema = {
   '@context': 'https://schema.org',
   '@type': 'ImageObject',
@@ -120,6 +123,11 @@ const imageSchema = {
         <figcaption class="photo-page-caption">
           <h1 class="photo-page-title">{title}</h1>
           {caption && <p>{caption}</p>}
+          {photoTags.length > 0 && (
+            <div class="photo-page-tags">
+              {photoTags.map(t => <a class="photo-page-tag" href={`/tag/${tagSlug(t)}`}>{t}</a>)}
+            </div>
+          )}
           <p class="photo-page-credit">
             &copy; Marc Ronan / TrackMarc · Available for editorial licensing —
             <a href="/licensing">licensing details</a> · <a href="/contact">get in touch</a>
@@ -175,5 +183,26 @@ const imageSchema = {
       color: var(--text-dim, var(--text-muted));
     }
     .photo-page-credit a { color: var(--accent); }
+    .photo-page-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .photo-page-tag {
+      font-family: var(--font-heading);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border, rgba(255,255,255,0.15));
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .photo-page-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
   </style>
 </Layout>

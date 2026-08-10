@@ -5,6 +5,7 @@ import type { ImageMetadata } from 'astro';
 import { getCaption } from '../../data/captions';
 import { events } from '../../data/events';
 import ShareButtons from '../../components/ShareButtons.astro';
+import { TAGS, tagSlug } from '../../data/tags';
 
 export function getStaticPaths() {
   return events.map(event => ({ params: { slug: event.slug }, props: { event } }));
@@ -68,7 +69,12 @@ const eventPageUrl = new URL(Astro.url.pathname, Astro.site).href;
       <div class="event-intro">
         {event.intro.map(par => <p>{par}</p>)}
         <div class="event-classes">
-          {event.classes.map(c => <span class="event-class-chip">{c}</span>)}
+          {event.classes.map(c => {
+            const tag = TAGS.find(t => t.toLowerCase() === c.toLowerCase());
+            return tag
+              ? <a class="event-class-chip" href={`/tag/${tagSlug(tag)}`}>{c}</a>
+              : <span class="event-class-chip">{c}</span>;
+          })}
         </div>
         <p class="share-label">Share this gallery</p>
         <ShareButtons url={eventPageUrl} title={event.name} text={`Photo coverage: ${event.name} at ${event.venue}`} />
@@ -303,6 +309,16 @@ const eventPageUrl = new URL(Astro.url.pathname, Astro.site).href;
       padding: 0.4rem 0.75rem;
       border: 1px solid var(--border, rgba(255,255,255,0.15));
       color: var(--text-muted);
+      text-decoration: none;
+      display: inline-block;
+    }
+    a.event-class-chip {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    a.event-class-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
     }
     .share-label {
       font-family: var(--font-heading);
