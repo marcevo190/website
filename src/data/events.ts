@@ -75,7 +75,7 @@ export const events: EventDef[] = [
     venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
     season: 'August 2026',
     categories: ['retrostock'],
-    hero: 'TODO.jpg', // set once photos are added — falls back to first photo until then
+    hero: 'DSC_6729-Enhanced-NR.jpg',
     intro: [
       'A day of old-school motorsport at Mondello Park, built entirely around pre-1994 machinery — rally, road and sprint cars turning laps on the full circuit.',
       'Sessions rotated every 20 minutes between drifting and grip driving, giving a mix of sideways action and tight, committed racing lines throughout the day, all from cars built well before modern electronics and aids.',

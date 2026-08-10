@@ -34,3 +34,6 @@ pnpm-debug.log*
 
 # Instagram image cache (generated at build time)
 public/ig/
+
+# scripts/caption-batch.mjs resume progress — transient, local only
+scripts/.caption-batch-progress.json
