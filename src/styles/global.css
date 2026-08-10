@@ -107,11 +107,16 @@ h1, h2, h3, h4 {
 /* ── HERO ── */
 .hero {
   position: relative;
-  height: 75vh;
-  min-height: 520px;
+  min-height: max(75vh, 520px);
   display: flex;
   align-items: flex-end;
-  padding: 0 2rem 5rem;
+  /* Top padding is a hard floor so hero-content can never render under the
+     fixed nav — align-items:flex-end only pins the BOTTOM edge; if content
+     (eyebrow + heading + desc + buttons) is taller than a short viewport's
+     75vh leaves room for, the top edge overflows upward with nothing here
+     to stop it. min-height (vs. a fixed height) lets the section grow
+     taller instead of letting that overflow happen at all. */
+  padding: calc(var(--nav-height) + 1.5rem) 2rem 5rem;
   overflow: hidden;
 }
 .hero-bg {
