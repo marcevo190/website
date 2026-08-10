@@ -65,15 +65,18 @@ const stopwords = new Set([
   'is', 'the', 'a', 'an', 'in', 'at', 'on', 'under', 'with', 'of', 'and',
   'for', 'from', 'that', 'this', 'its', 'you', 'your', 'it', 's', 'to', 'be',
 ]);
-const keywords = Array.from(new Set(
-  (title + ' ' + caption + ' ' + categoryLabel + ' ' + photo.category)
+const photoTags = extractTags(title);
+
+// Tags first (accurate, curated) then crude word-split filler — the split
+// alone drops short-but-meaningful tokens like "M2"/"M3" (<=2 chars).
+const keywords = Array.from(new Set([
+  ...photoTags,
+  ...(title + ' ' + caption + ' ' + categoryLabel + ' ' + photo.category)
     .toLowerCase()
     .replace(/[^a-z0-9\s#]/g, ' ')
     .split(/\s+/)
-    .filter(w => w.length > 2 && !stopwords.has(w))
-)).slice(0, 12);
-
-const photoTags = extractTags(title);
+    .filter(w => w.length > 2 && !stopwords.has(w)),
+])).slice(0, 12);
 
 const imageSchema = {
   '@context': 'https://schema.org',
