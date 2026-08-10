@@ -34,22 +34,23 @@ jobs:
       # Restoring the cache lets watermark.mjs's content-hash manifest skip
       # everything unchanged and only process new/edited photos.
       #
-      # "-v2" in the key: cache keys are immutable once created — a save
-      # under an existing key silently no-ops. A "watermark-..." cache
-      # already existed from before watermark.mjs tracked a manifest file,
-      # so every run kept restoring that manifest-less cache and could never
-      # save its freshly-built manifest back under the same key, defeating
-      # the skip logic completely. Bump this suffix again if the cache
-      # scheme changes and needs a clean slate.
+      # Version suffix in the key: cache keys are immutable once created — a
+      # save under an existing key silently no-ops, and the content-hash
+      # manifest only reprocesses a photo when the SOURCE bytes change, not
+      # when watermark.mjs's own logic changes. So any change to how outputs
+      # are generated needs a fresh cache to actually apply to the existing
+      # library, not just new photos — bump this suffix whenever that
+      # happens (v2: cache existed before the manifest did; v3: ig/ versions
+      # started getting watermarked too).
       - name: Cache watermarked + ig outputs
         uses: actions/cache@v4
         with:
           path: |
             src/assets/watermarked
             public/ig
-          key: watermark-v2-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
+          key: watermark-v3-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
           restore-keys: |
-            watermark-v2-${{ runner.os }}-
+            watermark-v3-${{ runner.os }}-
 
       - uses: actions/setup-node@v4
         with:

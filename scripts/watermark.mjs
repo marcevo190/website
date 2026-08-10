@@ -99,8 +99,10 @@ async function writeIgVersion(src, igDest) {
   fs.mkdirSync(path.dirname(igDest), { recursive: true });
   const igWidth  = Math.min(meta.width, 1080);
   const igHeight = Math.max(Math.round(igWidth * meta.height / meta.width), Math.ceil(igWidth / 1.91));
+  const wm = watermarkSVG(igWidth, igHeight);
   await sharp(src)
     .resize({ width: igWidth, height: igHeight, fit: 'cover', position: 'centre', withoutEnlargement: true })
+    .composite([{ input: wm, blend: 'over' }])
     .withMetadata({ exif: EXIF_METADATA })
     .jpeg({ quality: 88 })
     .toFile(igDest);
