@@ -1,6 +1,8 @@
 export type CaptionEntry = {
   title: string;
   caption: string;
+  /** Registration plate, if clearly legible in the photo — powers /plate search. Not backfilled for older photos. */
+  plate?: string;
 };
 
 export const captions: Record<string, CaptionEntry> = {
