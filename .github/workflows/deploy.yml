@@ -21,12 +21,36 @@ jobs:
     permissions:
       contents: read
     steps:
+      # lfs:false here on purpose — actions/checkout's built-in LFS fetch has
+      # no cache of its own, so it re-downloads the ENTIRE photo library from
+      # GitHub's LFS server on every single push. GitHub's free LFS bandwidth
+      # quota is small (1GB/month) and a day of active editing (many small
+      # pushes) blew through it in one session, breaking every deploy until
+      # the quota resets. Fetching LFS objects ourselves below, through a
+      # cache, means only new/changed photos actually hit the LFS server —
+      # unchanged ones get restored from the cache instead.
       - uses: actions/checkout@v4
         with:
-          lfs: true  # Build needs the real image bytes, not LFS pointers
+          lfs: false
 
       - name: Setup Git LFS
-        run: git lfs install
+        run: git lfs install --local
+
+      # Restores previously-downloaded LFS blobs into .git/lfs before we ask
+      # git to pull — git lfs pull only fetches objects it can't already find
+      # locally, so a cache hit here means little to no LFS bandwidth used at
+      # all. Key doesn't need to be exact: restore-keys falls back to the
+      # most recent cache, and `git lfs pull` fills in whatever's missing.
+      - name: Cache Git LFS objects
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
+          restore-keys: |
+            lfs-${{ runner.os }}-
+
+      - name: Git LFS pull
+        run: git lfs pull
 
       # Cache the watermark outputs between runs. src/assets/watermarked/ and
       # public/ig/ are git-ignored (regenerated at build), so without this the
