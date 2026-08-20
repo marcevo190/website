@@ -1,0 +1,145 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { captions } from '../data/captions';
+
+// Registration search reads from captions.ts directly (not a photo glob) since
+// it only needs the small set of entries that actually have a plate — no need
+// to touch every image file for this. New captions get a plate when visible
+// (see scripts/caption-batch.mjs); nothing has been backfilled for photos
+// captioned before this existed.
+const plates = Object.entries(captions)
+  .filter(([, c]) => c.plate && c.plate.trim().length > 0)
+  .map(([filename, c]) => ({
+    filename,
+    plate: c.plate!,
+    title: c.title,
+    slug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+  }));
+---
+
+<Layout
+  title="Search by Registration — TrackMarc Motorsport Photography"
+  description="Find your car on TrackMarc by its registration plate."
+>
+  <div style="padding-top: var(--nav-height);">
+    <div class="section">
+      <div class="section-header">
+        <p class="section-eyebrow">Find Your Car</p>
+        <h1 class="section-title">Search by Registration</h1>
+        <p class="section-subtitle">
+          Spot your own car at an event? Type its plate to find every photo of it.
+        </p>
+      </div>
+
+      <div class="plate-search">
+        <input
+          type="text"
+          id="plate-input"
+          placeholder="e.g. 141-D-12345"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <p class="plate-status" id="plate-status">
+        {plates.length === 0
+          ? "No plates recorded yet — this is a new feature, only photos captioned from here on will show up."
+          : `${plates.length} photograph${plates.length !== 1 ? 's' : ''} have a plate on record.`}
+      </p>
+
+      <div class="plate-results" id="plate-results"></div>
+    </div>
+  </div>
+
+  <script define:vars={{ plates }}>
+    const input = document.getElementById('plate-input');
+    const results = document.getElementById('plate-results');
+    const status = document.getElementById('plate-status');
+    const defaultStatus = status.textContent;
+
+    function normalise(s) {
+      return s.toLowerCase().replace(/[\s-]+/g, '');
+    }
+
+    function render(matches) {
+      results.innerHTML = matches.map(m => `
+        <a class="plate-result" href="/photo/${m.slug}">
+          <span class="plate-result-plate">${m.plate}</span>
+          <span class="plate-result-title">${m.title}</span>
+        </a>
+      `).join('');
+    }
+
+    input?.addEventListener('input', () => {
+      const q = normalise(input.value);
+      if (!q) {
+        results.innerHTML = '';
+        status.textContent = defaultStatus;
+        return;
+      }
+      const matches = plates.filter(p => normalise(p.plate).includes(q));
+      status.textContent = matches.length
+        ? `${matches.length} match${matches.length !== 1 ? 'es' : ''}`
+        : 'No matches — try just the numbers, or fewer characters.';
+      render(matches);
+    });
+  </script>
+
+  <style>
+    .plate-search {
+      max-width: 32rem;
+      margin-top: 1rem;
+    }
+    #plate-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.9rem 1.1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+    }
+    #plate-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .plate-status {
+      font-size: 0.8rem;
+      color: var(--text-dim, var(--text-muted));
+      margin-top: 0.75rem;
+    }
+    .plate-results {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-width: 32rem;
+    }
+    .plate-result {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.1rem;
+      border: 1px solid var(--border);
+      color: inherit;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .plate-result:hover {
+      border-color: var(--accent);
+    }
+    .plate-result-plate {
+      font-family: var(--font-heading);
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .plate-result-title {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: right;
+    }
+  </style>
+</Layout>

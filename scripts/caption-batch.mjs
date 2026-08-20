@@ -81,14 +81,20 @@ Two different captions are needed:
 - "igCaption": for Instagram. A hook in the first line (max 12 words), then 1-2 more sentences,
   ending with a question to invite comments. No exclamation marks anywhere.
 
+Also extract "plate": the car's road registration plate, ONLY if it's actually visible and you
+can read it with full confidence, character by character. This is a real road plate, not a
+competition/race number (e.g. a number on a door or windscreen banner like "64" or "#21" is NOT
+a plate). If there's no legible plate visible, use an empty string — never guess or reconstruct
+a partial one.
+
 Worked examples of the exact tone and format wanted:
-1. {"title": "Aston Martin Vantage GT3 #11 — Le Mans 2026", "caption": "The Aston Martin Vantage GT3, number 11, on track during the Le Mans 24 Hours. Green and yellow livery cutting through the grey.", "igCaption": "Green and yellow, cutting through the Le Mans grey. The Aston Martin Vantage GT3, car 11, mid-stint at this year's 24 Hours. What livery would you run on a GT3 car?"}
-2. {"title": "BMW M2, Teal — Bimmerfest, Mondello Park", "caption": "A teal BMW M2 parked up at Bimmerfest, Mondello Park. Clean, understated build, nothing overdone.", "igCaption": "Teal isn't a colour you see often on an M2. Spotted at Bimmerfest, Mondello Park, understated and clean, nothing overdone. Would you go this subtle or something louder?"}
-3. {"title": "Pink E30 drift car at Mondello", "caption": "A pink E30 sideways at Mondello Park, smoke off the rear tyres. One of the louder builds on show that day.", "igCaption": "Pink E30, sideways, smoke off both rear tyres. One of the loudest builds at Mondello Park that day, in every sense. Pink on a drift car, yes or no?"}
+1. {"title": "Aston Martin Vantage GT3 #11 — Le Mans 2026", "caption": "The Aston Martin Vantage GT3, number 11, on track during the Le Mans 24 Hours. Green and yellow livery cutting through the grey.", "igCaption": "Green and yellow, cutting through the Le Mans grey. The Aston Martin Vantage GT3, car 11, mid-stint at this year's 24 Hours. What livery would you run on a GT3 car?", "plate": ""}
+2. {"title": "BMW M2, Teal — Bimmerfest, Mondello Park", "caption": "A teal BMW M2 parked up at Bimmerfest, Mondello Park. Clean, understated build, nothing overdone.", "igCaption": "Teal isn't a colour you see often on an M2. Spotted at Bimmerfest, Mondello Park, understated and clean, nothing overdone. Would you go this subtle or something louder?", "plate": "141-D-12345"}
+3. {"title": "Pink E30 drift car at Mondello", "caption": "A pink E30 sideways at Mondello Park, smoke off the rear tyres. One of the louder builds on show that day.", "igCaption": "Pink E30, sideways, smoke off both rear tyres. One of the loudest builds at Mondello Park that day, in every sense. Pink on a drift car, yes or no?", "plate": ""}
 
 Return ONLY a JSON object (no other text) in a \`\`\`json fenced code block, shaped exactly like
-the examples above: {"title": "...", "caption": "...", "igCaption": "..."}. Title is short (like
-a photo credit line).`;
+the examples above: {"title": "...", "caption": "...", "igCaption": "...", "plate": "..."}. Title
+is short (like a photo credit line).`;
 
 function loadExistingCaptionKeys() {
   const src = fs.readFileSync(CAPTIONS_TS_PATH, 'utf8');
@@ -156,8 +162,10 @@ async function captionOne(imgPath) {
 function mergeIntoCaptionsTs(entries) {
   let src = fs.readFileSync(CAPTIONS_TS_PATH, 'utf8');
   const lines = Object.entries(entries)
-    .map(([filename, { title, caption }]) =>
-      `  '${filename}': { title: ${JSON.stringify(title)}, caption: ${JSON.stringify(caption)} },`)
+    .map(([filename, { title, caption, plate }]) => {
+      const plateField = plate ? `, plate: ${JSON.stringify(plate)}` : '';
+      return `  '${filename}': { title: ${JSON.stringify(title)}, caption: ${JSON.stringify(caption)}${plateField} },`;
+    })
     .join('\n');
 
   // Replace any existing empty placeholder for this filename, else append before closing `};`
