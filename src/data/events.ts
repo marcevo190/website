@@ -83,6 +83,21 @@ export const events: EventDef[] = [
     classes: ['Pre-1994 Rally', 'Pre-1994 Road', 'Pre-1994 Sprint', 'Drifting', 'Grip Driving'],
     description: 'Photo coverage of Retrostock 2026 at Mondello Park by Marc Ronan — pre-1994 rally, road and sprint cars across drifting and grip driving sessions.',
   },
+  {
+    slug: 'drift-games-summer-bash-2026',
+    name: 'Drift Games Summer Bash 2026',
+    shortLabel: 'Drift Games',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: 'August 2026',
+    categories: ['drift-games'],
+    hero: 'DSC_6961-Enhanced-NR.jpg',
+    intro: [
+      'Two days of drifting at Mondello Park for the Tire Streets Drift Games Summer Bash, with over 150 drivers running across all four of the venue\'s layouts plus Sportsland.',
+      'Big grids and bigger tandems throughout, from pro drivers sharpening their craft to grid-fillers just out for the fun of it, the way drifting was meant to be.',
+    ],
+    classes: ['Drifting', 'Tandem Battles'],
+    description: 'Photo coverage of the 2026 Tire Streets Drift Games Summer Bash at Mondello Park by Marc Ronan — over 150 drivers, big tandems, across all four track layouts.',
+  },
 ];
 
 export function getEvent(slug: string): EventDef | undefined {

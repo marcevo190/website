@@ -1,5 +1,5 @@
 {
-  "website": ["formula", "endurance", "rally", "gt", "car-shows", "iccr", "bimmerfest", "retrostock"],
+  "website": ["formula", "endurance", "rally", "gt", "car-shows", "iccr", "bimmerfest", "retrostock", "drift-games"],
   "instagramOnly": ["instagram-only"],
   "labels": {
     "formula": "Formula",
@@ -9,6 +9,7 @@
     "car-shows": "Car Shows",
     "iccr": "ICCR",
     "bimmerfest": "Bimmerfest",
-    "retrostock": "Retrostock"
+    "retrostock": "Retrostock",
+    "drift-games": "Drift Games"
   }
 }
