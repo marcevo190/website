@@ -10,6 +10,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+  # GitHub evicts a cache after 7 days with no read/restore, no exception, and
+  # this isn't a setting anything can override. During a quiet stretch with
+  # no pushes, both the LFS cache and the watermark cache would otherwise
+  # lapse, so the very next push after the gap pays the full one-time rebuild
+  # cost again (confirmed happening on 2026-08-22, after ~2 weeks blocked on
+  # the LFS budget). Twice a week keeps them touched with margin either side
+  # of the 7-day window even if one run happens to fail.
+  schedule:
+    - cron: '0 3 * * 0,3'  # Sunday and Wednesday, 3am UTC
 
 concurrency:
   group: track-bot-commits
