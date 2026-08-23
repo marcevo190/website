@@ -99,8 +99,16 @@ is short (like a photo credit line).`;
 function loadExistingCaptionKeys() {
   const src = fs.readFileSync(CAPTIONS_TS_PATH, 'utf8');
   const keys = new Set();
-  for (const match of src.matchAll(/'([^']+\.(?:jpe?g|png|webp))'\s*:\s*\{\s*title:\s*'[^']*',\s*caption:\s*'([^']*)'/gi)) {
-    if (match[2].trim().length > 0) keys.add(match[1]); // only truly captioned, not empty placeholders
+  // Entries can be single- or double-quoted -- the original hand-written
+  // corpus uses single quotes, but this script (and manual fixes matching
+  // its style) write double quotes. Missing either style here means an
+  // already-captioned photo looks "still empty" to the resumable-run check,
+  // gets reprocessed, and a stale progress.json entry can clobber a real fix
+  // with old text (confirmed happening 2026-08-23 on the car 711 colour fix).
+  const pattern = /'([^']+\.(?:jpe?g|png|webp))'\s*:\s*\{\s*title:\s*(?:'[^']*'|"(?:[^"\\]|\\.)*")\s*,\s*caption:\s*(?:'([^']*)'|"((?:[^"\\]|\\.)*)")/gi;
+  for (const match of src.matchAll(pattern)) {
+    const caption = match[2] ?? match[3] ?? '';
+    if (caption.trim().length > 0) keys.add(match[1]); // only truly captioned, not empty placeholders
   }
   return keys;
 }
