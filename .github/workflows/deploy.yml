@@ -21,8 +21,20 @@ on:
     - cron: '0 3 * * 0,3'  # Sunday and Wednesday, 3am UTC
 
 concurrency:
-  group: track-bot-commits
-  cancel-in-progress: false
+  # Own group, not track-bot-commits — this workflow never commits or pushes
+  # to git (it only builds and runs `wrangler deploy`), so it doesn't need to
+  # serialize against the workflows that do (auto-captions, Instagram post/
+  # boost, reel) and share that group to avoid racing each other's pushes.
+  # Sharing it anyway caused a real collision: a push touching
+  # src/assets/images/** fires both deploy.yml and auto-captions.yml, they'd
+  # compete for the same one-slot queue, and deploy would get cancelled
+  # (happened twice in one session, 2026-08-23). cancel-in-progress: true is
+  # safe here in a way it isn't for the bot-commit group — a newer deploy
+  # always supersedes an older one, unlike cancelling a git push mid-flight,
+  # so a burst of quick pushes now just deploys the last one instead of
+  # queuing every intermediate build.
+  group: cloudflare-deploy
+  cancel-in-progress: true
 
 jobs:
   deploy:
