@@ -12,7 +12,7 @@ const fs   = require('fs');
 const path = require('path');
 
 const CATEGORIES_FILE = 'src/data/categories.json';
-const CAPTIONS_FILE   = 'src/data/captions.ts';
+const CAPTIONS_FILE   = 'src/data/captions.json';
 const EVENTS_FILE     = 'src/data/events.ts';
 const IG_CAPTIONS_FILE = 'scripts/instagram-captions.json';
 
@@ -73,33 +73,26 @@ for (const c of eventCats) {
 }
 
 // ── Caption coverage (warnings — auto-captions fills placeholders later) ─────
-function captionKeys() {
-  const src = fs.readFileSync(CAPTIONS_FILE, 'utf8');
-  const keys = new Set();
-  for (const m of src.matchAll(/'([^']+\.(?:jpe?g|png|webp))'\s*:/gi)) keys.add(m[1]);
-  return keys;
-}
-function captionValue(filename) {
-  const src = fs.readFileSync(CAPTIONS_FILE, 'utf8');
-  const m = src.match(new RegExp(`'${filename}'\s*:\s*\{\s*title:\s*'((?:\\\\.|[^'])*)'\s*,\s*caption:\s*'((?:\\\\.|[^'])*)'\s*\}`));
-  return m ? m[2].replace(/\\'/g, "'") : null;
-}
+// Real JSON now — this used to regex-parse captions.ts and only recognised
+// single-quoted entries, so a double-quoted caption would silently read back
+// as empty here too (same root cause as the caption-batch.mjs bug it shared
+// this file with; see scripts/caption-batch.mjs's comment for the story).
+const captionsData = JSON.parse(fs.readFileSync(CAPTIONS_FILE, 'utf8'));
 
 const igCaptions = fs.existsSync(IG_CAPTIONS_FILE)
   ? JSON.parse(fs.readFileSync(IG_CAPTIONS_FILE, 'utf8'))
   : {};
 
-const existingKeys = captionKeys();
 for (const f of usedFolders) {
   const dir = path.join(IMAGES_BASE, f);
   for (const file of fs.readdirSync(dir)) {
     if (!/\.(jpe?g|png|webp)$/i.test(file)) continue;
-    if (!existingKeys.has(file)) {
+    if (!(file in captionsData)) {
       warnings.push(`[${f}] ${file} has no entry in ${CAPTIONS_FILE} — add a caption or accept the auto-added placeholder.`);
       continue;
     }
-    const siteCaption = captionValue(file) || '';
-    const igCaption   = igCaptions[file] || '';
+    const siteCaption = captionsData[file].caption || '';
+    const igCaption    = igCaptions[file] || '';
     if (!siteCaption.trim() && !igCaption.trim()) {
       warnings.push(`[${f}] ${file} has an empty caption — it won't be posted to Instagram (skipped by instagram-post.cjs).`);
     }

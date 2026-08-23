@@ -2,7 +2,7 @@ const fs   = require('fs');
 const path = require('path');
 
 const IMAGES_BASE = 'src/assets/images';
-const CAPTIONS_FILE = 'src/data/captions.ts';
+const CAPTIONS_FILE = 'src/data/captions.json';
 // Categories come from the single source of truth — src/data/categories.json.
 const CATEGORIES = require('../src/data/categories.json').website;
 
@@ -21,37 +21,19 @@ function collectImages() {
   return files;
 }
 
-// Parse existing caption keys from captions.ts
-function loadExistingKeys() {
-  const src = fs.readFileSync(CAPTIONS_FILE, 'utf8');
-  const keys = new Set();
-  for (const match of src.matchAll(/'([^']+\.(jpe?g|png|webp))'\s*:/gi)) {
-    keys.add(match[1]);
-  }
-  return keys;
-}
-
 const images = collectImages();
-const existing = loadExistingKeys();
-const missing = images.filter(f => !existing.has(f));
+const captions = JSON.parse(fs.readFileSync(CAPTIONS_FILE, 'utf8'));
+const missing = images.filter(f => !(f in captions));
 
 if (missing.length === 0) {
   console.log('No new images — nothing to do.');
   process.exit(0);
 }
 
-// Build placeholder entries
-const placeholders = missing.map(f => {
+for (const f of missing) {
   const stem = f.replace(/\.[^.]+$/, '').replace(/-Enhanced-NR$/i, '').replace(/_/g, ' ');
-  return `  '${f}': { title: '${stem}', caption: '' },`;
-}).join('\n');
+  captions[f] = { title: stem, caption: '' };
+}
 
-// Insert before the closing }; of the captions object
-let src = fs.readFileSync(CAPTIONS_FILE, 'utf8');
-src = src.replace(
-  /\n};\n\nexport function/,
-  `\n\n  // ── Uncaptioned — edit title and caption above ────────────────────────────\n\n${placeholders}\n};\n\nexport function`
-);
-
-fs.writeFileSync(CAPTIONS_FILE, src);
+fs.writeFileSync(CAPTIONS_FILE, JSON.stringify(captions, null, 2) + '\n');
 console.log(`Added ${missing.length} placeholder(s): ${missing.join(', ')}`);

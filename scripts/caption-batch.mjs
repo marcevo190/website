@@ -52,9 +52,9 @@ if (!fs.existsSync(imageDir)) {
   process.exit(1);
 }
 
-const CAPTIONS_TS_PATH = 'src/data/captions.ts';
-const IG_CAPTIONS_PATH = 'scripts/instagram-captions.json';
-const PROGRESS_PATH    = 'scripts/.caption-batch-progress.json';
+const CAPTIONS_JSON_PATH = 'src/data/captions.json';
+const IG_CAPTIONS_PATH   = 'scripts/instagram-captions.json';
+const PROGRESS_PATH      = 'scripts/.caption-batch-progress.json';
 
 // Free-tier daily quotas are per-model and small (~20 requests/day on some
 // models). Rotate to the next model on a 429 instead of stalling the whole
@@ -96,21 +96,21 @@ Return ONLY a JSON object (no other text) in a \`\`\`json fenced code block, sha
 the examples above: {"title": "...", "caption": "...", "igCaption": "...", "plate": "..."}. Title
 is short (like a photo credit line).`;
 
-function loadExistingCaptionKeys() {
-  const src = fs.readFileSync(CAPTIONS_TS_PATH, 'utf8');
-  const keys = new Set();
-  // Entries can be single- or double-quoted -- the original hand-written
-  // corpus uses single quotes, but this script (and manual fixes matching
-  // its style) write double quotes. Missing either style here means an
-  // already-captioned photo looks "still empty" to the resumable-run check,
-  // gets reprocessed, and a stale progress.json entry can clobber a real fix
-  // with old text (confirmed happening 2026-08-23 on the car 711 colour fix).
-  const pattern = /'([^']+\.(?:jpe?g|png|webp))'\s*:\s*\{\s*title:\s*(?:'[^']*'|"(?:[^"\\]|\\.)*")\s*,\s*caption:\s*(?:'([^']*)'|"((?:[^"\\]|\\.)*)")/gi;
-  for (const match of src.matchAll(pattern)) {
-    const caption = match[2] ?? match[3] ?? '';
-    if (caption.trim().length > 0) keys.add(match[1]); // only truly captioned, not empty placeholders
-  }
-  return keys;
+function loadCaptionsJson() {
+  try { return JSON.parse(fs.readFileSync(CAPTIONS_JSON_PATH, 'utf8')); } catch { return {}; }
+}
+
+function existingCaptionKeys(captionsData) {
+  // Real JSON now, not a hand-edited object literal three different scripts
+  // each parsed their own fragile way -- this used to be a regex that only
+  // recognised single-quoted entries, so a double-quoted manual fix looked
+  // "still empty" to this check, got reprocessed, and a stale progress.json
+  // entry clobbered the fix with old text (happened 2026-08-23, car 711).
+  return new Set(
+    Object.entries(captionsData)
+      .filter(([, entry]) => entry.caption?.trim().length > 0)
+      .map(([filename]) => filename)
+  );
 }
 
 function loadProgress() {
@@ -167,22 +167,11 @@ async function captionOne(imgPath) {
   throw lastErr ?? new Error('All models failed');
 }
 
-function mergeIntoCaptionsTs(entries) {
-  let src = fs.readFileSync(CAPTIONS_TS_PATH, 'utf8');
-  const lines = Object.entries(entries)
-    .map(([filename, { title, caption, plate }]) => {
-      const plateField = plate ? `, plate: ${JSON.stringify(plate)}` : '';
-      return `  '${filename}': { title: ${JSON.stringify(title)}, caption: ${JSON.stringify(caption)}${plateField} },`;
-    })
-    .join('\n');
-
-  // Replace any existing empty placeholder for this filename, else append before closing `};`
-  for (const filename of Object.keys(entries)) {
-    const placeholderRe = new RegExp(`\\n\\s*'${filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}':[^\\n]*\\n`);
-    src = src.replace(placeholderRe, '\n');
+function mergeIntoCaptionsJson(captionsData, entries) {
+  for (const [filename, { title, caption, plate }] of Object.entries(entries)) {
+    captionsData[filename] = plate ? { title, caption, plate } : { title, caption };
   }
-  src = src.replace(/\n};\n\nexport function/, `\n${lines}\n};\n\nexport function`);
-  fs.writeFileSync(CAPTIONS_TS_PATH, src);
+  fs.writeFileSync(CAPTIONS_JSON_PATH, JSON.stringify(captionsData, null, 2) + '\n');
 }
 
 function mergeIntoIgCaptions(entries) {
@@ -193,8 +182,9 @@ function mergeIntoIgCaptions(entries) {
   fs.writeFileSync(IG_CAPTIONS_PATH, JSON.stringify(igCaptions, null, 2));
 }
 
-const existingKeys = loadExistingCaptionKeys();
-const progress     = loadProgress();
+const captionsData = loadCaptionsJson();
+const existingKeys = existingCaptionKeys(captionsData);
+const progress = loadProgress();
 
 const files = fs.readdirSync(imageDir)
   .filter(f => /\.(jpe?g|png)$/i.test(f))
@@ -231,7 +221,7 @@ const finished = Object.fromEntries(
   Object.entries(progress).filter(([f]) => files.includes(f) && progress[f]?.title)
 );
 if (Object.keys(finished).length > 0) {
-  mergeIntoCaptionsTs(finished);
+  mergeIntoCaptionsJson(captionsData, finished);
   mergeIntoIgCaptions(finished);
 }
 

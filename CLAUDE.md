@@ -37,11 +37,18 @@ Node + a logged-in Cloudflare CLI. A push to `main` only goes live if:
      first — the "Edit Cloudflare Workers" template usually works.
   2. Someone manually deploys.
 
-**`deploy.yml` caches the watermark outputs** (`src/assets/watermarked/` + `public/ig/`)
-via `actions/cache`. Without the cache, `watermark.mjs` re-stamps ALL ~470 images every
-build (~15 min on CI) because those dirs are git-ignored and start empty. With the cache,
-the mtime check in `watermark.mjs` skips unchanged images and only processes new/edited
-ones. Do not remove the cache step.
+**`deploy.yml` caches both the LFS objects and the watermark outputs** (`src/assets/watermarked/`
++ `public/ig/`) via `actions/cache`. Without the LFS cache, every push re-downloads the entire
+photo library from GitHub's LFS server, burning through the free bandwidth quota fast (this
+exhausted the repo's quota once, 2026-08-20ish, from many pushes in one active session — fixed
+by caching, plus a Sun/Wed scheduled run so the caches don't expire from 7 days of inactivity,
+which isn't configurable). Without the watermark cache, `watermark.mjs` re-stamps every photo
+every build (~15 min on CI, 800+ photos as of 2026-08-23) since those dirs are git-ignored and
+start empty. The watermark script uses a content-hash manifest (not mtime — a checkout resets
+every file's mtime, which defeats a timestamp check) to skip unchanged photos. Do not remove
+either cache step, and if the caching scheme ever changes shape, bump the cache key version
+suffix (see the comment above the cache step in deploy.yml) or the change won't take effect
+for existing photos, only new ones.
 
 ## Repository
 
@@ -68,7 +75,7 @@ GEMINI_API_KEY=... node scripts/caption-batch.mjs <category> <imageDir>
   to `scripts/.caption-batch-progress.json` after every photo), rotates through
   `gemini-3.5-flash` → `gemini-3.1-flash-lite` on a 429 (free-tier daily quotas are small,
   ~20 requests/day on some models — this is why more than one model is tried), and writes
-  both `src/data/captions.ts` and `scripts/instagram-captions.json` in one pass (website
+  both `src/data/captions.json` and `scripts/instagram-captions.json` in one pass (website
   caption vs. Instagram caption are different styles — hook + question for Instagram, plain
   1-2 sentences for the site — the script asks Gemini for both explicitly).
 - The API key lives in this Mac's keychain (`security find-generic-password -s
@@ -93,7 +100,13 @@ much as it did to manual captioning.
 - `public/ig/{category}/` — clean (no watermark) 1080px Instagram versions, git-ignored
 
 ### Captions
-- `src/data/captions.ts` — website captions: `'DSC_1234.jpg': { title: '...', caption: '...' }`
+- `src/data/captions.json` — website captions (plain JSON): `"DSC_1234.jpg": { "title": "...", "caption": "..." }`.
+  `src/data/captions.ts` is just the typed accessor (`getCaption()`) that imports this JSON —
+  edit the `.json`, not the `.ts`. (Used to be the other way round: captions.ts held the data as
+  a hand-edited object literal with mixed quote styles, which three different scripts each
+  re-parsed their own fragile way — one via regex, one via `new Function()` eval. A double-quoted
+  manual fix once silently reverted because one script's "already captioned" check only
+  recognised single quotes. Migrated to real JSON 2026-08-23 to remove that whole bug class.)
 - `scripts/instagram-captions.json` — Instagram-specific captions keyed by filename
 
 ### Pages / styling
@@ -160,7 +173,7 @@ much as it did to manual captioning.
   so the LFS blob uploads on push, and Cloudflare fetches it at build like the photos.
 
 ### Auto-captioning
-- `scripts/auto-captions.cjs` — scans for images with no caption entry, adds placeholders to `captions.ts`.
+- `scripts/auto-captions.cjs` — scans for images with no caption entry, adds placeholders to `captions.json`.
 - `.github/workflows/auto-captions.yml` — triggers on push to `src/assets/images/**`.
 
 ### Category wiring validation
@@ -223,7 +236,7 @@ Make.com handles auth cleanly. Keep the Meta app in Development mode.
 
 ### New photos pushed by Marc
 1. `git pull` (make sure LFS pulls the actual image files, not just pointers)
-2. Find filenames missing from `captions.ts` (the auto-captions Action adds placeholders)
+2. Find filenames missing from `captions.json` (the auto-captions Action adds placeholders)
 3. **Downscale before captioning** — run
    `powershell -ExecutionPolicy Bypass -File scripts/resize-for-review.ps1 -SrcDir <source> -OutDir <scratch-dir>`
    (uses .NET System.Drawing, no npm install needed). The site never serves anything above

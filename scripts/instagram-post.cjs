@@ -2,14 +2,14 @@ const fs    = require('fs');
 const path  = require('path');
 const https = require('https');
 
-// ── Load website captions from captions.ts ───────────────────────────────────
+// ── Load website captions ─────────────────────────────────────────────────────
+// Plain JSON now — this used to strip captions.ts down to a bare object
+// literal and eval() it via new Function(), which worked but was needlessly
+// fragile (and now duplicated real parsing logic across three scripts, each
+// slightly differently). See scripts/caption-batch.mjs for the bug that
+// mixed-parsing approach caused.
 function loadCaptions() {
-  const src = fs.readFileSync('src/data/captions.ts', 'utf8');
-  const js  = src
-    .replace(/export type CaptionEntry[\s\S]+?};/, '')
-    .replace(/export const captions\s*:\s*Record<[^>]+>\s*=\s*/, 'return ')
-    .replace(/export function[\s\S]+$/, '');
-  return new Function(js)();
+  return JSON.parse(fs.readFileSync('src/data/captions.json', 'utf8'));
 }
 
 // ── Load Instagram-specific captions ─────────────────────────────────────────
