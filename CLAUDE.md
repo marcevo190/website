@@ -85,6 +85,12 @@ GEMINI_API_KEY=... node scripts/caption-batch.mjs <category> <imageDir>
 filenames, but it's not infallible — see the CRITICAL RULE below, which applies here just as
 much as it did to manual captioning.
 
+**Cars repeat across events.** It's a small regular Irish track day/drift scene — the same
+physical car (same livery/sponsors) turns up at events months apart. Check
+`scripts/known-cars.json` for a distinctive sponsor name/livery before assuming a "new" car is
+new, and add an entry there whenever you confirm a repeat (see its `car-711` example — same
+BMW E46 miscaptioned two different colours across two events before Marc caught it).
+
 ## Key files
 
 ### Images

@@ -1,0 +1,14 @@
+{
+  "_comment": "Reference for recurring cars across TrackMarc's events -- it's a small regular Irish track day/drift scene, so the same physical car turns up at multiple events months apart. When captioning a new batch (manually or reviewing a Gemini pass), grep this file for a distinctive livery/sponsor/plate before assuming a car is new. Add an entry whenever you confirm the same car reappearing (see car-711 below for how it was found: matching sponsor text across two events' photos). Not read by any script or page -- purely a lookup for whoever's doing the captioning.",
+  "cars": [
+    {
+      "id": "car-711",
+      "description": "BMW E46 coupe, candy apple red, 'Ecohome' + 'AMF Car Parts' + 'BM Concrete' sponsor livery, driver M. Kairaitis, race number 711",
+      "seenAt": [
+        "Bimmerfest 2026 (DSC_5916-Enhanced-NR.jpg, DSC_5961-Enhanced-NR.jpg)",
+        "Drift Games Summer Bash 2026 (DSC_7399-Enhanced-NR.jpg, DSC_7613-Enhanced-NR.jpg, DSC_7614-Enhanced-NR.jpg, DSC_7615-Enhanced-NR.jpg, DSC_7678-Enhanced-NR.jpg)"
+      ],
+      "note": "Originally miscaptioned as 'copper' (Bimmerfest) and plain 'red' (Drift Games) before Marc confirmed candy apple red -- fixed 2026-08-23."
+    }
+  ]
+}
