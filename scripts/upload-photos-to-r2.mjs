@@ -69,10 +69,29 @@ function contentTypeFor(file) {
   return 'image/jpeg';
 }
 
-let uploaded = 0, skipped = 0;
+// A file matching an image extension isn't necessarily real image bytes —
+// on a machine with no git-lfs binary installed, `git checkout` leaves LFS-
+// tracked files as their tiny plain-text pointer ("version https://git-lfs...")
+// instead of smudging in the real content. Uploading that pointer text as if
+// it were the photo happened once already; skip it loudly instead.
+function isLfsPointer(fullPath) {
+  const stat = fs.statSync(fullPath);
+  if (stat.size > 1024) return false;
+  const head = fs.readFileSync(fullPath, 'utf8').slice(0, 100);
+  return head.startsWith('version https://git-lfs.github.com/spec/v1');
+}
+
+let uploaded = 0, skipped = 0, pointers = 0;
 for (const file of files) {
   const key = `originals/${category}/${file}`;
   const fullPath = path.join(folder, file);
+
+  if (isLfsPointer(fullPath)) {
+    console.log(`[upload-to-r2] ! ${file} is a Git LFS pointer, not a real image — skipping (run \`git lfs pull\` first)`);
+    pointers++;
+    continue;
+  }
+
   const localSize = fs.statSync(fullPath).size;
 
   // Skip files already in R2 with a matching size, so re-running this
@@ -100,4 +119,4 @@ for (const file of files) {
   uploaded++;
 }
 
-console.log(`[upload-to-r2] Done — ${uploaded} uploaded, ${skipped} already present.`);
+console.log(`[upload-to-r2] Done — ${uploaded} uploaded, ${skipped} already present, ${pointers} LFS pointer(s) skipped.`);

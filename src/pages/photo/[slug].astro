@@ -52,6 +52,7 @@ const { photo, prevSlug, nextSlug } = Astro.props;
 const cap = getCaption(photo.filename);
 const title = cap?.title ?? photo.filename.replace(/\.[^.]+$/, '');
 const caption = cap?.caption ?? '';
+const plate = cap?.plate;
 
 const event = events.find(e => e.categories.includes(photo.category));
 const imageAbsoluteUrl = new URL(photo.src.src, Astro.site).href;
@@ -131,6 +132,11 @@ const imageSchema = {
               {photoTags.map(t => <a class="photo-page-tag" href={`/tag/${tagSlug(t)}`}>{t}</a>)}
             </div>
           )}
+          {plate && (
+            <p class="photo-page-plate">
+              Plate spotted: <a href={`/plate?q=${encodeURIComponent(plate)}`}>{plate}</a> — see every photo of this car
+            </p>
+          )}
           <p class="photo-page-credit">
             &copy; Marc Ronan / TrackMarc · Available for editorial licensing —
             <a href="/licensing">licensing details</a> · <a href="/contact">get in touch</a>
@@ -186,6 +192,16 @@ const imageSchema = {
       color: var(--text-dim, var(--text-muted));
     }
     .photo-page-credit a { color: var(--accent); }
+    .photo-page-plate {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .photo-page-plate a {
+      color: var(--accent);
+      font-family: var(--font-heading);
+      letter-spacing: 0.05em;
+    }
     .photo-page-tags {
       display: flex;
       flex-wrap: wrap;

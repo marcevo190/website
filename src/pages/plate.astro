@@ -83,6 +83,16 @@ const plates = Object.entries(captions)
         : 'No matches — try just the numbers, or fewer characters.';
       render(matches);
     });
+
+    // Photo pages link here as /plate?q=<plate> ("see every photo of this
+    // car") — pick that up and run the search immediately instead of
+    // dumping the visitor on an empty box they'd have to retype the plate
+    // they just saw into.
+    const queryPlate = new URLSearchParams(window.location.search).get('q');
+    if (queryPlate && input) {
+      input.value = queryPlate;
+      input.dispatchEvent(new Event('input'));
+    }
   </script>
 
   <style>
