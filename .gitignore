@@ -3,6 +3,11 @@ dist/
 
 # watermarked images — generated at build time, never committed
 src/assets/watermarked/
+
+# photo originals — live in Cloudflare R2, not git (moved 2026-08-26 to
+# remove the recurring Git LFS bandwidth-cost risk). scripts/sync-images-from-r2.mjs
+# populates this locally/in CI before each build.
+src/assets/images/
 # generated types
 .astro/
 

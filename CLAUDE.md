@@ -17,10 +17,11 @@ things plainly and do the technical work for him.
   `wrangler.json` defines a Worker named `website` serving `./dist` as static assets
   (`ASSETS` binding) with a `VISITS` KV namespace. Deployment is **NOT automatic from
   GitHub** — see `.github/workflows/deploy.yml` below.
-- **Images:** Git LFS (large files). **Important:** if `git-lfs` isn't installed locally,
-  new images get committed as raw files instead of LFS pointers (the `.gitattributes`
-  clean filter silently no-ops). This is fine for builds (the bytes are in the repo) but
-  old pointer-based images still need LFS to download. Mixed repos work either way.
+- **Images:** Cloudflare R2 (object storage), not git. Moved off Git LFS 2026-08-26 — LFS
+  bills by bandwidth and a day of active editing once blew through the free quota, blocking
+  every deploy until it reset. `src/assets/images/` is git-ignored; `scripts/upload-photos-to-r2.mjs`
+  and `scripts/sync-images-from-r2.mjs` handle getting originals in and out of the R2
+  bucket. See "New photos pushed by Marc" below for the actual workflow.
 - **Image processing:** Sharp (watermarking + resizing)
 - **Instagram automation:** GitHub Actions → Make.com webhook → Instagram
 
@@ -37,18 +38,20 @@ Node + a logged-in Cloudflare CLI. A push to `main` only goes live if:
      first — the "Edit Cloudflare Workers" template usually works.
   2. Someone manually deploys.
 
-**`deploy.yml` caches both the LFS objects and the watermark outputs** (`src/assets/watermarked/`
-+ `public/ig/`) via `actions/cache`. Without the LFS cache, every push re-downloads the entire
-photo library from GitHub's LFS server, burning through the free bandwidth quota fast (this
-exhausted the repo's quota once, 2026-08-20ish, from many pushes in one active session — fixed
-by caching, plus a Sun/Wed scheduled run so the caches don't expire from 7 days of inactivity,
-which isn't configurable). Without the watermark cache, `watermark.mjs` re-stamps every photo
-every build (~15 min on CI, 800+ photos as of 2026-08-23) since those dirs are git-ignored and
-start empty. The watermark script uses a content-hash manifest (not mtime — a checkout resets
-every file's mtime, which defeats a timestamp check) to skip unchanged photos. Do not remove
-either cache step, and if the caching scheme ever changes shape, bump the cache key version
-suffix (see the comment above the cache step in deploy.yml) or the change won't take effect
-for existing photos, only new ones.
+**`deploy.yml` syncs originals from R2, then caches the watermark outputs** (`src/assets/watermarked/`
++ `public/ig/`) via `actions/cache`. The R2 sync (`scripts/sync-images-from-r2.mjs`, no args =
+full mode) isn't cached — R2 has zero egress fees, so re-downloading everything every deploy
+costs nothing in money, only a few minutes of build time. This replaced Git LFS entirely
+2026-08-26 (LFS bills by bandwidth and once blocked every deploy for ~2 weeks after a single
+active-editing day blew through the free quota). Without the watermark cache, `watermark.mjs`
+re-stamps every photo every build (~15 min on CI, 950+ photos as of 2026-08-26) since those
+dirs are git-ignored and start empty. The watermark script uses a content-hash manifest (not
+mtime — a checkout resets every file's mtime, which defeats a timestamp check) to skip
+unchanged photos. Do not remove the watermark cache step, and if the caching scheme ever
+changes shape, bump the cache key version suffix (see the comment above the cache step in
+deploy.yml) or the change won't take effect for existing photos, only new ones. The Sun/Wed
+scheduled run still matters — it's what keeps this cache from expiring after 7 days of
+inactivity (not configurable).
 
 ## Repository
 
@@ -94,7 +97,7 @@ BMW E46 miscaptioned two different colours across two events before Marc caught 
 ## Key files
 
 ### Images
-- `src/assets/images/<category>/` — originals (Git LFS), grouped per event
+- `src/assets/images/<category>/` — originals (git-ignored, synced from Cloudflare R2), grouped per event
 - `src/data/categories.json` — **single source of truth for category wiring.** Lists
   `website` (folders that appear on the site + in the Instagram rotation) and
   `instagramOnly` (posted to Instagram only), plus human `labels`. Every script
@@ -178,20 +181,23 @@ Marc turned it off — partly a preference call, partly because the video was co
 the Git LFS budget getting eaten: `*.mp4` was LFS-tracked but the deploy cache key only
 covered `src/assets/images/**`, so every new weekly video silently missed the cache and got
 re-fetched from LFS on every single deploy afterwards, not just once. If a reel-type feature
-ever comes back, don't repeat that — either scope the cache key to cover whatever new
-LFS-tracked path is added, or (better, given the ongoing R2 migration) keep video out of git
-entirely and serve it from R2 instead.
+ever comes back, don't repeat that — keep video out of git entirely and serve it from R2
+instead, same as photos now (see "Images" above).
 
 ### Auto-captioning
 - `scripts/auto-captions.cjs` — scans for images with no caption entry, adds placeholders to `captions.json`.
-- `.github/workflows/auto-captions.yml` — triggers on push to `src/assets/images/**`.
+- `.github/workflows/auto-captions.yml` — runs every 6 hours + manual dispatch (used to
+  trigger on push to `src/assets/images/**`, but that path is git-ignored now — see "Images"
+  above — so a schedule is the only way to notice new photos uploaded to R2). Syncs
+  filenames from R2 (`--shallow`, no image bytes) before scanning.
 
 ### Category wiring validation
 - `scripts/validate.cjs` + `.github/workflows/validate.yml` — runs on every push to `src/**`
-  or `scripts/**` (no commits, no LFS). Fails the check if a photo folder or an event
-  references a category missing from `src/data/categories.json`; warns about photos with no
-  or empty captions (placeholders won't post to Instagram). `instagram-post.cjs` skips images
-  whose caption is still empty rather than posting a shell post.
+  or `scripts/**`. Syncs filenames from R2 (`--shallow`) before validating, same reason as
+  auto-captions above. Fails the check if a photo folder or an event references a category
+  missing from `src/data/categories.json`; warns about photos with no or empty captions
+  (placeholders won't post to Instagram). `instagram-post.cjs` skips images whose caption is
+  still empty rather than posting a shell post.
 
 > Note: scripts use the `.cjs` extension because `package.json` has `"type": "module"`.
 > CommonJS `require()` scripts must be `.cjs`, not `.js`.
@@ -245,8 +251,14 @@ Make.com handles auth cleanly. Keep the Meta app in Development mode.
 ## Common workflows
 
 ### New photos pushed by Marc
-1. `git pull` (make sure LFS pulls the actual image files, not just pointers)
-2. Find filenames missing from `captions.json` (the auto-captions Action adds placeholders)
+1. **Upload originals to R2** — `node scripts/upload-photos-to-r2.mjs <category> <folder>`
+   (needs `R2_ACCOUNT_ID`/`R2_ACCESS_KEY_ID`/`R2_SECRET_ACCESS_KEY`/`R2_BUCKET`; locally these
+   live in macOS Keychain as `trackmarc-r2-*`). This replaces `git add` + push of image
+   files entirely — nothing under `src/assets/images/` is committed to git any more (see
+   "Images" above). Then `node scripts/sync-images-from-r2.mjs` to pull the new originals
+   down locally for the next steps.
+2. Find filenames missing from `captions.json` (the auto-captions Action adds placeholders,
+   though it now runs on a schedule rather than on push — see "Auto-captioning" above)
 3. **Downscale before captioning** — run
    `powershell -ExecutionPolicy Bypass -File scripts/resize-for-review.ps1 -SrcDir <source> -OutDir <scratch-dir>`
    (uses .NET System.Drawing, no npm install needed). The site never serves anything above
@@ -258,7 +270,8 @@ Make.com handles auth cleanly. Keep the Meta app in Development mode.
    script is broken and there's no time to fix it.
 5. **Spot-check the generated captions** against the actual photos before pushing — open a
    handful (especially unusual cars) and confirm Gemini got them right; fix any it didn't.
-6. Commit and push
+6. Commit and push (this only ever commits `captions.json`/`instagram-captions.json` now —
+   text, so no LFS-style cost regardless of batch size)
 7. **New event/category?** (not just adding to an existing one) — add the category to
    `src/data/categories.json` (the single source of truth: `website` list + a `labels`
    entry; use `instagramOnly` for Instagram-only folders), plus a new entry in

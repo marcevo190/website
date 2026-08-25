@@ -12,11 +12,10 @@ on:
   workflow_dispatch:
   # GitHub evicts a cache after 7 days with no read/restore, no exception, and
   # this isn't a setting anything can override. During a quiet stretch with
-  # no pushes, both the LFS cache and the watermark cache would otherwise
-  # lapse, so the very next push after the gap pays the full one-time rebuild
-  # cost again (confirmed happening on 2026-08-22, after ~2 weeks blocked on
-  # the LFS budget). Twice a week keeps them touched with margin either side
-  # of the 7-day window even if one run happens to fail.
+  # no pushes, the watermark cache below would otherwise lapse, so the very
+  # next push after the gap pays the full one-time rebuild cost again. Twice
+  # a week keeps it touched with margin either side of the 7-day window even
+  # if one run happens to fail.
   schedule:
     - cron: '0 3 * * 0,3'  # Sunday and Wednesday, 3am UTC
 
@@ -24,15 +23,15 @@ concurrency:
   # Own group, not track-bot-commits — this workflow never commits or pushes
   # to git (it only builds and runs `wrangler deploy`), so it doesn't need to
   # serialize against the workflows that do (auto-captions, Instagram post/
-  # boost, reel) and share that group to avoid racing each other's pushes.
-  # Sharing it anyway caused a real collision: a push touching
-  # src/assets/images/** fires both deploy.yml and auto-captions.yml, they'd
-  # compete for the same one-slot queue, and deploy would get cancelled
-  # (happened twice in one session, 2026-08-23). cancel-in-progress: true is
-  # safe here in a way it isn't for the bot-commit group — a newer deploy
-  # always supersedes an older one, unlike cancelling a git push mid-flight,
-  # so a burst of quick pushes now just deploys the last one instead of
-  # queuing every intermediate build.
+  # boost) and share that group to avoid racing each other's pushes. Sharing
+  # it anyway caused a real collision: a push touching src/assets/images/**
+  # fires both deploy.yml and auto-captions.yml, they'd compete for the same
+  # one-slot queue, and deploy would get cancelled (happened twice in one
+  # session, 2026-08-23). cancel-in-progress: true is safe here in a way it
+  # isn't for the bot-commit group — a newer deploy always supersedes an
+  # older one, unlike cancelling a git push mid-flight, so a burst of quick
+  # pushes now just deploys the last one instead of queuing every
+  # intermediate build.
   group: cloudflare-deploy
   cancel-in-progress: true
 
@@ -42,46 +41,36 @@ jobs:
     permissions:
       contents: read
     steps:
-      # lfs:false here on purpose — actions/checkout's built-in LFS fetch has
-      # no cache of its own, so it re-downloads the ENTIRE photo library from
-      # GitHub's LFS server on every single push. GitHub's free LFS bandwidth
-      # quota is small (1GB/month) and a day of active editing (many small
-      # pushes) blew through it in one session, breaking every deploy until
-      # the quota resets. Fetching LFS objects ourselves below, through a
-      # cache, means only new/changed photos actually hit the LFS server —
-      # unchanged ones get restored from the cache instead.
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          lfs: false
+          node-version: "22"
+          cache: npm
 
-      - name: Setup Git LFS
-        run: git lfs install --local
+      - name: Install dependencies
+        run: npm ci
 
-      # Restores previously-downloaded LFS blobs into .git/lfs before we ask
-      # git to pull — git lfs pull only fetches objects it can't already find
-      # locally, so a cache hit here means little to no LFS bandwidth used at
-      # all. Key doesn't need to be exact: restore-keys falls back to the
-      # most recent cache, and `git lfs pull` fills in whatever's missing.
+      # Originals live in Cloudflare R2 now, not git — moved off Git LFS
+      # 2026-08-26 to remove the recurring LFS-bandwidth-cost risk (a real
+      # incident: a day of active editing blew through the free LFS quota
+      # and blocked every deploy until it reset). This downloads the current
+      # set into src/assets/images/ before the build, replacing the old
+      # `git lfs pull` step.
       #
-      # Key must cover every LFS-tracked path `git lfs pull` below actually
-      # fetches. Used to also need public/reels/weekly.mp4 — that path had a
-      # real bug where a new weekly video (different hash every Sunday) never
-      # landed in this images-only-keyed cache, so every deploy afterwards
-      # silently re-downloaded the same video from LFS again for nothing.
-      # Moot now that the weekly reel feature is removed (2026-08-25) — no
-      # more LFS-tracked video in the repo — but if anything ever adds
-      # LFS-tracked content outside src/assets/images/ again, extend this key
-      # to cover it too, or this same bug comes back.
-      - name: Cache Git LFS objects
-        uses: actions/cache@v4
-        with:
-          path: .git/lfs
-          key: lfs-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
-          restore-keys: |
-            lfs-${{ runner.os }}-
-
-      - name: Git LFS pull
-        run: git lfs pull
+      # No caching here on purpose: R2 has zero egress fees, so
+      # re-downloading everything each deploy costs nothing in money, only a
+      # few minutes of build time. The watermark cache below is what
+      # actually matters for build speed, and it still works fine — the
+      # downloaded bytes are identical each time a photo hasn't changed, so
+      # its content hash (and therefore the cache key) doesn't move.
+      - name: Sync images from R2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: node scripts/sync-images-from-r2.mjs
 
       # Cache the watermark outputs between runs. src/assets/watermarked/ and
       # public/ig/ are git-ignored (regenerated at build), so without this the
@@ -106,14 +95,6 @@ jobs:
           key: watermark-v3-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
           restore-keys: |
             watermark-v3-${{ runner.os }}-
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
 
       - name: Build site
         run: npm run build

@@ -1,9 +1,15 @@
 name: Auto-add caption placeholders
 
+# Used to trigger on `push: paths: src/assets/images/**`, but that path
+# stopped being git-tracked entirely 2026-08-26 (photos live in Cloudflare
+# R2 now, not git — see CLAUDE.md). A push can never touch that path again,
+# so that trigger would've silently gone dead forever. Runs on a schedule
+# instead and lists R2 directly to find anything uncaptioned.
+
 on:
-  push:
-    paths:
-      - 'src/assets/images/**'
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
 
 # Serialize with the post/boost workflows — see concurrency note in
 # instagram-post.yml.
@@ -19,12 +25,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Filenames only, no image bytes — creates empty placeholder files
+      # matching what's actually in the R2 bucket so auto-captions.cjs's
+      # readdirSync-based scan below sees the real current set.
+      - name: Sync image filenames from R2 (shallow)
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: node scripts/sync-images-from-r2.mjs --shallow
 
       - name: Add placeholders for uncaptioned images
         run: node scripts/auto-captions.cjs
@@ -35,5 +55,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git add src/data/captions.json
           git diff --staged --quiet || git commit -m "[CI Skip] chore: add caption placeholders for new images"
-          # No pull --rebase here — same LFS pointer reason as instagram-post.yml.
+          # No pull --rebase here — same reason as instagram-post.yml: the
+          # shared concurrency group already serializes bot commits.
           git push

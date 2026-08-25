@@ -21,12 +21,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: false  # Don't download image files — we only need filenames
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Filenames only, no image bytes — photos live in R2 now, not git (see
+      # CLAUDE.md). instagram-post.cjs's collectImages() would otherwise see
+      # every category as empty and never post anything.
+      - name: Sync image filenames from R2 (shallow)
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: node scripts/sync-images-from-r2.mjs --shallow
 
       - name: Post next photo to Instagram
         env:
@@ -39,8 +53,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git add post-queue.json
           git diff --staged --quiet || git commit -m "[CI Skip] chore: update Instagram post queue"
-          # No pull --rebase here: with lfs:false checkouts git misreads the
-          # LFS-tracked weekly.mp4 as unstaged changes and refuses to rebase.
-          # The shared concurrency group (track-bot-commits) serializes bot
-          # commits, so a plain push can't race another one.
+          # No pull --rebase here — the shared concurrency group
+          # (track-bot-commits) already serializes bot commits, so a plain
+          # push can't race another one.
           git push
