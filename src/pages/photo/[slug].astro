@@ -5,6 +5,7 @@ import type { ImageMetadata } from 'astro';
 import { getCaption } from '../../data/captions';
 import { events } from '../../data/events';
 import ShareButtons from '../../components/ShareButtons.astro';
+import SmartBackLink from '../../components/SmartBackLink.astro';
 import { extractTags, tagSlug } from '../../data/tags';
 
 // One indexable page per photo — unique title/description, ImageObject
@@ -106,9 +107,11 @@ const imageSchema = {
     <div class="section photo-page">
 
       <div class="photo-page-nav">
-        <a href={event ? `/events/${event.slug}` : '/gallery'} class="photo-back">
-          &larr; {event ? event.name : 'Gallery'}
-        </a>
+        <SmartBackLink
+          href={event ? `/events/${event.slug}` : '/gallery'}
+          label={event ? event.name : 'Gallery'}
+          class="photo-back"
+        />
         <div class="photo-page-arrows">
           {prevSlug && <a href={`/photo/${prevSlug}`} rel="prev">&larr; Previous</a>}
           {nextSlug && <a href={`/photo/${nextSlug}`} rel="next">Next &rarr;</a>}

@@ -21,3 +21,19 @@ export const captions: Record<string, CaptionEntry> = captionsData;
 export function getCaption(filename: string): CaptionEntry | null {
   return captions[filename] ?? null;
 }
+
+export type PlateEntry = { filename: string; plate: string; title: string; slug: string };
+
+// Shared by /plate and the homepage's search box — every photo that has a
+// plate on record, with the slug pre-computed so results can link straight
+// to /photo/<slug>.
+export function getPlateIndex(): PlateEntry[] {
+  return Object.entries(captions)
+    .filter(([, c]) => c.plate && c.plate.trim().length > 0)
+    .map(([filename, c]) => ({
+      filename,
+      plate: c.plate!,
+      title: c.title,
+      slug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    }));
+}

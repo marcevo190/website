@@ -6,6 +6,7 @@ import { getCaption } from '../../data/captions';
 import categoriesData from '../../data/categories.json';
 import { TAGS, extractTags, tagSlug } from '../../data/tags';
 import ShareButtons from '../../components/ShareButtons.astro';
+import SmartBackLink from '../../components/SmartBackLink.astro';
 
 // getStaticPaths runs in an isolated scope during route collection and can't
 // reliably call helper functions declared elsewhere in this frontmatter, so
@@ -59,7 +60,7 @@ const tagPageUrl = new URL(Astro.url.pathname, Astro.site).href;
         <p class="section-subtitle">
           {photos.length} photograph{photos.length !== 1 ? 's' : ''} across every gallery.
         </p>
-        <p class="tag-back"><a href="/gallery">&larr; Back to the full gallery</a></p>
+        <p class="tag-back"><SmartBackLink href="/gallery" label="Back to the full gallery" /></p>
         <p class="share-label">Share this search</p>
         <ShareButtons url={tagPageUrl} title={`${tag} — TrackMarc`} text={`Every ${tag} photo on TrackMarc`} />
       </div>

@@ -1,0 +1,29 @@
+---
+// A "back" link that uses real browser history when the visitor came from
+// elsewhere on this site, so the previous page's scroll position is
+// restored the way a genuine back-button press would — plain forward links
+// to a fixed URL always reload at the top, which is what this replaces.
+// Falls back to a normal link to `href` when there's nothing useful to go
+// back to (arrived via a shared link, search engine, or a new tab).
+interface Props {
+  href: string;
+  label: string;
+  class?: string;
+}
+const { href, label, class: className } = Astro.props;
+const id = `smart-back-${Math.random().toString(36).slice(2, 9)}`;
+---
+<a href={href} class={className} id={id}>&larr; {label}</a>
+<script define:vars={{ id }}>
+  const link = document.getElementById(id);
+  if (link && document.referrer && window.history.length > 1) {
+    try {
+      if (new URL(document.referrer).origin === window.location.origin) {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          history.back();
+        });
+      }
+    } catch {}
+  }
+</script>

@@ -5,6 +5,7 @@ import type { ImageMetadata } from 'astro';
 import { getCaption } from '../../data/captions';
 import { events } from '../../data/events';
 import ShareButtons from '../../components/ShareButtons.astro';
+import SmartBackLink from '../../components/SmartBackLink.astro';
 import { extractTags, tagSlug } from '../../data/tags';
 
 export function getStaticPaths() {
@@ -66,6 +67,7 @@ const eventPageUrl = new URL(Astro.url.pathname, Astro.site).href;
 
     <!-- INTRO -->
     <div class="section" style="padding-bottom: 1rem;">
+      <p class="event-back"><SmartBackLink href="/events" label="All Events" /></p>
       <div class="event-intro">
         {event.intro.map(par => <p>{par}</p>)}
         <div class="event-classes">
@@ -291,6 +293,17 @@ const eventPageUrl = new URL(Astro.url.pathname, Astro.site).href;
       font-size: 0.85rem;
       color: var(--text-muted);
       letter-spacing: 0.04em;
+    }
+    .event-back {
+      margin-bottom: 1rem;
+    }
+    .event-back a {
+      font-size: 0.8rem;
+      color: var(--text-dim, var(--text-muted));
+      text-decoration: none;
+    }
+    .event-back a:hover {
+      color: var(--accent);
     }
     .event-intro {
       max-width: 46rem;

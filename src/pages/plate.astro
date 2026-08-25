@@ -1,20 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { captions } from '../data/captions';
+import { getPlateIndex } from '../data/captions';
 
 // Registration search reads from captions.ts directly (not a photo glob) since
 // it only needs the small set of entries that actually have a plate — no need
 // to touch every image file for this. New captions get a plate when visible
 // (see scripts/caption-batch.mjs); nothing has been backfilled for photos
 // captioned before this existed.
-const plates = Object.entries(captions)
-  .filter(([, c]) => c.plate && c.plate.trim().length > 0)
-  .map(([filename, c]) => ({
-    filename,
-    plate: c.plate!,
-    title: c.title,
-    slug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-  }));
+const plates = getPlateIndex();
 ---
 
 <Layout
