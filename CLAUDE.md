@@ -165,18 +165,16 @@ BMW E46 miscaptioned two different colours across two events before Marc caught 
   Google Images index the homepage slides. The hero shuffles to a 10-photo subset each
   build; the `alt` lookup uses `getCaption(filename)`.
 
-### Weekly Instagram Reel
-- `scripts/instagram-reel.cjs` — `build` phase makes a 9:16 slideshow (ffmpeg) from the last
-  7 posted photos (fetched from trackmarc.com/ig/, no LFS needed) → `public/reels/weekly.mp4`;
-  `send` phase fires the `MAKE_REEL_WEBHOOK_URL` webhook with `{ video_url, caption }`.
-- `.github/workflows/instagram-reel.yml` — Sundays 5:30pm UTC. Commits the video (no
-  `[skip ci]` — Cloudflare must build to serve it), waits ~8 min, then sends. Scheduled runs
-  no-op until the `MAKE_REEL_WEBHOOK_URL` repo secret exists; manual dispatch builds anyway
-  for testing. Requires a separate Make.com scenario with an "Instagram — Create a Reel"
-  module (the daily photo scenario cannot post video).
-- `weekly.mp4` is **Git LFS-tracked** (`*.mp4` in `.gitattributes`) so the ~20MB video never
-  accumulates in git history — the workflow runs `git lfs install --local` before committing
-  so the LFS blob uploads on push, and Cloudflare fetches it at build like the photos.
+### Weekly Instagram Reel — removed 2026-08-25
+Used to build a 9:16 slideshow video and auto-post it every Sunday
+(`scripts/instagram-reel.cjs`, `.github/workflows/instagram-reel.yml`, `public/reels/`).
+Marc turned it off — partly a preference call, partly because the video was contributing to
+the Git LFS budget getting eaten: `*.mp4` was LFS-tracked but the deploy cache key only
+covered `src/assets/images/**`, so every new weekly video silently missed the cache and got
+re-fetched from LFS on every single deploy afterwards, not just once. If a reel-type feature
+ever comes back, don't repeat that — either scope the cache key to cover whatever new
+LFS-tracked path is added, or (better, given the ongoing R2 migration) keep video out of git
+entirely and serve it from R2 instead.
 
 ### Auto-captioning
 - `scripts/auto-captions.cjs` — scans for images with no caption entry, adds placeholders to `captions.json`.

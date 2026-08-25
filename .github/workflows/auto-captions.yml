@@ -5,7 +5,7 @@ on:
     paths:
       - 'src/assets/images/**'
 
-# Serialize with the post/boost/reel workflows — see concurrency note in
+# Serialize with the post/boost workflows — see concurrency note in
 # instagram-post.yml.
 concurrency:
   group: track-bot-commits

@@ -6,7 +6,7 @@ on:
     - cron: '0 17 * * *'  # Daily at 5pm UTC — second post now that there's enough photo backlog
   workflow_dispatch:        # Manual trigger from GitHub UI
 
-# Serialize with the boost/auto-captions/reel workflows: all of them commit
+# Serialize with the boost/auto-captions workflows: all of them commit
 # and push to main, and concurrent pushes to the same tracked files can race.
 # cancel-in-progress: false means a second run simply waits its turn.
 concurrency:

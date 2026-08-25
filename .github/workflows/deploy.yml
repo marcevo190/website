@@ -62,6 +62,16 @@ jobs:
       # locally, so a cache hit here means little to no LFS bandwidth used at
       # all. Key doesn't need to be exact: restore-keys falls back to the
       # most recent cache, and `git lfs pull` fills in whatever's missing.
+      #
+      # Key must cover every LFS-tracked path `git lfs pull` below actually
+      # fetches. Used to also need public/reels/weekly.mp4 — that path had a
+      # real bug where a new weekly video (different hash every Sunday) never
+      # landed in this images-only-keyed cache, so every deploy afterwards
+      # silently re-downloaded the same video from LFS again for nothing.
+      # Moot now that the weekly reel feature is removed (2026-08-25) — no
+      # more LFS-tracked video in the repo — but if anything ever adds
+      # LFS-tracked content outside src/assets/images/ again, extend this key
+      # to cover it too, or this same bug comes back.
       - name: Cache Git LFS objects
         uses: actions/cache@v4
         with:
