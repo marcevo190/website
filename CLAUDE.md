@@ -133,19 +133,22 @@ BMW E46 miscaptioned two different colours across two events before Marc caught 
   whenever a new event's photos are added**, and drop old ones once their backlog clears.
 - `post-queue.json` — tracks posted filenames (committed to repo, updated by the Action).
 - `.github/workflows/instagram-post.yml` — runs **twice daily, 8am and 5pm UTC** (enough photo backlog now to support two posts a day).
-- `instagram-post.cjs` accepts an optional category name as a CLI arg (e.g.
-  `node scripts/instagram-post.cjs bimmerfest`) to post from just that category, bypassing
-  the normal rotation — used for temporary "boost" workflows below.
-- `.github/workflows/instagram-post-boost.yml` — temporary 5x/day posting for a fresh
-  category (currently `retrostock`, repurposed 2026-08-26 after `bimmerfest` finished — see
-  known-cars.json-style history in the workflow's own header comment), on top of the normal
-  2x/day rotation, self-expiring after the backlog clears or the expiry date passes. **Was
-  deleted 2026-08-09, then restored the same day** — the deletion was based on "all photos
-  committed to the repo", which was wrongly read as "all photos posted"; only 11 of 127
-  bimmerfest photos had actually posted. Check `post-queue.json` against the category's
-  source folder before ever deleting this again — don't infer posted-count from commit
-  messages. When a category finishes, this workflow gets repurposed to the next one worth
-  boosting rather than deleted and recreated.
+- `instagram-post.cjs` accepts a **priority list** of category names as CLI args (e.g.
+  `node scripts/instagram-post.cjs retrostock drift-games`) — posts from the first category
+  in the list that still has unposted photos, automatically falling through to the next once
+  one's exhausted. With no args, falls back to the normal full-rotation `pickNext()`. Added
+  2026-08-26 so boost workflows chain to the next category on their own instead of silently
+  posting nothing once the current one clears (see the bimmerfest incident below).
+- `.github/workflows/instagram-post-boost.yml` — temporary 5x/day posting for a priority list
+  of fresh categories (currently `retrostock` then `drift-games`, set 2026-08-26 after
+  `bimmerfest` finished), on top of the normal 2x/day rotation, self-expiring after the whole
+  list clears or the expiry date passes. **Was deleted 2026-08-09, then restored the same
+  day** — the deletion was based on "all photos committed to the repo", which was wrongly
+  read as "all photos posted"; only 11 of 127 bimmerfest photos had actually posted. Check
+  `post-queue.json` against the category's source folder before ever deleting this again —
+  don't infer posted-count from commit messages. Add more categories to the end of the
+  priority list (both here and in the workflow's `run:` line) to chain further ones instead
+  of waiting for the list to empty and repurposing by hand.
 - `.github/workflows/deploy.yml` — **added 2026-08-09** to deploy the Worker on every push
   to `main` (build + `wrangler deploy`). Needs the `CLOUDFLARE_API_TOKEN` repo secret. See
   "Deployment — CRITICAL" above. Without this workflow (or a manual `npm run deploy`),

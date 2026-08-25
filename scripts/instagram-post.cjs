@@ -282,7 +282,13 @@ function pickFollowCta(postedCount) {
 // workflow to guarantee a fresh event actually gets extra posts today rather
 // than only nudging its odds within the general rotation.
 async function main() {
-  const categoryOverride = process.argv[2] || null;
+  // Accepts one or more categories, in priority order (e.g. "retrostock
+  // drift-games") — used by "boost" workflows to fast-track a fresh event's
+  // backlog, then automatically fall through to the next category once the
+  // first is exhausted, rather than silently posting nothing (what happened
+  // with bimmerfest before someone noticed and swapped the category by
+  // hand). With no args, falls back to the normal full-rotation pickNext().
+  const categoryPriority = process.argv.slice(2);
 
   const queuePath = 'post-queue.json';
   const queue     = fs.existsSync(queuePath)
@@ -291,17 +297,23 @@ async function main() {
 
   const captions   = loadCaptions();
   const igCaptions = loadInstagramCaptions();
-  let images       = collectImages();
-  if (categoryOverride) {
-    images = images.filter(i => i.category === categoryOverride);
-    if (!images.length) {
-      console.log(`No images found in category "${categoryOverride}".`);
-      return;
+  const allImages  = collectImages();
+
+  let next = null;
+  if (categoryPriority.length) {
+    for (const category of categoryPriority) {
+      const inCategory = allImages.filter(i => i.category === category);
+      if (!inCategory.length) {
+        console.log(`No images found in category "${category}" — skipping to next in priority list.`);
+        continue;
+      }
+      next = inCategory.find(i => !queue.posted.includes(i.filename)) ?? null;
+      if (next) break;
+      console.log(`Category "${category}" exhausted — falling through to next in priority list.`);
     }
+  } else {
+    next = pickNext(allImages, queue.posted);
   }
-  const next = categoryOverride
-    ? images.find(i => !queue.posted.includes(i.filename)) ?? null
-    : pickNext(images, queue.posted);
 
   if (!next) {
     console.log('All images have been posted — queue complete.');
