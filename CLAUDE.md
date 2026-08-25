@@ -137,12 +137,15 @@ BMW E46 miscaptioned two different colours across two events before Marc caught 
   `node scripts/instagram-post.cjs bimmerfest`) to post from just that category, bypassing
   the normal rotation — used for temporary "boost" workflows below.
 - `.github/workflows/instagram-post-boost.yml` — temporary 5x/day posting for a fresh
-  category (currently `bimmerfest`), on top of the normal 2x/day rotation, self-expiring
-  after the backlog clears or the expiry date passes. **Was deleted 2026-08-09, then
-  restored the same day** — the deletion was based on "all photos committed to the repo",
-  which was wrongly read as "all photos posted"; only 11 of 127 bimmerfest photos had
-  actually posted. Check `post-queue.json` against the category's source folder before
-  ever deleting this again — don't infer posted-count from commit messages.
+  category (currently `retrostock`, repurposed 2026-08-26 after `bimmerfest` finished — see
+  known-cars.json-style history in the workflow's own header comment), on top of the normal
+  2x/day rotation, self-expiring after the backlog clears or the expiry date passes. **Was
+  deleted 2026-08-09, then restored the same day** — the deletion was based on "all photos
+  committed to the repo", which was wrongly read as "all photos posted"; only 11 of 127
+  bimmerfest photos had actually posted. Check `post-queue.json` against the category's
+  source folder before ever deleting this again — don't infer posted-count from commit
+  messages. When a category finishes, this workflow gets repurposed to the next one worth
+  boosting rather than deleted and recreated.
 - `.github/workflows/deploy.yml` — **added 2026-08-09** to deploy the Worker on every push
   to `main` (build + `wrangler deploy`). Needs the `CLOUDFLARE_API_TOKEN` repo secret. See
   "Deployment — CRITICAL" above. Without this workflow (or a manual `npm run deploy`),

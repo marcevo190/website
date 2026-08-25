@@ -1,17 +1,17 @@
-name: Instagram Bimmerfest Boost
+name: Instagram Retrostock Boost
 
-# Temporary: posts Bimmerfest photos specifically, 5x/day, on top of the
+# Temporary: posts Retrostock photos specifically, 5x/day, on top of the
 # normal twice-daily instagram-post.yml schedule, so the event gets real
 # traction while it's still fresh rather than trickling out over ~2 months in
 # the general rotation. Self-expires below — delete this file once the
-# bimmerfest category is exhausted or the expiry date passes, whichever
+# retrostock category is exhausted or the expiry date passes, whichever
 # comes first.
 #
-# Restored 2026-08-09: this workflow was deleted on 2026-08-09 on the
-# mistaken belief that "all photos committed [to the repo]" meant "all
-# photos posted" — it didn't. Of 127 Bimmerfest photos, only 11 had actually
-# posted to Instagram (116 still pending) when it was removed. Bumped from
-# 4x/day to 5x/day since the backlog is bigger than expected.
+# Repurposed 2026-08-26: this workflow previously boosted Bimmerfest (127
+# photos, finished 2026-08-25 19:56 UTC — DSC_6107-Enhanced-NR.jpg was the
+# last one posted). Same pattern, now pointed at Retrostock (136 photos, 0
+# posted as of 2026-08-26). At 5/day that's ~28 days; expiry below gives it
+# margin beyond that.
 
 concurrency:
   group: track-bot-commits
@@ -37,10 +37,10 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "active=true" >> "$GITHUB_OUTPUT"
-          elif [ "$(date -u +%Y-%m-%d)" \< "2026-09-20" ]; then
+          elif [ "$(date -u +%Y-%m-%d)" \< "2026-10-10" ]; then
             echo "active=true" >> "$GITHUB_OUTPUT"
           else
-            echo "Boost window expired (past 2026-09-20) — delete .github/workflows/instagram-post-boost.yml"
+            echo "Boost window expired (past 2026-10-10) — delete .github/workflows/instagram-post-boost.yml"
             echo "active=false" >> "$GITHUB_OUTPUT"
           fi
 
@@ -55,11 +55,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Post next Bimmerfest photo to Instagram
+      - name: Post next Retrostock photo to Instagram
         if: steps.expiry.outputs.active == 'true'
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
-        run: node scripts/instagram-post.cjs bimmerfest
+        run: node scripts/instagram-post.cjs retrostock
 
       - name: Commit updated queue
         if: steps.expiry.outputs.active == 'true'
@@ -67,6 +67,6 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add post-queue.json
-          git diff --staged --quiet || git commit -m "[CI Skip] chore: update Instagram post queue (bimmerfest boost)"
+          git diff --staged --quiet || git commit -m "[CI Skip] chore: update Instagram post queue (retrostock boost)"
           # No pull --rebase here — same LFS pointer reason as instagram-post.yml.
           git push
