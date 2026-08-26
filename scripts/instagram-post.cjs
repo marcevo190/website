@@ -213,7 +213,14 @@ function generateTagsAndMentions(title, caption, category) {
 // normal rotation once all are worked through. Keep the newest/most
 // time-sensitive event first. Update this after each new event — add the
 // new category, and drop old ones once their backlogs have cleared.
-const PRIORITY_CATEGORIES = ['bimmerfest', 'iccr'];
+//
+// Kept in sync with instagram-post-boost.yml's priority list (2026-08-26):
+// bimmerfest finished, so this general twice-daily rotation now shares the
+// same retrostock -> drift-games order as the boost workflow. Otherwise this
+// list silently outranks the boost's priority (as it did when it still said
+// ['bimmerfest', 'iccr'] after bimmerfest ran out — iccr, not retrostock,
+// started winning every non-boost post).
+const PRIORITY_CATEGORIES = ['retrostock', 'drift-games'];
 
 // ── Pick next image ────────────────────────────────────────────────────────
 function pickNext(images, posted) {
