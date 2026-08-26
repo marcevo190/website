@@ -96,6 +96,25 @@ jobs:
           restore-keys: |
             watermark-v3-${{ runner.os }}-
 
+      # Astro has its own image-transform cache (resize/WebP encode), kept at
+      # node_modules/.astro/assets/ — separate from the watermark cache above,
+      # which only covers watermark.mjs's own output. Nothing restores this
+      # directory between runs (npm ci wipes node_modules fresh every time),
+      # so every deploy re-encoded all ~3,836 image variants from scratch even
+      # when almost no photo had changed — that's what made "Build site" take
+      # 13+ minutes on a run that only added a handful of new photos.
+      # Cache filenames are content-addressed (hash of pixel data + transform
+      # params), so a restore-keys fallback still gives correct cache hits for
+      # every unchanged photo even when the exact key misses on a new one —
+      # same reasoning as the watermark cache's restore-keys above.
+      - name: Cache Astro image transforms
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.astro/assets
+          key: astro-image-cache-v1-${{ runner.os }}-${{ hashFiles('src/assets/images/**') }}
+          restore-keys: |
+            astro-image-cache-v1-${{ runner.os }}-
+
       - name: Build site
         run: npm run build
 
