@@ -132,13 +132,25 @@ jobs:
       # another already had the new one). Purging everything right after
       # deploy forces every PoP to fetch fresh on the next request instead of
       # waiting out its own cache window.
+      #
+      # Uses a separate, single-purpose token (CLOUDFLARE_CACHE_PURGE_TOKEN)
+      # rather than adding Cache Purge to the main CLOUDFLARE_API_TOKEN —
+      # adding it as a 24th permission to that already-sprawling token got a
+      # persistent 401 "Authentication error" from Cloudflare's API (code
+      # 10000) that never cleared, even after 20+ minutes and a full re-run,
+      # while every other permission on that token kept working fine. A
+      # brand new token with just this one permission worked immediately.
+      # Never diagnosed the exact cause, but a dedicated minimal token is
+      # better practice anyway (least privilege) — if this ever needs
+      # re-creating, Zone > Cache Purge > Purge, resource: the trackmarc.com
+      # zone (or All zones), is the entire permission set required.
       - name: Purge Cloudflare cache
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_CACHE_PURGE_TOKEN: ${{ secrets.CLOUDFLARE_CACHE_PURGE_TOKEN }}
           CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
           curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
-            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_CACHE_PURGE_TOKEN}" \
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}' \
             --fail-with-body
