@@ -98,6 +98,21 @@ export const events: EventDef[] = [
     classes: ['Drifting', 'Tandem Battles'],
     description: 'Photo coverage of the 2026 Tire Streets Drift Games Summer Bash at Mondello Park by Marc Ronan — over 150 drivers, big tandems, across all four track layouts.',
   },
+  {
+    slug: '86fest-2026',
+    name: '86 Fest 2026',
+    shortLabel: '86 Fest',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: 'September 2026',
+    categories: ['86fest'],
+    hero: 'DSC_8631-Enhanced-NR.jpg',
+    intro: [
+      'Ireland\'s Toyota festival at Mondello Park, hosted by JDM Classics and built entirely around the AE86 and the wider world of Japanese car culture it inspired — Show & Shine, on-track sessions, and a proper community meet all in one day.',
+      'Headline guests Shinji and Masayo Minowa, D1GP legends from Japan, brought a huge moment for the Irish drift scene. The paddock ran deep with AE86 Levins and Truenos in every colour, alongside E70 and AE101 Corollas, a Starlet, and an Altezza.',
+    ],
+    classes: ['AE86', 'JDM Classics', 'Show & Shine', 'On-Track'],
+    description: 'Photo coverage of 86 Fest 2026 at Mondello Park by Marc Ronan — AE86s and JDM classics, hosted by JDM Classics with headline guests Shinji and Masayo Minowa.',
+  },
 ];
 
 export function getEvent(slug: string): EventDef | undefined {
