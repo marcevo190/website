@@ -1,6 +1,6 @@
-name: Instagram Retrostock Boost
+name: Instagram 86 Fest Boost
 
-# Temporary: posts Retrostock photos specifically, 5x/day, on top of the
+# Temporary: posts 86 Fest photos specifically, 5x/day, on top of the
 # normal twice-daily instagram-post.yml schedule, so the event gets real
 # traction while it's still fresh rather than trickling out over ~2 months in
 # the general rotation. Self-expires below — delete this file once the whole
@@ -10,13 +10,14 @@ name: Instagram Retrostock Boost
 # instagram-post.cjs takes a priority list of categories now (2026-08-26) —
 # it posts from the first one in the list that still has unposted photos, and
 # automatically falls through to the next once one's exhausted. So this
-# workflow no longer needs a manual category swap when one finishes: retrostock
-# (136 photos, 0 posted as of 2026-08-26) is first, then drift-games (351
-# photos) automatically picks up once retrostock clears. Add more categories
-# to the end of the priority list below if you want to chain further ones.
+# workflow no longer needs a manual category swap when one finishes.
 #
-# Repurposed 2026-08-26: previously boosted Bimmerfest (127 photos, finished
-# 2026-08-25 19:56 UTC — DSC_6107-Enhanced-NR.jpg was the last one posted).
+# Repurposed 2026-09-07: 86 Fest only has its first batch of 20 photos in as
+# of this change (Marc's adding more later the same day) but it's the
+# freshest event so it jumps to the front regardless — then retrostock (51
+# pending as of this change) and drift-games (351 pending, untouched) pick up
+# after, in that order. Previously boosted retrostock -> drift-games (started
+# 2026-08-26, following bimmerfest which finished 2026-08-25 19:56 UTC).
 
 concurrency:
   group: track-bot-commits
@@ -80,7 +81,7 @@ jobs:
         if: steps.expiry.outputs.active == 'true'
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
-        run: node scripts/instagram-post.cjs retrostock drift-games
+        run: node scripts/instagram-post.cjs 86fest retrostock drift-games
 
       - name: Commit updated queue
         if: steps.expiry.outputs.active == 'true'
