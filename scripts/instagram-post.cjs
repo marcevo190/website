@@ -223,6 +223,27 @@ function generateTagsAndMentions(title, caption, category) {
 // ['bimmerfest', 'iccr'] after bimmerfest had already run out.
 const PRIORITY_CATEGORIES = ['86fest', 'retrostock', 'drift-games'];
 
+// Categories where the next pick is random among that category's pending
+// photos, instead of the default "lowest filename number first". Posting
+// strictly in DSC-number order reads as an obvious bot pattern once anyone
+// notices; picking randomly within the category (still respecting the
+// priority order above — this category still has to be exhausted before
+// falling through to the next one) fixes that. Scoped to 86fest only, per
+// Marc's request (2026-09-07) — leave this empty once 86fest's backlog
+// clears rather than leaving it applying to whatever category is next.
+const RANDOM_PICK_CATEGORIES = ['86fest'];
+
+// Picks one photo from a category's already-unposted candidates: random if
+// the category is in RANDOM_PICK_CATEGORIES, otherwise the first by
+// filename (the long-standing default, still used everywhere else).
+function pickFromCategory(candidates, category) {
+  if (!candidates.length) return null;
+  if (RANDOM_PICK_CATEGORIES.includes(category)) {
+    return candidates[Math.floor(Math.random() * candidates.length)];
+  }
+  return candidates[0];
+}
+
 // ── Pick next image ────────────────────────────────────────────────────────
 function pickNext(images, posted) {
   const postedSet = new Set(posted);
@@ -239,7 +260,7 @@ function pickNext(images, posted) {
     // (bimmerfest) keeps taking the slot while it has pending photos; a
     // secondary priority category only gets a pick when that's exhausted.
     for (const cat of PRIORITY_CATEGORIES) {
-      const match = pending.find(p => p.category === cat);
+      const match = pickFromCategory(pending.filter(p => p.category === cat), cat);
       if (match) return match;
     }
   }
@@ -315,7 +336,7 @@ async function main() {
         console.log(`No images found in category "${category}" — skipping to next in priority list.`);
         continue;
       }
-      next = inCategory.find(i => !queue.posted.includes(i.filename)) ?? null;
+      next = pickFromCategory(inCategory.filter(i => !queue.posted.includes(i.filename)), category);
       if (next) break;
       console.log(`Category "${category}" exhausted — falling through to next in priority list.`);
     }
