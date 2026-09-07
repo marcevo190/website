@@ -122,3 +122,23 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx wrangler deploy
+
+      # Cloudflare's edge has ~300 locations worldwide, each caching
+      # independently — a fresh deploy doesn't reach all of them instantly,
+      # so a visitor can hit a PoP still serving the previous build for a few
+      # minutes after "Deploy to Cloudflare" finishes (confirmed twice: the
+      # underlying build/data was correct both times, direct curl showed
+      # cf-cache-status: HIT with stale content on one edge node while
+      # another already had the new one). Purging everything right after
+      # deploy forces every PoP to fetch fresh on the next request instead of
+      # waiting out its own cache window.
+      - name: Purge Cloudflare cache
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: |
+          curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}' \
+            --fail-with-body
