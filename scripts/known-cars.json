@@ -17,6 +17,15 @@
         "Drift Games Summer Bash 2026 (DSC_7253-Enhanced-NR.jpg, DSC_8340-Enhanced-NR-2.jpg, DSC_8344-Enhanced-NR-2.jpg, DSC_8345-Enhanced-NR-2.jpg, DSC_8358-Enhanced-NR-2.jpg)"
       ],
       "note": "Gemini alternated between 'S14' and 'S15' across these 5 photos of the same car -- confirmed S15 from the front fascia (narrow angular headlights integrated into the bumper corners, not the bulkier separated S14 units). Fixed 2026-08-26; 3 of the 5 entries were wrong (S14)."
+    },
+    {
+      "id": "car-minowa-cresta",
+      "description": "White Toyota Cresta (X100 generation), plate 99-MH-15123 (Gemini has misread this as 99-MH-15723 and 99-MH-5123 on different photos -- same plate, same car). At 86 Fest this was Shinji Minowa's (D1GP legend, headline guest) loaner car for the weekend -- he's the driver/standing next to it in all 86 Fest appearances. Same plate also appears at Drift Games Summer Bash 2026 under what's presumably a different regular owner/driver, weeks before 86 Fest -- don't apply the Minowa connection to those photos.",
+      "seenAt": [
+        "86 Fest 2026 (DSC_1440-Enhanced-NR.jpg, DSC_1450-Enhanced-NR.jpg, DSC_1454-Enhanced-NR.jpg, DSC_1462-Enhanced-NR.jpg, DSC_2517-Enhanced-NR.jpg -- all Shinji Minowa driving/loaner)",
+        "Drift Games Summer Bash 2026 (DSC_7446-Enhanced-NR.jpg -- same plate, not Minowa, predates 86 Fest)"
+      ],
+      "note": "Gemini repeatedly misidentified this as a 'Toyota Chaser' or 'Toyota Mark II' -- it's a Cresta, the third badge-engineered sibling on the same JZX100 platform (Chaser/Cresta/Mark II are near-identical apart from grille and taillight details). Fixed 2026-09-07 per Marc's correction. Also: Gemini invented a false celebrity ID for Shinji Minowa in one photo (DSC_1494-Enhanced-NR.jpg), captioning him as 'Keiichi Tsuchiya' -- a real but completely different person. Always verify a named-person ID against context (guest list, who's actually confirmed to be at the event) rather than trusting a model's specific identity claim."
     }
   ]
 }
