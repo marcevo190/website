@@ -78,6 +78,12 @@ function watermarkSVG(w, h) {
 // gets that logo instead of the plain "trackmarc.com" text — e.g. an
 // "86 Fest x TrackMarc" lockup for the 86fest category. Categories with no
 // file here are completely unaffected, still get the plain text mark.
+// Instagram-only (2026-09-08): the website's own gallery output always uses
+// the plain text mark regardless of category — a co-branded lockup reads as
+// normal on a social post but not on the main portfolio site, where every
+// event should look consistently like TrackMarc's own work. Only
+// writeIgVersion (further down) actually calls buildWatermarkLayer; the
+// site image composite always builds the plain SVG directly.
 const COLLAB_LOGOS_DIR = 'src/assets/collab-logos';
 function collabLogoPath(category) {
   const p = path.join(COLLAB_LOGOS_DIR, `${category}.png`);
@@ -120,13 +126,17 @@ async function buildWatermarkLayer(category, w, h) {
 
 // Part of the manifest comparison alongside the source photo's own hash —
 // so adding/changing a collab logo for a category forces reprocessing of
-// every photo already in that category (their existing watermark is now
-// wrong). Categories with no logo keep the exact bare-hash manifest format
-// used before this feature existed, on purpose: appending something like
-// "|text" unconditionally would change every manifest entry at once and
+// every photo already in that category (their Instagram version's watermark
+// is now wrong). Categories with no logo keep the exact bare-hash manifest
+// format used before this feature existed, on purpose: appending something
+// like "|text" unconditionally would change every manifest entry at once and
 // force a full-library reprocess for a change that only actually affects
 // two categories. This way only 86fest/retrostock's entries invalidate;
-// everything else keeps its existing cache hits untouched.
+// everything else keeps its existing cache hits untouched. Minor accepted
+// cost: since site and IG outputs share one skip-check per source photo,
+// this also re-encodes the (now pixel-identical) site image alongside the
+// IG one — not worth a second hash just to avoid re-encoding ~250 photos
+// once.
 function combinedManifestValue(hash, category) {
   const logoPath = collabLogoPath(category);
   return logoPath ? `${hash}|logo:${hashFile(logoPath)}` : hash;
@@ -188,7 +198,12 @@ try {
 
     const img  = sharp(src);
     const meta = await img.metadata();
-    const wm   = await buildWatermarkLayer(category, meta.width, meta.height);
+    // Site output always gets the plain text mark, regardless of category —
+    // collab logos (if any) only apply to the Instagram version below, via
+    // writeIgVersion's own buildWatermarkLayer call. A co-branded lockup
+    // reads as normal on a social post; on the main portfolio site every
+    // gallery should look consistently like TrackMarc's own work.
+    const wm = { input: watermarkSVG(meta.width, meta.height), blend: 'over' };
 
     await img
       .composite([wm])
