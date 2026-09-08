@@ -84,6 +84,20 @@ function collabLogoPath(category) {
   return fs.existsSync(p) ? p : null;
 }
 
+// Most photos in a shoot share the same resolution (same camera, same
+// session), so the resized-logo buffer is cached per (category, target
+// width) instead of re-decoding + re-resizing the same PNG on every single
+// photo — a few hundred photos in a category would otherwise mean a few
+// hundred redundant resizes of an identical result.
+const resizedLogoCache = new Map();
+async function getResizedLogo(logoPath, targetWidth) {
+  const key = `${logoPath}@${targetWidth}`;
+  if (!resizedLogoCache.has(key)) {
+    resizedLogoCache.set(key, sharp(logoPath).resize({ width: targetWidth }).toBuffer());
+  }
+  return resizedLogoCache.get(key);
+}
+
 // Sized as a fraction of photo width (not a fixed pixel size) so it scales
 // with whatever resolution comes in, same as the text mark's font-size
 // already does. Wider than the text mark on purpose — these are full brand
@@ -93,7 +107,7 @@ async function buildWatermarkLayer(category, w, h) {
   if (!logoPath) return { input: watermarkSVG(w, h), blend: 'over' };
 
   const targetWidth = Math.round(w * 0.26);
-  const resized      = await sharp(logoPath).resize({ width: targetWidth }).toBuffer();
+  const resized      = await getResizedLogo(logoPath, targetWidth);
   const logoMeta     = await sharp(resized).metadata();
   const padX = Math.round(w * 0.025);
   const padY = Math.round(h * 0.025);
@@ -107,13 +121,15 @@ async function buildWatermarkLayer(category, w, h) {
 // Part of the manifest comparison alongside the source photo's own hash —
 // so adding/changing a collab logo for a category forces reprocessing of
 // every photo already in that category (their existing watermark is now
-// wrong), while every other category's manifest entries stay valid and
-// don't get touched. Without this, a new logo file would only apply to
-// new/edited photos going forward, silently leaving old ones on the plain
-// text mark.
-function watermarkIdentity(category) {
+// wrong). Categories with no logo keep the exact bare-hash manifest format
+// used before this feature existed, on purpose: appending something like
+// "|text" unconditionally would change every manifest entry at once and
+// force a full-library reprocess for a change that only actually affects
+// two categories. This way only 86fest/retrostock's entries invalidate;
+// everything else keeps its existing cache hits untouched.
+function combinedManifestValue(hash, category) {
   const logoPath = collabLogoPath(category);
-  return logoPath ? `logo:${hashFile(logoPath)}` : 'text';
+  return logoPath ? `${hash}|logo:${hashFile(logoPath)}` : hash;
 }
 
 // Embedded in every served image — machine-readable ownership signals for
@@ -163,7 +179,7 @@ try {
     // Skip if the source's content hash AND the applicable watermark are both
     // unchanged from the last processed run, and both outputs already exist.
     const igDest0 = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
-    const combinedHash = `${hashFile(src)}|${watermarkIdentity(category)}`;
+    const combinedHash = combinedManifestValue(hashFile(src), category);
     if (manifest[rel] === combinedHash && fs.existsSync(dest) && fs.existsSync(igDest0)) {
       skipped++; continue;
     }
@@ -194,7 +210,7 @@ try {
     const category    = rel.split(path.sep)[0];
     const igDest0     = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
     const manifestKey = `igonly:${rel}`;
-    const combinedHash = `${hashFile(src)}|${watermarkIdentity(category)}`;
+    const combinedHash = combinedManifestValue(hashFile(src), category);
 
     if (manifest[manifestKey] === combinedHash && fs.existsSync(igDest0)) {
       skipped++; continue;
