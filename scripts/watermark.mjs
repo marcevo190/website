@@ -73,6 +73,49 @@ function watermarkSVG(w, h) {
     </svg>`);
 }
 
+// Per-event collab watermark: drop a transparent PNG at
+// src/assets/collab-logos/<category>.png and every photo in that category
+// gets that logo instead of the plain "trackmarc.com" text — e.g. an
+// "86 Fest x TrackMarc" lockup for the 86fest category. Categories with no
+// file here are completely unaffected, still get the plain text mark.
+const COLLAB_LOGOS_DIR = 'src/assets/collab-logos';
+function collabLogoPath(category) {
+  const p = path.join(COLLAB_LOGOS_DIR, `${category}.png`);
+  return fs.existsSync(p) ? p : null;
+}
+
+// Sized as a fraction of photo width (not a fixed pixel size) so it scales
+// with whatever resolution comes in, same as the text mark's font-size
+// already does. Wider than the text mark on purpose — these are full brand
+// lockups, meant to actually read, not a subtle corner credit.
+async function buildWatermarkLayer(category, w, h) {
+  const logoPath = collabLogoPath(category);
+  if (!logoPath) return { input: watermarkSVG(w, h), blend: 'over' };
+
+  const targetWidth = Math.round(w * 0.26);
+  const resized      = await sharp(logoPath).resize({ width: targetWidth }).toBuffer();
+  const logoMeta     = await sharp(resized).metadata();
+  const padX = Math.round(w * 0.025);
+  const padY = Math.round(h * 0.025);
+  return {
+    input: resized,
+    left: Math.max(0, w - logoMeta.width - padX),
+    top:  Math.max(0, h - logoMeta.height - padY),
+  };
+}
+
+// Part of the manifest comparison alongside the source photo's own hash —
+// so adding/changing a collab logo for a category forces reprocessing of
+// every photo already in that category (their existing watermark is now
+// wrong), while every other category's manifest entries stay valid and
+// don't get touched. Without this, a new logo file would only apply to
+// new/edited photos going forward, silently leaving old ones on the plain
+// text mark.
+function watermarkIdentity(category) {
+  const logoPath = collabLogoPath(category);
+  return logoPath ? `logo:${hashFile(logoPath)}` : 'text';
+}
+
 // Embedded in every served image — machine-readable ownership signals for
 // Google Images ("licensable" detection) and anyone inspecting the file.
 const EXIF_METADATA = {
@@ -94,15 +137,15 @@ let stamped = 0, skipped = 0;
 const manifest = loadManifest();
 
 // Instagram requires aspect ratio between 0.8 (4:5 portrait) and 1.91:1 (landscape)
-async function writeIgVersion(src, igDest) {
+async function writeIgVersion(src, igDest, category) {
   const meta = await sharp(src).metadata();
   fs.mkdirSync(path.dirname(igDest), { recursive: true });
   const igWidth  = Math.min(meta.width, 1080);
   const igHeight = Math.max(Math.round(igWidth * meta.height / meta.width), Math.ceil(igWidth / 1.91));
-  const wm = watermarkSVG(igWidth, igHeight);
+  const wm = await buildWatermarkLayer(category, igWidth, igHeight);
   await sharp(src)
     .resize({ width: igWidth, height: igHeight, fit: 'cover', position: 'centre', withoutEnlargement: true })
-    .composite([{ input: wm, blend: 'over' }])
+    .composite([wm])
     .withMetadata({ exif: EXIF_METADATA })
     .jpeg({ quality: 88 })
     .toFile(igDest);
@@ -113,14 +156,15 @@ async function writeIgVersion(src, igDest) {
 // still keeps credit for whatever was already processed this run.
 try {
   for (const src of files) {
-    const rel  = path.relative(INPUT_BASE, src);
-    const dest = path.join(OUTPUT_BASE, rel).replace(/\.[^.]+$/, '.jpg');
+    const rel      = path.relative(INPUT_BASE, src);
+    const category = rel.split(path.sep)[0];
+    const dest     = path.join(OUTPUT_BASE, rel).replace(/\.[^.]+$/, '.jpg');
 
-    // Skip if the source's content hash matches the last processed run AND
-    // both outputs already exist (manifest key: bare rel path)
+    // Skip if the source's content hash AND the applicable watermark are both
+    // unchanged from the last processed run, and both outputs already exist.
     const igDest0 = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
-    const hash = hashFile(src);
-    if (manifest[rel] === hash && fs.existsSync(dest) && fs.existsSync(igDest0)) {
+    const combinedHash = `${hashFile(src)}|${watermarkIdentity(category)}`;
+    if (manifest[rel] === combinedHash && fs.existsSync(dest) && fs.existsSync(igDest0)) {
       skipped++; continue;
     }
 
@@ -128,18 +172,18 @@ try {
 
     const img  = sharp(src);
     const meta = await img.metadata();
-    const wm   = watermarkSVG(meta.width, meta.height);
+    const wm   = await buildWatermarkLayer(category, meta.width, meta.height);
 
     await img
-      .composite([{ input: wm, blend: 'over' }])
+      .composite([wm])
       .withMetadata({ exif: EXIF_METADATA })
       .jpeg({ quality: 88 })
       .toFile(dest);
 
     // Also write a 1080px-wide clean version to public/ig/ for Instagram posts
-    await writeIgVersion(src, igDest0);
+    await writeIgVersion(src, igDest0, category);
 
-    manifest[rel] = hash;
+    manifest[rel] = combinedHash;
     console.log(`[watermark] ✓ ${rel}`);
     stamped++;
   }
@@ -147,16 +191,17 @@ try {
   // Instagram-only images: no watermarked/ copy, so they never appear in the website gallery.
   for (const src of igOnlyFiles) {
     const rel         = path.relative(INPUT_BASE, src);
+    const category    = rel.split(path.sep)[0];
     const igDest0     = path.join(IG_BASE, rel).replace(/\.[^.]+$/, '.jpg');
     const manifestKey = `igonly:${rel}`;
-    const hash        = hashFile(src);
+    const combinedHash = `${hashFile(src)}|${watermarkIdentity(category)}`;
 
-    if (manifest[manifestKey] === hash && fs.existsSync(igDest0)) {
+    if (manifest[manifestKey] === combinedHash && fs.existsSync(igDest0)) {
       skipped++; continue;
     }
 
-    await writeIgVersion(src, igDest0);
-    manifest[manifestKey] = hash;
+    await writeIgVersion(src, igDest0, category);
+    manifest[manifestKey] = combinedHash;
     console.log(`[watermark] ✓ ${rel} (Instagram-only)`);
     stamped++;
   }
