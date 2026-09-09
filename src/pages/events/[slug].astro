@@ -39,6 +39,12 @@ const photos = Object.entries(imageModules)
     const filename = parts[parts.length - 1];
     const folder = parts[parts.length - 2];
     const cap = getCaption(filename);
+    // Just the frame number (e.g. "8631" from "DSC_8631-Enhanced-NR.jpg") —
+    // Marc's reference for telling me which photos to cull later, since the
+    // full filename is more than he needs to type/remember. Filenames that
+    // don't match this camera's DSC_#### pattern (Instagram-only imports,
+    // phone photos) just don't get a badge.
+    const dscMatch = filename.match(/DSC_?0*(\d+)/i);
     return {
       src: mod.default,
       category: folder,
@@ -46,6 +52,7 @@ const photos = Object.entries(imageModules)
       title: cap?.title ?? filename.replace(/\.[^.]+$/, ''),
       caption: cap?.caption ?? '',
       pageSlug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      dscNumber: dscMatch ? dscMatch[1] : null,
     };
   })
   .filter(p => event.categories.includes(p.category))
@@ -123,6 +130,7 @@ const eventPageUrl = new URL(Astro.url.pathname, Astro.site).href;
               widths={[400, 800, 1200]}
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
+            {photo.dscNumber && <span class="photo-card-number">{photo.dscNumber}</span>}
             <div class="photo-card-overlay">
               <div class="photo-card-meta">
                 <a class="photo-card-title" href={`/photo/${photo.pageSlug}`} style="color:inherit;text-decoration:none;">{photo.title}</a>

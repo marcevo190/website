@@ -310,6 +310,23 @@ h1, h2, h3, h4 {
   color: var(--text-muted);
   margin-top: 0.2rem;
 }
+/* Always-visible (not hover-gated like .photo-card-overlay) — Marc's
+   reference number for telling me which photos to cull later. Deliberately
+   tiny and low-contrast so it reads as a quiet detail, not a UI element. */
+.photo-card-number {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  background: rgba(8, 8, 8, 0.55);
+  color: rgba(255, 255, 255, 0.65);
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 2px;
+  pointer-events: none;
+}
 
 /* ── ABOUT STRIP ── */
 .about-strip {
