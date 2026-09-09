@@ -41,6 +41,7 @@ for (const [name, val] of Object.entries({ R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_S
 
 const IMAGES_BASE = 'src/assets/images';
 const PREFIX = 'originals/';
+const DATES_PATH = 'src/data/photo-dates.json';
 
 const s3 = new S3Client({
   region: 'auto',
@@ -108,6 +109,21 @@ for (const obj of objects) {
   console.log(`[sync-from-r2] ✓ ${rel}`);
   downloaded++;
 }
+
+// R2's own LastModified is the real "date added" signal — it's set once
+// when an object is first uploaded and never changes on subsequent syncs
+// (upload-photos-to-r2.mjs only PUTs a file whose size differs from what's
+// already there), unlike filename order, which reflects the camera's frame
+// number from the day of the shoot, not when a photo actually reached the
+// site. Event gallery pages use this to sort newest-added-first. Written
+// in both sync modes since the listing is already fetched either way.
+const photoDates = {};
+for (const obj of objects) {
+  const filename = obj.Key.slice(PREFIX.length).split('/').pop();
+  photoDates[filename] = obj.LastModified.toISOString();
+}
+fs.mkdirSync(path.dirname(DATES_PATH), { recursive: true });
+fs.writeFileSync(DATES_PATH, JSON.stringify(photoDates));
 
 const expectedRelPaths = new Set(objects.map(o => o.Key.slice(PREFIX.length)));
 let pruned = 0;
