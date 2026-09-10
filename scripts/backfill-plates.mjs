@@ -54,8 +54,8 @@ const PROGRESS_PATH = 'scripts/.plate-backfill-progress.json';
 const MODELS = ['gemini-3.5-flash', 'gemini-3.1-flash-lite'];
 
 const PLATE_PROMPT = `Look at this motorsport/car photo. Is there a real road registration
-plate clearly legible on the car, character by character? This means an actual road plate
-(e.g. Irish/UK format: a year/county code plus numbers, like "141-D-12345", or a UK-format
+plate clearly legible on any car in the shot, character by character? This means an actual road
+plate (e.g. Irish/UK format: a year/county code plus numbers, like "141-D-12345", or a UK-format
 plate like "WV05 APZ"), NOT any of the following, which are NOT plates even if they look like
 one at a glance:
 - A competition/race number painted on a door, bumper, or windscreen banner (e.g. "64" or "#21").
@@ -68,10 +68,12 @@ one at a glance:
 Only report a plate if it's in a real Irish or UK road-plate format and you can read every
 character with full confidence. If there's no such plate visible, or it's blurred, angled,
 obscured, or you're not fully sure of even one character, say so instead of guessing or
-reconstructing a partial one.
+reconstructing a partial one. If more than one car in the shot has a legible plate, report all
+of them.
 
 Return ONLY a JSON object in a \`\`\`json fenced code block: {"plate": "..."} — the plate string
-exactly as it appears (spaces/dashes as shown), or {"plate": ""} if none is legible.`;
+exactly as it appears (spaces/dashes as shown), multiple plates separated by ", " if there's more
+than one, or {"plate": ""} if none is legible.`;
 
 function isLfsPointer(fullPath) {
   const stat = fs.statSync(fullPath);

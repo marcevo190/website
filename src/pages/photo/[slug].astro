@@ -53,7 +53,9 @@ const { photo, prevSlug, nextSlug } = Astro.props;
 const cap = getCaption(photo.filename);
 const title = cap?.title ?? photo.filename.replace(/\.[^.]+$/, '');
 const caption = cap?.caption ?? '';
-const plate = cap?.plate;
+// Split into individual plates so a multi-car photo links each one to its
+// own /plate search instead of one broken link with a comma stuck in it.
+const plates = cap?.plate ? cap.plate.split(',').map(p => p.trim()).filter(Boolean) : [];
 
 const event = events.find(e => e.categories.includes(photo.category));
 const imageAbsoluteUrl = new URL(photo.src.src, Astro.site).href;
@@ -135,9 +137,16 @@ const imageSchema = {
               {photoTags.map(t => <a class="photo-page-tag" href={`/tag/${tagSlug(t)}`}>{t}</a>)}
             </div>
           )}
-          {plate && (
+          {plates.length > 0 && (
             <p class="photo-page-plate">
-              Plate spotted: <a href={`/plate?q=${encodeURIComponent(plate)}`}>{plate}</a> — see every photo of this car
+              {plates.length === 1 ? 'Plate spotted: ' : 'Plates spotted: '}
+              {plates.map((p, i) => (
+                <>
+                  {i > 0 && ' · '}
+                  <a href={`/plate?q=${encodeURIComponent(p)}`}>{p}</a>
+                </>
+              ))}
+              {' '}— see every photo of {plates.length === 1 ? 'this car' : 'these cars'}
             </p>
           )}
           <p class="photo-page-credit">

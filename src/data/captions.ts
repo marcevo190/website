@@ -12,7 +12,12 @@ import captionsData from './captions.json';
 export type CaptionEntry = {
   title: string;
   caption: string;
-  /** Registration plate, if clearly legible in the photo — powers /plate search. Not backfilled for older photos. */
+  /**
+   * Registration plate(s), if clearly legible in the photo — powers /plate
+   * search. Comma-separated when a photo shows more than one car with a
+   * legible plate (e.g. "141-D-12345, WV05 APZ"). Not backfilled for older
+   * photos.
+   */
   plate?: string;
 };
 
@@ -26,14 +31,16 @@ export type PlateEntry = { filename: string; plate: string; title: string; slug:
 
 // Shared by /plate and the homepage's search box — every photo that has a
 // plate on record, with the slug pre-computed so results can link straight
-// to /photo/<slug>.
+// to /photo/<slug>. A photo with multiple comma-separated plates yields one
+// entry per plate, all pointing at the same photo.
 export function getPlateIndex(): PlateEntry[] {
-  return Object.entries(captions)
-    .filter(([, c]) => c.plate && c.plate.trim().length > 0)
-    .map(([filename, c]) => ({
-      filename,
-      plate: c.plate!,
-      title: c.title,
-      slug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-    }));
+  return Object.entries(captions).flatMap(([filename, c]) => {
+    if (!c.plate) return [];
+    const slug = filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    return c.plate
+      .split(',')
+      .map(p => p.trim())
+      .filter(Boolean)
+      .map(plate => ({ filename, plate, title: c.title, slug }));
+  });
 }

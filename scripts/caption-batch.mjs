@@ -81,11 +81,13 @@ Two different captions are needed:
 - "igCaption": for Instagram. A hook in the first line (max 12 words), then 1-2 more sentences,
   ending with a question to invite comments. No exclamation marks anywhere.
 
-Also extract "plate": the car's road registration plate, ONLY if it's actually visible and you
-can read it with full confidence, character by character. This is a real road plate, not a
-competition/race number (e.g. a number on a door or windscreen banner like "64" or "#21" is NOT
-a plate). If there's no legible plate visible, use an empty string — never guess or reconstruct
-a partial one.
+Also extract "plate": the road registration plate of any car in the photo, ONLY if it's
+actually visible and you can read it with full confidence, character by character. This is a
+real road plate, not a competition/race number (e.g. a number on a door or windscreen banner
+like "64" or "#21" is NOT a plate). If more than one car in the shot has a legible plate, return
+all of them as a single comma-separated string (e.g. "141-D-12345, WV05 APZ"). If there's no
+legible plate visible on any car, use an empty string — never guess or reconstruct a partial
+one.
 
 Worked examples of the exact tone and format wanted:
 1. {"title": "Aston Martin Vantage GT3 #11 — Le Mans 2026", "caption": "The Aston Martin Vantage GT3, number 11, on track during the Le Mans 24 Hours. Green and yellow livery cutting through the grey.", "igCaption": "Green and yellow, cutting through the Le Mans grey. The Aston Martin Vantage GT3, car 11, mid-stint at this year's 24 Hours. What livery would you run on a GT3 car?", "plate": ""}

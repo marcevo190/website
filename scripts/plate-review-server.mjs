@@ -192,9 +192,11 @@ function render() {
         <button id="prev-btn">&larr; Prev</button>
         <button id="next-btn">Next &rarr;</button>
       </div>
-      <p class="hint">Enter saves the box above and marks this photo reviewed, then moves on.
-      "No real plate" clears it and marks reviewed (use when there's genuinely no legible plate).
-      "Skip" moves on without changing anything. Prev/Next just browse.</p>
+      <p class="hint">More than one car with a legible plate in this shot? Separate them with a
+      comma, e.g. "141-D-12345, WV05 APZ". Enter saves the box above and marks this photo
+      reviewed, then moves on. "No real plate" clears it and marks reviewed (use when there's
+      genuinely no legible plate). "Skip" moves on without changing anything. Prev/Next just
+      browse.</p>
     </div>
   \`;
   const input = document.getElementById('plate-input');
