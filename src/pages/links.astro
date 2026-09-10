@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { getPlateIndex } from '../data/captions';
 
 // A dedicated "link in bio" page — Instagram only allows one bio link, and a
@@ -9,30 +11,29 @@ import { getPlateIndex } from '../data/captions';
 // external link taps that month) gives people a reason before they click.
 const plates = getPlateIndex();
 
-// Buy Me a Coffee gets its own official button graphic further down rather
-// than living in this generic list — more recognizable to visitors than a
-// plain text row, and it's the one link that isn't part of the site itself.
-const topLinks = [
-  {
-    emoji: '🔍',
-    label: 'Search Your Reg',
-    desc: 'Find every photo of your car by registration plate.',
-    href: '/plate',
-  },
-  {
-    emoji: '🏁',
-    label: '86 Fest 2026 Photos',
-    desc: 'The full AE86 / JDM festival gallery.',
-    href: '/events/86fest-2026',
-  },
+// A real photo behind the card instead of a flat colour — a link-in-bio page
+// is the one place every Instagram visitor lands, worth it looking like a
+// photographer's page rather than a generic template. Pick one at random
+// each build from the same watermarked pool the homepage hero uses.
+const galleryModules = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/watermarked/**/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  { eager: true }
+);
+const bgCandidates = Object.values(galleryModules).map(mod => mod.default);
+const bgPhoto = bgCandidates.length
+  ? bgCandidates[Math.floor(Math.random() * bgCandidates.length)]
+  : null;
+
+// "Search Your Reg" is the standout feature (and the whole reason the plate
+// stat exists), so it gets its own highlighted treatment instead of sitting
+// in the plain list at the same visual weight as everything else.
+const links = [
   {
     emoji: '📸',
     label: 'Get Your Photo',
     desc: "Want the high-res version of your car? Send me a message and I'll get it to you.",
     href: '/contact',
   },
-];
-const bottomLinks = [
   {
     emoji: '🖼️',
     label: 'Full Portfolio',
@@ -54,6 +55,11 @@ const bottomLinks = [
   hideChrome
 >
   <div class="links-page">
+    {bgPhoto && (
+      <div class="links-bg">
+        <Image src={bgPhoto} alt="" width={1200} loading="eager" />
+      </div>
+    )}
     <div class="links-card">
       <a href="/" class="links-brand">
         <span class="links-flag">🇮🇪</span> TRACK<span class="links-brand-accent">MARC</span>
@@ -63,25 +69,16 @@ const bottomLinks = [
         <p class="links-stat">{plates.length} photographs have a plate on record</p>
       )}
 
+      <a class="links-featured" href="/plate">
+        <span class="links-featured-emoji">🔍</span>
+        <span class="links-item-text">
+          <span class="links-item-label">Search Your Reg</span>
+          <span class="links-item-desc">Find every photo of your car by registration plate.</span>
+        </span>
+      </a>
+
       <div class="links-list">
-        {topLinks.map(link => (
-          <a class="links-item" href={link.href}>
-            <span class="links-item-emoji">{link.emoji}</span>
-            <span class="links-item-text">
-              <span class="links-item-label">{link.label}</span>
-              <span class="links-item-desc">{link.desc}</span>
-            </span>
-          </a>
-        ))}
-
-        <a href="https://www.buymeacoffee.com/TrackMarc" target="_blank" rel="noopener" class="links-bmc">
-          <img
-            src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=TrackMarc&button_colour=40DCA5&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00"
-            alt="Buy Me a Coffee"
-          />
-        </a>
-
-        {bottomLinks.map(link => (
+        {links.map(link => (
           <a class="links-item" href={link.href}>
             <span class="links-item-emoji">{link.emoji}</span>
             <span class="links-item-text">
@@ -92,6 +89,16 @@ const bottomLinks = [
         ))}
       </div>
 
+      <div class="links-support">
+        <p class="links-support-label">Enjoying the photos?</p>
+        <a href="https://www.buymeacoffee.com/TrackMarc" target="_blank" rel="noopener" class="links-bmc">
+          <img
+            src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=TrackMarc&button_colour=40DCA5&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00"
+            alt="Buy Me a Coffee"
+          />
+        </a>
+      </div>
+
       <a href="/" class="links-back">trackmarc.com &rarr;</a>
     </div>
   </div>
@@ -99,13 +106,35 @@ const bottomLinks = [
 
 <style>
   .links-page {
+    position: relative;
     min-height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2.5rem 1.25rem;
+    overflow: hidden;
+  }
+  .links-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+  .links-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(18px) brightness(0.45) saturate(1.1);
+    transform: scale(1.1);
+  }
+  .links-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(13,17,20,0.55) 0%, rgba(8,8,8,0.88) 100%);
   }
   .links-card {
+    position: relative;
+    z-index: 1;
     width: 100%;
     max-width: 26rem;
     text-align: center;
@@ -130,17 +159,35 @@ const bottomLinks = [
     font-size: 0.75rem;
     margin-top: 0.35rem;
   }
+  .links-featured {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    background: linear-gradient(135deg, rgba(0,210,190,0.16), rgba(0,210,190,0.05));
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    text-align: left;
+    box-shadow: 0 0 24px rgba(0,210,190,0.12);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .links-featured:hover, .links-featured:active {
+    transform: translateY(-1px);
+    box-shadow: 0 0 32px rgba(0,210,190,0.2);
+  }
+  .links-featured-emoji { font-size: 1.7rem; flex-shrink: 0; }
   .links-list {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    margin-top: 2rem;
+    margin-top: 0.75rem;
   }
   .links-item {
     display: flex;
     align-items: center;
     gap: 0.9rem;
-    background: var(--surface);
+    background: rgba(20,22,24,0.7);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 0.9rem 1.1rem;
@@ -164,10 +211,19 @@ const bottomLinks = [
     color: var(--text-muted);
     line-height: 1.4;
   }
+  .links-support {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .links-support-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
   .links-bmc {
     display: flex;
     justify-content: center;
-    padding: 0.25rem 0;
   }
   .links-bmc img { height: auto; }
   .links-back {
