@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getPlateIndex } from '../data/captions';
+
+// A dedicated "link in bio" page — Instagram only allows one bio link, and a
+// flat link straight to Buy Me a Coffee doesn't tell a visitor why they'd
+// want to tap it. Breaking it into a few clearly-labelled options (per
+// Marc's 2026-09-10 analytics review: 651 profile visits but only 38
+// external link taps that month) gives people a reason before they click.
+const plates = getPlateIndex();
+
+const links = [
+  {
+    emoji: '🔍',
+    label: 'Search Your Reg',
+    desc: 'Find every photo of your car by registration plate.',
+    href: '/plate',
+  },
+  {
+    emoji: '🏁',
+    label: '86 Fest 2026 Photos',
+    desc: 'The full AE86 / JDM festival gallery.',
+    href: '/events/86fest-2026',
+  },
+  {
+    emoji: '☕',
+    label: 'Buy Prints / Support',
+    desc: 'Get a print of your car, or just buy me a coffee.',
+    href: 'https://buymeacoffee.com/TrackMarc',
+    external: true,
+  },
+  {
+    emoji: '🖼️',
+    label: 'Full Portfolio',
+    desc: 'Every event, every category.',
+    href: '/gallery',
+  },
+  {
+    emoji: '📩',
+    label: 'Press & Licensing',
+    desc: "Series organisers, media, or want to license a photo?",
+    href: '/licensing',
+  },
+];
+---
+
+<Layout
+  title="TrackMarc — Links"
+  description="Search your reg, browse event galleries, buy a print, or get in touch."
+>
+  <div class="links-page">
+    <div class="links-card">
+      <a href="/" class="links-brand">
+        <span class="links-flag">🇮🇪</span> TRACK<span class="links-brand-accent">MARC</span>
+      </a>
+      <p class="links-tagline">Motorsport &amp; Automotive Photography</p>
+      {plates.length > 0 && (
+        <p class="links-stat">{plates.length} photographs have a plate on record</p>
+      )}
+
+      <div class="links-list">
+        {links.map(link => (
+          <a
+            class="links-item"
+            href={link.href}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener' : undefined}
+          >
+            <span class="links-item-emoji">{link.emoji}</span>
+            <span class="links-item-text">
+              <span class="links-item-label">{link.label}</span>
+              <span class="links-item-desc">{link.desc}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <a href="/" class="links-back">trackmarc.com &rarr;</a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .links-page {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.25rem;
+  }
+  .links-card {
+    width: 100%;
+    max-width: 26rem;
+    text-align: center;
+  }
+  .links-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+  }
+  .links-brand-accent { color: var(--accent); }
+  .links-flag { font-size: 1.1rem; }
+  .links-tagline {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+  .links-stat {
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    margin-top: 0.35rem;
+  }
+  .links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .links-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    text-align: left;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .links-item:hover, .links-item:active {
+    border-color: var(--accent);
+    background: var(--surface-2);
+  }
+  .links-item-emoji { font-size: 1.4rem; flex-shrink: 0; }
+  .links-item-text { display: flex; flex-direction: column; gap: 0.15rem; }
+  .links-item-label {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .links-item-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .links-back {
+    display: inline-block;
+    margin-top: 2rem;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+  .links-back:hover { color: var(--text-muted); }
+</style>

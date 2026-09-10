@@ -305,6 +305,23 @@ function pickFollowCta(postedCount) {
   return FOLLOW_CTAS[postedCount % FOLLOW_CTAS.length];
 }
 
+// Only added when this specific photo has a legible plate on record — the
+// CTA needs to be concretely true of what's pictured, not a generic bolt-on.
+// Rotated the same way as FOLLOW_CTAS so it doesn't read as the same line
+// every time. Built per Marc's 2026-09-10 analytics review: 651 profile
+// visits but only 38 external link taps that month — the plate search is a
+// real differentiator (most trackday photographers don't have one) worth
+// surfacing directly in captions rather than only living on the site.
+const REG_CTAS = [
+  'See your reg in this shot? Search it at trackmarc.com/plate for every photo of your car.',
+  "Spot your plate? Find every photo of this car at trackmarc.com/plate — it's free.",
+  'Every photo of this car, searchable by reg, at trackmarc.com/plate.',
+];
+
+function pickRegCta(postedCount) {
+  return REG_CTAS[postedCount % REG_CTAS.length];
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 // Optional CLI arg: a category name restricts posting to just that category,
 // bypassing the normal rotation entirely — used by the temporary "boost"
@@ -367,8 +384,9 @@ async function main() {
     return;
   }
   const followCta       = pickFollowCta(queue.posted.length);
+  const regCta          = cap.plate ? pickRegCta(queue.posted.length) : null;
   const tagsAndMentions = generateTagsAndMentions(cap.title, cap.caption, next.category);
-  const igCaption       = `${captionText}\n\n${followCta}\n\n${tagsAndMentions}`;
+  const igCaption       = [captionText, regCta, followCta, tagsAndMentions].filter(Boolean).join('\n\n');
   const igFilename      = next.filename.replace(/\.[^.]+$/, '.jpg');
   const imageUrl        = `https://trackmarc.com/ig/${next.category}/${igFilename}`;
 
