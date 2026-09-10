@@ -54,10 +54,24 @@ const plates = getPlateIndex();
       return s.toLowerCase().replace(/[\s-]+/g, '');
     }
 
-    function render(matches) {
+    // Gemini reads plates from photos and can misread a single character —
+    // the classic OCR confusions (O/0, I/L/1, S/5, B/8, Z/2, G/6). If a
+    // visitor's exact plate finds nothing, retry with these folded together
+    // before giving up, so one bad character doesn't hide a real match.
+    // Deliberately narrow (not general fuzzy/edit-distance matching) so it
+    // can't start surfacing someone else's car for an unrelated plate.
+    const OCR_GROUPS = { o: '0', i: '1', l: '1', s: '5', b: '8', z: '2', g: '6' };
+    function canonicalise(s) {
+      return s.split('').map(c => OCR_GROUPS[c] ?? c).join('');
+    }
+
+    function render(matches, isFuzzy) {
       results.innerHTML = matches.map(m => `
         <a class="plate-result" href="/photo/${m.slug}">
-          <span class="plate-result-plate">${m.plate}</span>
+          <span class="plate-result-plate">
+            ${m.plate}
+            ${isFuzzy ? '<span class="plate-result-fuzzy">possible match</span>' : ''}
+          </span>
           <span class="plate-result-title">${m.title}</span>
         </a>
       `).join('');
@@ -70,11 +84,21 @@ const plates = getPlateIndex();
         status.textContent = defaultStatus;
         return;
       }
-      const matches = plates.filter(p => normalise(p.plate).includes(q));
-      status.textContent = matches.length
-        ? `${matches.length} match${matches.length !== 1 ? 'es' : ''}`
-        : 'No matches — try just the numbers, or fewer characters.';
-      render(matches);
+      const exact = plates.filter(p => normalise(p.plate).includes(q));
+      if (exact.length) {
+        status.textContent = `${exact.length} match${exact.length !== 1 ? 'es' : ''}`;
+        render(exact, false);
+        return;
+      }
+      const qCanon = canonicalise(q);
+      const fuzzy = plates.filter(p => canonicalise(normalise(p.plate)).includes(qCanon));
+      if (fuzzy.length) {
+        status.textContent = `${fuzzy.length} possible match${fuzzy.length !== 1 ? 'es' : ''} — the plate reading may be off by a character`;
+        render(fuzzy, true);
+      } else {
+        status.textContent = 'No matches — try just the numbers, or fewer characters.';
+        render([], false);
+      }
     });
 
     // Photo pages link here as /plate?q=<plate> ("see every photo of this
@@ -132,6 +156,19 @@ const plates = getPlateIndex();
     }
     .plate-result:hover {
       border-color: var(--accent);
+    }
+    .plate-result-fuzzy {
+      display: inline-block;
+      margin-left: 0.5rem;
+      padding: 0.15rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-dim, var(--text-muted));
+      font-family: inherit;
+      font-size: 0.65rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      vertical-align: middle;
     }
     .plate-result-plate {
       font-family: var(--font-heading);
