@@ -9,7 +9,10 @@ import { getPlateIndex } from '../data/captions';
 // external link taps that month) gives people a reason before they click.
 const plates = getPlateIndex();
 
-const links = [
+// Buy Me a Coffee gets its own official button graphic further down rather
+// than living in this generic list — more recognizable to visitors than a
+// plain text row, and it's the one link that isn't part of the site itself.
+const topLinks = [
   {
     emoji: '🔍',
     label: 'Search Your Reg',
@@ -23,12 +26,13 @@ const links = [
     href: '/events/86fest-2026',
   },
   {
-    emoji: '☕',
-    label: 'Buy Prints / Support',
-    desc: 'Get a print of your car, or just buy me a coffee.',
-    href: 'https://buymeacoffee.com/TrackMarc',
-    external: true,
+    emoji: '📸',
+    label: 'Get Your Photo',
+    desc: "Want the high-res version of your car? Send me a message and I'll get it to you.",
+    href: '/contact',
   },
+];
+const bottomLinks = [
   {
     emoji: '🖼️',
     label: 'Full Portfolio',
@@ -47,6 +51,7 @@ const links = [
 <Layout
   title="TrackMarc — Links"
   description="Search your reg, browse event galleries, buy a print, or get in touch."
+  hideChrome
 >
   <div class="links-page">
     <div class="links-card">
@@ -59,13 +64,25 @@ const links = [
       )}
 
       <div class="links-list">
-        {links.map(link => (
-          <a
-            class="links-item"
-            href={link.href}
-            target={link.external ? '_blank' : undefined}
-            rel={link.external ? 'noopener' : undefined}
-          >
+        {topLinks.map(link => (
+          <a class="links-item" href={link.href}>
+            <span class="links-item-emoji">{link.emoji}</span>
+            <span class="links-item-text">
+              <span class="links-item-label">{link.label}</span>
+              <span class="links-item-desc">{link.desc}</span>
+            </span>
+          </a>
+        ))}
+
+        <a href="https://www.buymeacoffee.com/TrackMarc" target="_blank" rel="noopener" class="links-bmc">
+          <img
+            src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=TrackMarc&button_colour=40DCA5&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00"
+            alt="Buy Me a Coffee"
+          />
+        </a>
+
+        {bottomLinks.map(link => (
+          <a class="links-item" href={link.href}>
             <span class="links-item-emoji">{link.emoji}</span>
             <span class="links-item-text">
               <span class="links-item-label">{link.label}</span>
@@ -147,6 +164,12 @@ const links = [
     color: var(--text-muted);
     line-height: 1.4;
   }
+  .links-bmc {
+    display: flex;
+    justify-content: center;
+    padding: 0.25rem 0;
+  }
+  .links-bmc img { height: auto; }
   .links-back {
     display: inline-block;
     margin-top: 2rem;
