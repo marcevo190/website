@@ -149,29 +149,33 @@ const catSelect = document.getElementById('category-select');
 const unreviewedToggle = document.getElementById('unreviewed-only');
 const progressEl = document.getElementById('progress');
 
-function filtered() {
-  return items.filter(it =>
-    (category === 'ALL' || it.category === category) &&
-    (!onlyUnreviewed || !it.reviewed)
-  );
+// "view" is a STABLE array — filtered by category only, never by reviewed
+// status. Marking something reviewed just flips a flag on the same object;
+// it never leaves the array or shifts anyone else's position. That's what
+// makes Prev reliable: idx-1 always means "the photo before this one", not
+// "whatever happens to be first in a shrinking list". Forward movement
+// (Next/Skip/Save) is the only place that skips over already-reviewed
+// photos when "unreviewed only" is checked.
+function computeView() {
+  return items.filter(it => category === 'ALL' || it.category === category);
 }
 
-function categoryCounts() {
-  const catItems = items.filter(it => category === 'ALL' || it.category === category);
-  return { reviewed: catItems.filter(it => it.reviewed).length, total: catItems.length };
+function categoryCounts(view) {
+  return { reviewed: view.filter(it => it.reviewed).length, total: view.length };
 }
 
-function renderChrome() {
-  const { reviewed, total } = categoryCounts();
+function renderChrome(view) {
+  const { reviewed, total } = categoryCounts(view);
   progressEl.textContent = total ? \`\${reviewed} / \${total} reviewed\` : '';
 }
 
 function render() {
-  renderChrome();
-  const f = filtered();
-  if (idx >= f.length) idx = Math.max(0, f.length - 1);
-  const it = f[idx];
-  if (!it) {
+  const view = computeView();
+  renderChrome(view);
+  if (idx < 0) idx = 0;
+  if (idx >= view.length) idx = Math.max(0, view.length - 1);
+  const it = view[idx];
+  if (!it || (onlyUnreviewed && view.every(x => x.reviewed))) {
     main.innerHTML = '<div id="empty">Nothing left to review here 🎉<br>Try a different category, or untick "unreviewed only".</div>';
     return;
   }
@@ -207,14 +211,28 @@ function render() {
   });
   document.getElementById('save-btn').addEventListener('click', () => doSave(input.value, true));
   document.getElementById('noplate-btn').addEventListener('click', () => doSave('', true));
-  document.getElementById('skip-btn').addEventListener('click', () => { idx++; render(); });
+  document.getElementById('skip-btn').addEventListener('click', () => goNext());
   document.getElementById('prev-btn').addEventListener('click', () => { idx = Math.max(0, idx - 1); render(); });
-  document.getElementById('next-btn').addEventListener('click', () => { idx++; render(); });
+  document.getElementById('next-btn').addEventListener('click', () => goNext());
+}
+
+// Steps idx forward by one. If "unreviewed only" is on, keeps stepping past
+// anything already reviewed so Next/Skip/Save all land on the next thing
+// actually worth looking at — but this never removes items from "view",
+// so stepping back with Prev still finds every photo you passed over.
+function goNext() {
+  const view = computeView();
+  let next = idx + 1;
+  if (onlyUnreviewed) {
+    while (next < view.length && view[next].reviewed) next++;
+  }
+  idx = Math.min(next, Math.max(0, view.length - 1));
+  render();
 }
 
 async function doSave(plateValue, markReviewed) {
-  const f = filtered();
-  const it = f[idx];
+  const view = computeView();
+  const it = view[idx];
   if (!it) return;
   const res = await fetch('/api/save', {
     method: 'POST',
@@ -225,17 +243,28 @@ async function doSave(plateValue, markReviewed) {
   if (!data.ok) { alert('Save failed: ' + data.error); return; }
   it.plate = plateValue.trim();
   it.reviewed = it.reviewed || markReviewed;
-  render();
+  goNext();
 }
 
-catSelect.addEventListener('change', () => { category = catSelect.value; idx = 0; render(); });
-unreviewedToggle.addEventListener('change', () => { onlyUnreviewed = unreviewedToggle.checked; idx = 0; render(); });
+// Jump to the first thing actually worth looking at rather than always
+// idx 0, so switching category (or re-checking "unreviewed only") doesn't
+// dump you on a photo you already confirmed.
+function jumpToFirstRelevant() {
+  const view = computeView();
+  if (!onlyUnreviewed) { idx = 0; return; }
+  const i = view.findIndex(it => !it.reviewed);
+  idx = i === -1 ? 0 : i;
+}
+
+catSelect.addEventListener('change', () => { category = catSelect.value; jumpToFirstRelevant(); render(); });
+unreviewedToggle.addEventListener('change', () => { onlyUnreviewed = unreviewedToggle.checked; jumpToFirstRelevant(); render(); });
 
 fetch('/api/list').then(r => r.json()).then(data => {
   items = data;
   const cats = [...new Set(items.map(it => it.category))];
   catSelect.innerHTML = '<option value="ALL">All categories</option>' +
     cats.map(c => \`<option value="\${c}">\${c}</option>\`).join('');
+  jumpToFirstRelevant();
   render();
 });
 </script>
