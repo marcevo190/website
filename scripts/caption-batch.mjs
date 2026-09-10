@@ -169,7 +169,13 @@ async function captionOne(imgPath) {
   throw lastErr ?? new Error('All models failed');
 }
 
-function mergeIntoCaptionsJson(captionsData, entries) {
+function mergeIntoCaptionsJson(entries) {
+  // Re-read fresh right before writing rather than reusing the snapshot
+  // loaded at script start — a long batch (many minutes, rate-limited by
+  // Gemini) can overlap with something else editing captions.json, like the
+  // plate review tool. Merging into a stale in-memory copy would silently
+  // wipe out those concurrent edits on this script's final write.
+  const captionsData = loadCaptionsJson();
   for (const [filename, { title, caption, plate }] of Object.entries(entries)) {
     captionsData[filename] = plate ? { title, caption, plate } : { title, caption };
   }
@@ -184,8 +190,7 @@ function mergeIntoIgCaptions(entries) {
   fs.writeFileSync(IG_CAPTIONS_PATH, JSON.stringify(igCaptions, null, 2));
 }
 
-const captionsData = loadCaptionsJson();
-const existingKeys = existingCaptionKeys(captionsData);
+const existingKeys = existingCaptionKeys(loadCaptionsJson());
 const progress = loadProgress();
 
 const files = fs.readdirSync(imageDir)
@@ -223,7 +228,7 @@ const finished = Object.fromEntries(
   Object.entries(progress).filter(([f]) => files.includes(f) && progress[f]?.title)
 );
 if (Object.keys(finished).length > 0) {
-  mergeIntoCaptionsJson(captionsData, finished);
+  mergeIntoCaptionsJson(finished);
   mergeIntoIgCaptions(finished);
 }
 
