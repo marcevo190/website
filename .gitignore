@@ -48,3 +48,4 @@ public/ig/
 scripts/.caption-batch-progress.json
 scripts/.plate-backfill-progress.json
 scripts/.plate-review-progress.json
+scripts/.portfolio-review-progress.json
