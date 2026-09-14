@@ -61,7 +61,7 @@ const currentPath = Astro.url.pathname;
     <title>{title}</title>
     <slot name="head" />
   </head>
-  <body>
+  <body class="protect-images">
     {!hideChrome && (
       <>
         <nav class="nav" id="main-nav">
@@ -161,6 +161,33 @@ const currentPath = Astro.url.pathname;
         hamburger?.classList.remove('open');
         document.body.style.overflow = '';
       };
+    </script>
+
+    <script>
+      // Deters casual "long-press / right-click / drag to save" on photos —
+      // doesn't stop screenshots (nothing on the web can) or anyone who opens
+      // dev tools, but it does stop the average visitor's one-tap save.
+      // Marc uses the site itself to grab casual reposts, so this needs to
+      // stay off for him: visiting once with ?unlock=<token> remembers the
+      // choice in this browser via localStorage, no login needed.
+      const UNLOCK_PARAM = 'trackmarc-unlock-2026';
+      const UNLOCK_KEY = 'tm_img_unlock';
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('unlock') === UNLOCK_PARAM) {
+        localStorage.setItem(UNLOCK_KEY, '1');
+      }
+
+      if (localStorage.getItem(UNLOCK_KEY) === '1') {
+        document.body.classList.remove('protect-images');
+      } else {
+        document.addEventListener('contextmenu', e => {
+          if (e.target instanceof HTMLImageElement) e.preventDefault();
+        });
+        document.addEventListener('dragstart', e => {
+          if (e.target instanceof HTMLImageElement) e.preventDefault();
+        });
+      }
     </script>
 
     <script>
