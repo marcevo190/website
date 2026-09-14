@@ -223,6 +223,34 @@ function generateTagsAndMentions(title, caption, category) {
 // ['bimmerfest', 'iccr'] after bimmerfest had already run out.
 const PRIORITY_CATEGORIES = ['86fest', 'retrostock', 'drift-games'];
 
+// Explicit filename overrides — jump the queue ahead of EVERYTHING else
+// (even PRIORITY_CATEGORIES), checked first regardless of whether the
+// script was invoked with a category priority list or with none at all.
+// For re-edited photos that should go out again despite already having
+// been posted once, remove the filename from post-queue.json's "posted"
+// array first — this list only pulls from already-pending photos, it
+// doesn't override posted-status by itself. Clear this list out once
+// everything in it has posted.
+const PRIORITY_FILENAMES = [
+  'DSC_6961-Enhanced-NR.jpg', 'DSC_6977-Enhanced-NR.jpg', 'DSC_6992-Enhanced-NR.jpg',
+  'DSC_7121-Enhanced-NR.jpg', 'DSC_7163-Enhanced-NR.jpg', 'DSC_7170-Enhanced-NR.jpg',
+  'DSC_7280-Enhanced-NR.jpg', 'DSC_7286-Enhanced-NR.jpg', 'DSC_7322-Enhanced-NR.jpg',
+  'DSC_7326-Enhanced-NR-2.jpg', 'DSC_7331-Enhanced-NR.jpg', 'DSC_7333-Enhanced-NR.jpg',
+  'DSC_7334-Enhanced-NR.jpg', 'DSC_7338-Enhanced-NR.jpg', 'DSC_7368-Enhanced-NR.jpg',
+  'DSC_7380-Enhanced-NR.jpg', 'DSC_7382-Enhanced-NR.jpg', 'DSC_7395-Enhanced-NR.jpg',
+  'DSC_7407-Enhanced-NR.jpg', 'DSC_7420-Enhanced-NR.jpg', 'DSC_7426-Enhanced-NR.jpg',
+  'DSC_7660-Enhanced-NR.jpg', 'DSC_7668-Enhanced-NR.jpg', 'DSC_7671-Enhanced-NR.jpg',
+  'DSC_7673-Enhanced-NR.jpg', 'DSC_7678-Enhanced-NR.jpg', 'DSC_7686-Enhanced-NR.jpg',
+  'DSC_7690-Enhanced-NR.jpg', 'DSC_7693-Enhanced-NR.jpg', 'DSC_7696-Enhanced-NR.jpg',
+  'DSC_7698-Enhanced-NR.jpg', 'DSC_7699-Enhanced-NR.jpg', 'DSC_7708-Enhanced-NR.jpg',
+  'DSC_7710-Enhanced-NR.jpg', 'DSC_7711-Enhanced-NR.jpg', 'DSC_7713-Enhanced-NR.jpg',
+  'DSC_7714-Enhanced-NR.jpg', 'DSC_7715-Enhanced-NR.jpg', 'DSC_7716-Enhanced-NR.jpg',
+  'DSC_7717-Enhanced-NR.jpg', 'DSC_7718-Enhanced-NR.jpg', 'DSC_7719-Enhanced-NR.jpg',
+  'DSC_7720-Enhanced-NR.jpg', 'DSC_7721-Enhanced-NR.jpg', 'DSC_7727-Enhanced-NR.jpg',
+  'DSC_7730-Enhanced-NR.jpg', 'DSC_7731-Enhanced-NR.jpg', 'DSC_7738-Enhanced-NR.jpg',
+  'DSC_7741-Enhanced-NR.jpg', 'DSC_7742-Enhanced-NR.jpg',
+];
+
 // Categories where the next pick is random among that category's pending
 // photos, instead of the default "lowest filename number first". Posting
 // strictly in DSC-number order reads as an obvious bot pattern once anyone
@@ -345,8 +373,13 @@ async function main() {
   const igCaptions = loadInstagramCaptions();
   const allImages  = collectImages();
 
-  let next = null;
-  if (categoryPriority.length) {
+  let next = PRIORITY_FILENAMES.length
+    ? allImages.find(i => PRIORITY_FILENAMES.includes(i.filename) && !queue.posted.includes(i.filename))
+    : null;
+
+  if (next) {
+    console.log(`Priority filename override: ${next.filename}`);
+  } else if (categoryPriority.length) {
     for (const category of categoryPriority) {
       const inCategory = allImages.filter(i => i.category === category);
       if (!inCategory.length) {
