@@ -249,6 +249,18 @@ const PRIORITY_FILENAMES = [
   'DSC_7720-Enhanced-NR.jpg', 'DSC_7721-Enhanced-NR.jpg', 'DSC_7727-Enhanced-NR.jpg',
   'DSC_7730-Enhanced-NR.jpg', 'DSC_7731-Enhanced-NR.jpg', 'DSC_7738-Enhanced-NR.jpg',
   'DSC_7741-Enhanced-NR.jpg', 'DSC_7742-Enhanced-NR.jpg',
+  // Second rework batch (2026-09-14)
+  'DSC_6952-Enhanced-NR.jpg', 'DSC_7047-Enhanced-NR.jpg', 'DSC_7117-Enhanced-NR.jpg',
+  'DSC_7147-Enhanced-NR.jpg', 'DSC_7253-Enhanced-NR.jpg', 'DSC_7269-Enhanced-NR.jpg',
+  'DSC_7271-Enhanced-NR.jpg', 'DSC_7379-Enhanced-NR.jpg', 'DSC_7386-Enhanced-NR.jpg',
+  'DSC_7461-Enhanced-NR.jpg', 'DSC_7473-Enhanced-NR.jpg', 'DSC_7475-Enhanced-NR.jpg',
+  'DSC_7491-Enhanced-NR.jpg', 'DSC_7493-Enhanced-NR.jpg', 'DSC_7499-Enhanced-NR.jpg',
+  'DSC_7504-Enhanced-NR.jpg', 'DSC_7546-Enhanced-NR.jpg', 'DSC_7562-Enhanced-NR.jpg',
+  'DSC_7582-Enhanced-NR.jpg', 'DSC_7589-Enhanced-NR.jpg', 'DSC_7591-Enhanced-NR.jpg',
+  'DSC_7594-Enhanced-NR.jpg', 'DSC_7599-Enhanced-NR.jpg', 'DSC_7600-Enhanced-NR.jpg',
+  'DSC_7609-Enhanced-NR.jpg', 'DSC_7611-Enhanced-NR.jpg', 'DSC_7613-Enhanced-NR.jpg',
+  'DSC_7615-Enhanced-NR.jpg', 'DSC_7616-Enhanced-NR.jpg', 'DSC_7623-Enhanced-NR.jpg',
+  'DSC_7644-Enhanced-NR.jpg',
 ];
 
 // Categories where the next pick is random among that category's pending
