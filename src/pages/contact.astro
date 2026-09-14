@@ -104,6 +104,13 @@ import Layout from '../layouts/Layout.astro';
     // they mean — this fills in context automatically instead.
     const ref = new URLSearchParams(window.location.search).get('photo');
     if (ref) {
+      // The real slug carries "-enhanced-nr" (a Lightroom export artefact) —
+      // exact and unambiguous, so it stays in the hidden field for Marc's
+      // own lookup, but it reads as meaningless noise to a visitor. Strip it
+      // for anything they actually see; any trailing "-2"/"-3" (a real,
+      // separate edit of the same shot) is kept since that part matters.
+      const prettyRef = ref.replace(/-enhanced-nr/gi, '').toUpperCase();
+
       const hidden = document.getElementById('photo_reference') as HTMLInputElement | null;
       const typeSelect = document.getElementById('type') as HTMLSelectElement | null;
       const message = document.getElementById('message') as HTMLTextAreaElement | null;
@@ -116,7 +123,7 @@ import Layout from '../layouts/Layout.astro';
       if (hidden) hidden.value = ref;
       if (typeSelect) typeSelect.value = 'photo';
       if (message && !message.value) {
-        message.value = `Hi Marc, I'd like the high-res version of this photo please: ${ref}`;
+        message.value = `Hi Marc, I'd like the high-res version of this photo please: ${prettyRef}`;
       }
       if (eyebrow) eyebrow.textContent = 'Get Your Photo';
       if (title) title.textContent = 'Get The Full-Res Version';
@@ -124,7 +131,7 @@ import Layout from '../layouts/Layout.astro';
       if (orgGroup) orgGroup.style.display = 'none';
       if (banner) {
         banner.style.display = 'block';
-        banner.textContent = `Photo referenced: ${ref}`;
+        banner.textContent = `Photo referenced: ${prettyRef}`;
       }
     }
   </script>
