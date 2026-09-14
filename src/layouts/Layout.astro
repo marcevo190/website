@@ -181,12 +181,61 @@ const currentPath = Astro.url.pathname;
       if (localStorage.getItem(UNLOCK_KEY) === '1') {
         document.body.classList.remove('protect-images');
       } else {
+        // Best-effort: find which photo this <img> actually is, so the
+        // popup can send the visitor straight to a contact form that
+        // already knows what they're asking for. Gallery/event cards carry
+        // data-slug; a photo page's own URL already is the reference.
+        function photoRefFor(img: HTMLImageElement): string | null {
+          const card = img.closest<HTMLElement>('[data-slug]');
+          if (card?.dataset.slug) return card.dataset.slug;
+          const link = img.closest<HTMLAnchorElement>('a[href^="/photo/"]');
+          if (link) return link.getAttribute('href')!.replace(/^\/photo\//, '').replace(/\/$/, '');
+          const pageMatch = window.location.pathname.match(/^\/photo\/([^/]+)\/?$/);
+          return pageMatch ? pageMatch[1] : null;
+        }
+
+        let popupEl: HTMLElement | null = null;
+        function showSavePopup(img: HTMLImageElement) {
+          popupEl?.remove();
+          const ref = photoRefFor(img);
+          const href = ref ? `/contact?photo=${encodeURIComponent(ref)}` : '/contact';
+          const el = document.createElement('div');
+          el.className = 'save-photo-popup';
+          el.innerHTML = `
+            <p>Want this one without the watermark? I'll send it to you free — just ask.
+            A coffee helps keep this going ☕</p>
+            <div class="save-photo-popup-actions">
+              <a href="${href}">Get this photo &rarr;</a>
+              <button type="button" aria-label="Dismiss">&times;</button>
+            </div>
+          `;
+          document.body.appendChild(el);
+          popupEl = el;
+          el.querySelector('button')?.addEventListener('click', () => el.remove());
+          setTimeout(() => { if (popupEl === el) el.remove(); }, 12000);
+        }
+
         document.addEventListener('contextmenu', e => {
-          if (e.target instanceof HTMLImageElement) e.preventDefault();
+          if (e.target instanceof HTMLImageElement) {
+            e.preventDefault();
+            showSavePopup(e.target);
+          }
         });
         document.addEventListener('dragstart', e => {
           if (e.target instanceof HTMLImageElement) e.preventDefault();
         });
+
+        // Long-press on touch devices — no native "long-press" event exists,
+        // so this is a simple hold-timer: if the finger hasn't lifted or
+        // moved after 500ms, treat it the same as a blocked right-click.
+        let pressTimer: ReturnType<typeof setTimeout> | undefined;
+        document.addEventListener('touchstart', e => {
+          const target = e.target;
+          if (!(target instanceof HTMLImageElement)) return;
+          pressTimer = setTimeout(() => showSavePopup(target), 500);
+        }, { passive: true });
+        document.addEventListener('touchend', () => clearTimeout(pressTimer));
+        document.addEventListener('touchmove', () => clearTimeout(pressTimer));
       }
     </script>
 

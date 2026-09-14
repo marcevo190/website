@@ -8,11 +8,12 @@ import Layout from '../layouts/Layout.astro';
 >
   <div class="contact-wrap">
     <div class="contact-header">
-      <p class="section-eyebrow">Get in Touch</p>
-      <h1 class="section-title">Press &amp; Inquiries</h1>
-      <p class="section-subtitle">
+      <p class="section-eyebrow" id="contact-eyebrow">Get in Touch</p>
+      <h1 class="section-title" id="contact-title">Press &amp; Inquiries</h1>
+      <p class="section-subtitle" id="contact-subtitle">
         For accreditation requests, editorial commissions, or licensing — use the form or reach out directly.
       </p>
+      <p class="contact-photo-banner" id="photo-banner" style="display:none;"></p>
     </div>
 
     <div class="contact-grid">
@@ -22,6 +23,7 @@ import Layout from '../layouts/Layout.astro';
         method="POST"
       >
         <input type="hidden" name="_next" value="https://trackmarc.com/thanks" />
+        <input type="hidden" name="photo_reference" id="photo_reference" value="" />
         <div class="form-group">
           <label class="form-label" for="name">Name</label>
           <input class="form-input" type="text" id="name" name="name" required placeholder="Your name" />
@@ -32,7 +34,7 @@ import Layout from '../layouts/Layout.astro';
           <input class="form-input" type="email" id="email" name="email" required placeholder="your@email.com" />
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="organisation-group">
           <label class="form-label" for="organisation">Organisation / Series</label>
           <input class="form-input" type="text" id="organisation" name="organisation" placeholder="e.g. FIA, ACO, team name" />
         </div>
@@ -41,6 +43,7 @@ import Layout from '../layouts/Layout.astro';
           <label class="form-label" for="type">Inquiry Type</label>
           <select class="form-select" id="type" name="type">
             <option value="">Select...</option>
+            <option value="photo">Get My Photo (High-Res)</option>
             <option value="accreditation">Media Accreditation Request</option>
             <option value="commission">Editorial Commission</option>
             <option value="licensing">Image Licensing</option>
@@ -81,4 +84,48 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
   </div>
+
+  <style>
+    .contact-photo-banner {
+      margin-top: 1.25rem;
+      padding: 0.9rem 1.1rem;
+      background: linear-gradient(135deg, rgba(0,210,190,0.14), rgba(0,210,190,0.04));
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+  </style>
+
+  <script>
+    // Photo pages / the save-block popup link here as
+    // /contact?photo=<reference> so a visitor asking for their photo
+    // doesn't land on a blank form and doesn't have to explain which shot
+    // they mean — this fills in context automatically instead.
+    const ref = new URLSearchParams(window.location.search).get('photo');
+    if (ref) {
+      const hidden = document.getElementById('photo_reference') as HTMLInputElement | null;
+      const typeSelect = document.getElementById('type') as HTMLSelectElement | null;
+      const message = document.getElementById('message') as HTMLTextAreaElement | null;
+      const banner = document.getElementById('photo-banner');
+      const title = document.getElementById('contact-title');
+      const subtitle = document.getElementById('contact-subtitle');
+      const eyebrow = document.getElementById('contact-eyebrow');
+      const orgGroup = document.getElementById('organisation-group');
+
+      if (hidden) hidden.value = ref;
+      if (typeSelect) typeSelect.value = 'photo';
+      if (message && !message.value) {
+        message.value = `Hi Marc, I'd like the high-res version of this photo please: ${ref}`;
+      }
+      if (eyebrow) eyebrow.textContent = 'Get Your Photo';
+      if (title) title.textContent = 'Get The Full-Res Version';
+      if (subtitle) subtitle.textContent = "Send this and I'll get the clean, high-res file to you — free.";
+      if (orgGroup) orgGroup.style.display = 'none';
+      if (banner) {
+        banner.style.display = 'block';
+        banner.textContent = `Photo referenced: ${ref}`;
+      }
+    }
+  </script>
 </Layout>
