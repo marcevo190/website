@@ -1,5 +1,6 @@
 ---
 import fs from 'node:fs';
+import path from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -26,6 +27,15 @@ export function getStaticPaths() {
 }
 
 const { event } = Astro.props;
+
+// A collab logo (src/assets/collab-logos/<category>.png) means this event's
+// organizers actively partner with TrackMarc — the same signal that drives
+// which Instagram posts get the co-branded lockup (see watermark.mjs). This
+// page just surfaces that same partnership as a small text credit instead
+// of a logo, so the site's own watermarking stays consistent everywhere.
+const isCollabPartner = event.categories.some(cat =>
+  fs.existsSync(path.join('src/assets/collab-logos', `${cat}.png`))
+);
 
 // Same source as the gallery — watermarked copies generated at build
 const imageModules = import.meta.glob<{ default: ImageMetadata }>(
@@ -95,6 +105,9 @@ const eventPageUrl = new URL(Astro.url.pathname, Astro.site).href;
     <div class="section" style="padding-bottom: 1rem;">
       <p class="event-back"><SmartBackLink href="/events" label="All Events" /></p>
       <div class="event-intro">
+        {isCollabPartner && (
+          <p class="event-partner-credit">Official photography partner for {event.shortLabel}</p>
+        )}
         {event.intro.map(par => <p>{par}</p>)}
         <div class="event-classes">
           {event.classes.map(c => {
@@ -339,6 +352,19 @@ const eventPageUrl = new URL(Astro.url.pathname, Astro.site).href;
       color: var(--text-muted);
       line-height: 1.75;
       margin-bottom: 1.1rem;
+    }
+    .event-partner-credit {
+      display: inline-block;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0,210,190,0.1);
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      margin-bottom: 1.25rem;
     }
     .event-classes {
       display: flex;
