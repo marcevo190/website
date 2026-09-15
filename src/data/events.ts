@@ -21,7 +21,25 @@ export interface EventDef {
   description: string;
 }
 
+// Ordered best-to-worst by Marc's own read of the photo sets (2026-09-16) —
+// this order also drives the homepage "Event Galleries" section and /events,
+// so the strongest work leads. Update this order if his opinion changes.
 export const events: EventDef[] = [
+  {
+    slug: '86fest-2026',
+    name: '86 Fest 2026',
+    shortLabel: '86 Fest',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: 'September 2026',
+    categories: ['86fest'],
+    hero: 'DSC_8631-Enhanced-NR.jpg',
+    intro: [
+      'Ireland\'s Toyota festival at Mondello Park, hosted by JDM Classics and built entirely around the AE86 and the wider world of Japanese car culture it inspired — Show & Shine, on-track sessions, and a proper community meet all in one day.',
+      'Headline guests Shinji and Masayo Minowa, D1GP legends from Japan, brought a huge moment for the Irish drift scene. The paddock ran deep with AE86 Levins and Truenos in every colour, alongside E70 and AE101 Corollas, a Starlet, and an Altezza.',
+    ],
+    classes: ['AE86', 'JDM Classics', 'Show & Shine', 'On-Track'],
+    description: 'Photo coverage of 86 Fest 2026 at Mondello Park by Marc Ronan — AE86s and JDM classics, hosted by JDM Classics with headline guests Shinji and Masayo Minowa.',
+  },
   {
     slug: 'le-mans-2026',
     name: '24 Heures du Mans 2026',
@@ -54,19 +72,19 @@ export const events: EventDef[] = [
     description: 'Photo coverage of an Irish Championship Circuit Racing (ICCR) meeting at Mondello Park by Marc Ronan — Formula Vee, Formula Sheane, Junior Mini Challenge, Fiesta championships and Sports 2000.',
   },
   {
-    slug: 'bimmerfest-2026',
-    name: 'Bimmerfest 2026',
-    shortLabel: 'Bimmerfest',
+    slug: 'drift-games-summer-bash-2026',
+    name: 'Drift Games Summer Bash 2026',
+    shortLabel: 'Drift Games',
     venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
-    season: '2026',
-    categories: ['bimmerfest'],
-    hero: 'DSC_5722.jpg',
+    season: 'August 2026',
+    categories: ['drift-games'],
+    hero: 'DSC_6961-Enhanced-NR.jpg',
     intro: [
-      'An open-pitlane trackday at Mondello Park, run by trackdays.ie under the Bimmerfest banner, with BMW\'s M division taking centre stage — E36, E46, E92 and F80 M3s, the M2 and M4 in half a dozen colours, and a brand new M5 all turning laps and filling the paddock.',
-      'The BMW theme didn\'t stop other marques joining in: a Subaru Impreza, a Skoda Fabia rally car, a run of Renault Clio and Mégane RS track cars, a Ford Fiesta and a SEAT Leon Cupra all shared the circuit, alongside lightweight specials and open-cockpit prototypes. A BMW Motorsport tribute livery and Austin O\'Brien\'s Jägermeister-liveried E36, built for the Irish Touring Car Championship, drew plenty of attention in the paddock.',
+      'Two days of drifting at Mondello Park for the Tire Streets Drift Games Summer Bash, with over 150 drivers running across all four of the venue\'s layouts plus Sportsland.',
+      'Big grids and bigger tandems throughout, from pro drivers sharpening their craft to grid-fillers just out for the fun of it, the way drifting was meant to be.',
     ],
-    classes: ['BMW M2', 'BMW M3', 'BMW M4', 'BMW M5', 'Hot Hatches', 'Trackday'],
-    description: 'Photo coverage of the Bimmerfest 2026 trackday at Mondello Park by Marc Ronan — BMW M cars and a mixed open-pitlane paddock, run by trackdays.ie.',
+    classes: ['Drifting', 'Tandem Battles'],
+    description: 'Photo coverage of the 2026 Tire Streets Drift Games Summer Bash at Mondello Park by Marc Ronan — over 150 drivers, big tandems, across all four track layouts.',
   },
   {
     slug: 'retrostock-2026',
@@ -84,34 +102,19 @@ export const events: EventDef[] = [
     description: 'Photo coverage of Retrostock 2026 at Mondello Park by Marc Ronan — pre-1994 rally, road and sprint cars across drifting and grip driving sessions.',
   },
   {
-    slug: 'drift-games-summer-bash-2026',
-    name: 'Drift Games Summer Bash 2026',
-    shortLabel: 'Drift Games',
+    slug: 'bimmerfest-2026',
+    name: 'Bimmerfest 2026',
+    shortLabel: 'Bimmerfest',
     venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
-    season: 'August 2026',
-    categories: ['drift-games'],
-    hero: 'DSC_6961-Enhanced-NR.jpg',
+    season: '2026',
+    categories: ['bimmerfest'],
+    hero: 'DSC_5722.jpg',
     intro: [
-      'Two days of drifting at Mondello Park for the Tire Streets Drift Games Summer Bash, with over 150 drivers running across all four of the venue\'s layouts plus Sportsland.',
-      'Big grids and bigger tandems throughout, from pro drivers sharpening their craft to grid-fillers just out for the fun of it, the way drifting was meant to be.',
+      'An open-pitlane trackday at Mondello Park, run by trackdays.ie under the Bimmerfest banner, with BMW\'s M division taking centre stage — E36, E46, E92 and F80 M3s, the M2 and M4 in half a dozen colours, and a brand new M5 all turning laps and filling the paddock.',
+      'The BMW theme didn\'t stop other marques joining in: a Subaru Impreza, a Skoda Fabia rally car, a run of Renault Clio and Mégane RS track cars, a Ford Fiesta and a SEAT Leon Cupra all shared the circuit, alongside lightweight specials and open-cockpit prototypes. A BMW Motorsport tribute livery and Austin O\'Brien\'s Jägermeister-liveried E36, built for the Irish Touring Car Championship, drew plenty of attention in the paddock.',
     ],
-    classes: ['Drifting', 'Tandem Battles'],
-    description: 'Photo coverage of the 2026 Tire Streets Drift Games Summer Bash at Mondello Park by Marc Ronan — over 150 drivers, big tandems, across all four track layouts.',
-  },
-  {
-    slug: '86fest-2026',
-    name: '86 Fest 2026',
-    shortLabel: '86 Fest',
-    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
-    season: 'September 2026',
-    categories: ['86fest'],
-    hero: 'DSC_8631-Enhanced-NR.jpg',
-    intro: [
-      'Ireland\'s Toyota festival at Mondello Park, hosted by JDM Classics and built entirely around the AE86 and the wider world of Japanese car culture it inspired — Show & Shine, on-track sessions, and a proper community meet all in one day.',
-      'Headline guests Shinji and Masayo Minowa, D1GP legends from Japan, brought a huge moment for the Irish drift scene. The paddock ran deep with AE86 Levins and Truenos in every colour, alongside E70 and AE101 Corollas, a Starlet, and an Altezza.',
-    ],
-    classes: ['AE86', 'JDM Classics', 'Show & Shine', 'On-Track'],
-    description: 'Photo coverage of 86 Fest 2026 at Mondello Park by Marc Ronan — AE86s and JDM classics, hosted by JDM Classics with headline guests Shinji and Masayo Minowa.',
+    classes: ['BMW M2', 'BMW M3', 'BMW M4', 'BMW M5', 'Hot Hatches', 'Trackday'],
+    description: 'Photo coverage of the Bimmerfest 2026 trackday at Mondello Park by Marc Ronan — BMW M cars and a mixed open-pitlane paddock, run by trackdays.ie.',
   },
 ];
 

@@ -49,7 +49,10 @@ const photos = Object.entries(imageModules)
       slug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
     };
   })
-  .filter(p => categories.includes(p.category));
+  .filter(p => categories.includes(p.category))
+  // Stack categories best-first (order set in categories.json) so the
+  // strongest work leads the grid instead of falling out in folder order.
+  .sort((a, b) => categories.indexOf(a.category) - categories.indexOf(b.category));
 
 const hasPhotos = photos.length > 0;
 const populatedCategories = categories.filter(cat => photos.some(p => p.category === cat));
