@@ -271,37 +271,6 @@ const PRIORITY_FILENAMES = [
   'DSC_8467-Enhanced-NR-3.jpg', 'DSC_8478-Enhanced-NR-3.jpg', 'DSC_8503-Enhanced-NR-3.jpg',
   'DSC_8508-Enhanced-NR-3.jpg', 'DSC_8579-Enhanced-NR-2.jpg', 'DSC_8586-Enhanced-NR-2.jpg',
   'DSC_8596-Enhanced-NR-2.jpg', 'DSC_8597-Enhanced-NR-2.jpg', 'DSC_8598-Enhanced-NR-2.jpg',
-  // Fourth rework batch (2026-09-14) -- bimmerfest + retrostock, several
-  // already posted under the old edit; removed from post-queue.json's
-  // posted list so they go out again per Marc's standing exception.
-  'DSC_5793-Enhanced-NR.jpg', 'DSC_5796-Enhanced-NR.jpg', 'DSC_5827-Enhanced-NR.jpg',
-  'DSC_5933-Enhanced-NR.jpg', 'DSC_5954-Enhanced-NR.jpg', 'DSC_5961-Enhanced-NR.jpg',
-  'DSC_5963-Enhanced-NR.jpg', 'DSC_5977-Enhanced-NR.jpg', 'DSC_5998-Enhanced-NR.jpg',
-  'DSC_6007-Enhanced-NR.jpg', 'DSC_6013-Enhanced-NR.jpg', 'DSC_6020-Enhanced-NR.jpg',
-  'DSC_6025-Enhanced-NR.jpg', 'DSC_6029-Enhanced-NR.jpg', 'DSC_6036-Enhanced-NR.jpg',
-  'DSC_6044-Enhanced-NR.jpg', 'DSC_6050-Enhanced-NR.jpg', 'DSC_6051-Enhanced-NR.jpg',
-  'DSC_6052-Enhanced-NR.jpg', 'DSC_6060-Enhanced-NR.jpg', 'DSC_6063-Enhanced-NR.jpg',
-  'DSC_6066-Enhanced-NR.jpg', 'DSC_6067-Enhanced-NR.jpg', 'DSC_6069-Enhanced-NR.jpg',
-  'DSC_6070-Enhanced-NR.jpg', 'DSC_6074-Enhanced-NR.jpg', 'DSC_6081-Enhanced-NR.jpg',
-  'DSC_6107-Enhanced-NR.jpg', 'DSC_6156-Enhanced-NR-2.jpg', 'DSC_6158-Enhanced-NR.jpg',
-  'DSC_6164-Enhanced-NR.jpg', 'DSC_6176-Enhanced-NR.jpg', 'DSC_6190-Enhanced-NR.jpg',
-  'DSC_6224-Enhanced-NR.jpg', 'DSC_6250-Enhanced-NR.jpg', 'DSC_6291-Enhanced-NR.jpg',
-  'DSC_6304-Enhanced-NR.jpg', 'DSC_6309-Enhanced-NR.jpg', 'DSC_6322-Enhanced-NR.jpg',
-  'DSC_6330-Enhanced-NR.jpg', 'DSC_6338-Enhanced-NR.jpg', 'DSC_6347-Enhanced-NR.jpg',
-  'DSC_6351-Enhanced-NR.jpg', 'DSC_6357-Enhanced-NR.jpg', 'DSC_6359-Enhanced-NR.jpg',
-  'DSC_6365-Enhanced-NR.jpg', 'DSC_6375-Enhanced-NR.jpg', 'DSC_6380-Enhanced-NR.jpg',
-  'DSC_6415-Enhanced-NR.jpg', 'DSC_6434-Enhanced-NR.jpg', 'DSC_6460-Enhanced-NR.jpg',
-  'DSC_6468-Enhanced-NR.jpg', 'DSC_6479-Enhanced-NR.jpg', 'DSC_6492-Enhanced-NR.jpg',
-  'DSC_6493-Enhanced-NR.jpg', 'DSC_6496-Enhanced-NR.jpg', 'DSC_6500-Enhanced-NR.jpg',
-  'DSC_6504-Enhanced-NR.jpg', 'DSC_6508-Enhanced-NR.jpg', 'DSC_6510-Enhanced-NR.jpg',
-  'DSC_6516-Enhanced-NR.jpg', 'DSC_6532-Enhanced-NR.jpg', 'DSC_6539-Enhanced-NR.jpg',
-  'DSC_6619-Enhanced-NR.jpg', 'DSC_6621-Enhanced-NR.jpg', 'DSC_6626-Enhanced-NR.jpg',
-  'DSC_6685-Enhanced-NR.jpg', 'DSC_6691-Enhanced-NR.jpg', 'DSC_6702-Enhanced-NR.jpg',
-  'DSC_6728-Enhanced-NR.jpg', 'DSC_6729-Enhanced-NR.jpg', 'DSC_6733-Enhanced-NR.jpg',
-  'DSC_6739-Enhanced-NR.jpg', 'DSC_6744-Enhanced-NR.jpg', 'DSC_6752-Enhanced-NR.jpg',
-  'DSC_6758-Enhanced-NR.jpg', 'DSC_6766-Enhanced-NR.jpg', 'DSC_6778-Enhanced-NR.jpg',
-  'DSC_6781-Enhanced-NR.jpg', 'DSC_6782-Enhanced-NR.jpg', 'DSC_6789-Enhanced-NR.jpg',
-  'DSC_6792-Enhanced-NR.jpg', 'DSC_6795-Enhanced-NR.jpg',
 ];
 
 // Categories where the next pick is random among that category's pending
