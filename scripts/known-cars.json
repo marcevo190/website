@@ -1,5 +1,12 @@
 {
   "_comment": "Reference for recurring cars across TrackMarc's events -- it's a small regular Irish track day/drift scene, so the same physical car turns up at multiple events months apart. When captioning a new batch (manually or reviewing a Gemini pass), grep this file for a distinctive livery/sponsor/plate before assuming a car is new. Add an entry whenever you confirm the same car reappearing (see car-711 below for how it was found: matching sponsor text across two events' photos). Not read by any script or page -- purely a lookup for whoever's doing the captioning.",
+  "modelIdentificationGuides": [
+    {
+      "id": "jzx100-chaser-cresta-markii",
+      "models": ["Toyota Chaser", "Toyota Cresta", "Toyota Mark II"],
+      "guide": "Badge-engineered triplets on the same JZX100 platform (1996-2001) -- mechanically identical, styling differences are subtle enough that even long-time owners argue about it online. Gemini has repeatedly failed on this exact distinction (see car-minowa-cresta above) and should not be trusted on it without a visible badge or Marc's own confirmation. #1 rule: if a model-name badge is legible (boot lid script badge, or front fender badge -- 'CHASER', 'CRESTA', or 'MARK II') trust that over any styling guess. Without a badge, rough character cues only (not reliable enough to caption from alone): Chaser = sportier, 3-bar grille pre-1998 facelift / 2-bar after, trim badges like Tourer/Tourer V/Tourer S/Avante; Cresta = more curved/sloping bodywork and simpler grille, sits ~20mm taller than the other two (Toyota's own deliberate cue for a chunkier, more upright stance); Mark II = more conservative/formal chrome grille, traditional sedan proportions, Grande trim badge. When no badge is visible and styling is ambiguous, prefer the plate-cross-reference trick (same reg plate elsewhere with a clear badge shot) over guessing, or flag it for Marc rather than pick one."
+    }
+  ],
   "cars": [
     {
       "id": "car-711",
