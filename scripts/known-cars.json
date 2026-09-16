@@ -25,7 +25,15 @@
         "86 Fest 2026 (DSC_1440-Enhanced-NR.jpg, DSC_1450-Enhanced-NR.jpg, DSC_1454-Enhanced-NR.jpg, DSC_1462-Enhanced-NR.jpg, DSC_2517-Enhanced-NR.jpg -- all Shinji Minowa driving/loaner)",
         "Drift Games Summer Bash 2026 (DSC_7446-Enhanced-NR.jpg -- same plate, not Minowa, predates 86 Fest)"
       ],
-      "note": "Gemini repeatedly misidentified this as a 'Toyota Chaser' or 'Toyota Mark II' -- it's a Cresta, the third badge-engineered sibling on the same JZX100 platform (Chaser/Cresta/Mark II are near-identical apart from grille and taillight details). Fixed 2026-09-07 per Marc's correction. Also: Gemini invented a false celebrity ID for Shinji Minowa in one photo (DSC_1494-Enhanced-NR.jpg), captioning him as 'Keiichi Tsuchiya' -- a real but completely different person. Always verify a named-person ID against context (guest list, who's actually confirmed to be at the event) rather than trusting a model's specific identity claim."
+      "note": "Gemini repeatedly misidentified this as a 'Toyota Chaser' or 'Toyota Mark II' -- it's a Cresta, the third badge-engineered sibling on the same JZX100 platform (Chaser/Cresta/Mark II are near-identical apart from grille and taillight details). Fixed 2026-09-07 per Marc's correction. Also: Gemini invented a false celebrity ID for Shinji Minowa in one photo (DSC_1494-Enhanced-NR.jpg), captioning him as 'Keiichi Tsuchiya' -- a real but completely different person. Always verify a named-person ID against context (guest list, who's actually confirmed to be at the event) rather than trusting a model's specific identity claim. WARNING (2026-09-16): a fresh Gemini plate-consistency audit was run to check for this exact class of error elsewhere, and on THIS car it called plate 99-MH-15123 a 'Chaser', directly contradicting Marc's own confirmed 'Cresta' correction above -- proof Gemini still can't be trusted on the Chaser/Cresta/Mark II distinction even when explicitly asked to double-check. Do not apply any Gemini Chaser/Cresta/Mark II call without Marc's own eyes on it."
+    },
+    {
+      "id": "car-levin-bzr-7199",
+      "description": "Black Toyota Corolla Levin BZ-R (AE111 generation), plate 99-LK-7199, 'TOYOTA LEVIN' and 'BZ-R' badging visible on the boot lid.",
+      "seenAt": [
+        "86 Fest 2026 (DSC_0208-Enhanced-NR.jpg, DSC_1896-Enhanced-NR.jpg, DSC_2709-Enhanced-NR.jpg, DSC_9373-Enhanced-NR.jpg, DSC_9507-Enhanced-NR.jpg)"
+      ],
+      "note": "3 of the 5 photos under this plate were wrong -- DSC_0208 and DSC_9507 captioned as a 'Honda Integra Type R', DSC_1896 as a 'Nissan Silvia S14'. Found and fixed 2026-09-16 via a plate-consistency audit (grouping captions.json by plate and flagging disagreeing model names) after Marc caught an unrelated Starlet/Corolla mixup and asked for a wider check. Confirmed by matching the visible plate across all 5 photos plus the boot badge reading 'LEVIN'/'BZ-R' on the two clearest shots."
     }
   ]
 }
