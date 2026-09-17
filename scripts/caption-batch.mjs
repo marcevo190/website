@@ -74,6 +74,15 @@ Style rules:
   nestled, vibrant, game-changer, transformative.
 - No exclamation marks.
 - British/Irish English: colour, tyre, favour, organise. Contractions are fine (it's, that's).
+- Never open the Instagram hook with a generic stock phrase like "Nothing beats...", "There's
+  nothing quite like...", "You can't go wrong with...", or "It's hard to beat...". These get
+  reused across dozens of captions in the same batch and start looking like a template. Open
+  with something specific to what's actually in this photo instead (the car, the livery, the
+  action, the location).
+- For paint colour, prefer a plain, simple word (orange, red, blue) over a fancier-sounding
+  guess (bronze, copper, burgundy, gunmetal) unless you're genuinely confident -- metallic
+  paint under variable outdoor lighting is an easy way to guess wrong, and the same car has
+  been called two different specific-sounding colours across two photos before.
 - This photo is from: ${categoryLabel}.
 
 Two different captions are needed:

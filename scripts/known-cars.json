@@ -41,6 +41,14 @@
         "86 Fest 2026 (DSC_0208-Enhanced-NR.jpg, DSC_1896-Enhanced-NR.jpg, DSC_2709-Enhanced-NR.jpg, DSC_9373-Enhanced-NR.jpg, DSC_9507-Enhanced-NR.jpg)"
       ],
       "note": "3 of the 5 photos under this plate were wrong -- DSC_0208 and DSC_9507 captioned as a 'Honda Integra Type R', DSC_1896 as a 'Nissan Silvia S14'. Found and fixed 2026-09-16 via a plate-consistency audit (grouping captions.json by plate and flagging disagreeing model names) after Marc caught an unrelated Starlet/Corolla mixup and asked for a wider check. Confirmed by matching the visible plate across all 5 photos plus the boot badge reading 'LEVIN'/'BZ-R' on the two clearest shots."
+    },
+    {
+      "id": "car-350z-oy06ptu",
+      "description": "Orange Nissan 350Z, plate OY06 PTU, at Drift Games.",
+      "seenAt": [
+        "Drift Games Summer Bash 2026 (DSC_7320-Enhanced-NR.jpg, DSC_7322-Enhanced-NR.jpg)"
+      ],
+      "note": "Gemini called it 'bronze' in one photo and 'copper' in the other -- Marc confirmed it's just orange (2026-09-17) after both went out on Instagram with mismatched colours. Bronze/copper/orange on metallic paint under drift-day lighting is an easy one for Gemini to get wrong -- when in doubt on a colour like this, it's worth a plain, simple word over a fancier-sounding guess."
     }
   ]
 }
