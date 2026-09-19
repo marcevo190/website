@@ -26,6 +26,21 @@ export interface EventDef {
 // so the strongest work leads. Update this order if his opinion changes.
 export const events: EventDef[] = [
   {
+    slug: '130-showdown-2026',
+    name: "James Deane's 130 Showdown 2026",
+    shortLabel: '130 Showdown',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: 'September 2026',
+    categories: ['130-showdown'],
+    hero: 'DSC_4363-Enhanced-NR.jpg',
+    intro: [
+      "A two-day drift spectacular at Mondello Park celebrating 20 years of James Deane's career, built around a hand-picked Top 24 of the world's best and Ireland's finest going door to door.",
+      "The headline moment was Mad Mike Whiddett's first-ever appearance in Ireland, alongside the rebuilt Worthouse S15s reunited on track and Evenflow. The format ran an Irish knockout competition first, building to the Showdown itself.",
+    ],
+    classes: ['Drifting', 'Tandem Battles', 'Top 24 Knockout'],
+    description: "Photo coverage of James Deane's 130 Showdown 2026 at Mondello Park by Marc Ronan — 20 years of James Deane, Mad Mike Whiddett's Irish debut, and the reunited Worthouse S15s.",
+  },
+  {
     slug: '86fest-2026',
     name: '86 Fest 2026',
     shortLabel: '86 Fest',

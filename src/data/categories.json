@@ -1,5 +1,5 @@
 {
-  "website": ["86fest", "endurance", "iccr", "drift-games", "retrostock", "bimmerfest", "car-shows", "formula", "rally", "gt"],
+  "website": ["130-showdown", "86fest", "endurance", "iccr", "drift-games", "retrostock", "bimmerfest", "car-shows", "formula", "rally", "gt"],
   "instagramOnly": ["instagram-only"],
   "labels": {
     "formula": "Formula",
@@ -11,6 +11,7 @@
     "bimmerfest": "Bimmerfest",
     "retrostock": "Retrostock",
     "drift-games": "Drift Games",
-    "86fest": "86 Fest"
+    "86fest": "86 Fest",
+    "130-showdown": "130 Showdown"
   }
 }

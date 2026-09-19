@@ -1,6 +1,6 @@
-name: Instagram 86 Fest Boost
+name: Instagram 130 Showdown Boost
 
-# Temporary: posts 86 Fest photos specifically, 5x/day, on top of the
+# Temporary: posts 130 Showdown photos specifically, 5x/day, on top of the
 # normal twice-daily instagram-post.yml schedule, so the event gets real
 # traction while it's still fresh rather than trickling out over ~2 months in
 # the general rotation. Self-expires below — delete this file once the whole
@@ -12,12 +12,11 @@ name: Instagram 86 Fest Boost
 # automatically falls through to the next once one's exhausted. So this
 # workflow no longer needs a manual category swap when one finishes.
 #
-# Repurposed 2026-09-07: 86 Fest only has its first batch of 20 photos in as
-# of this change (Marc's adding more later the same day) but it's the
-# freshest event so it jumps to the front regardless — then retrostock (51
-# pending as of this change) and drift-games (351 pending, untouched) pick up
-# after, in that order. Previously boosted retrostock -> drift-games (started
-# 2026-08-26, following bimmerfest which finished 2026-08-25 19:56 UTC).
+# Repurposed 2026-09-19: James Deane's 130 Showdown (20th-anniversary drift
+# show, Mad Mike's Irish debut) is the freshest event -- 81 photos in from
+# day one, Marc still shooting day two -- so it jumps to the front, then
+# 86fest, retrostock and drift-games pick up after, in that order. Previously
+# boosted 86fest -> retrostock -> drift-games (started 2026-09-07).
 
 concurrency:
   group: track-bot-commits
@@ -81,7 +80,7 @@ jobs:
         if: steps.expiry.outputs.active == 'true'
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
-        run: node scripts/instagram-post.cjs 86fest retrostock drift-games
+        run: node scripts/instagram-post.cjs 130-showdown 86fest retrostock drift-games
 
       - name: Commit updated queue
         if: steps.expiry.outputs.active == 'true'

@@ -214,14 +214,14 @@ function generateTagsAndMentions(title, caption, category) {
 // time-sensitive event first. Update this after each new event — add the
 // new category, and drop old ones once their backlogs have cleared.
 //
-// Kept in sync with instagram-post-boost.yml's priority list (2026-09-07):
-// 86 Fest is the freshest event (only 20 photos in so far, more coming
-// later today) so it goes first, ahead of retrostock (51 pending) and
-// drift-games (351 pending, untouched). Otherwise this list silently
-// outranks the boost's priority — that's exactly how iccr quietly started
-// winning every non-boost post back on 2026-08-26, when this list still said
+// Kept in sync with instagram-post-boost.yml's priority list (2026-09-19):
+// 130 Showdown is the freshest event (James Deane's 20th-anniversary show,
+// 81 photos in so far, Marc actively shooting day two) so it leads, ahead of
+// 86fest, retrostock and drift-games. Otherwise this list silently outranks
+// the boost's priority — that's exactly how iccr quietly started winning
+// every non-boost post back on 2026-08-26, when this list still said
 // ['bimmerfest', 'iccr'] after bimmerfest had already run out.
-const PRIORITY_CATEGORIES = ['86fest', 'retrostock', 'drift-games'];
+const PRIORITY_CATEGORIES = ['130-showdown', '86fest', 'retrostock', 'drift-games'];
 
 // Explicit filename overrides — jump the queue ahead of EVERYTHING else
 // (even PRIORITY_CATEGORIES), checked first regardless of whether the
@@ -278,10 +278,11 @@ const PRIORITY_FILENAMES = [
 // strictly in DSC-number order reads as an obvious bot pattern once anyone
 // notices; picking randomly within the category (still respecting the
 // priority order above — this category still has to be exhausted before
-// falling through to the next one) fixes that. Scoped to 86fest only, per
-// Marc's request (2026-09-07) — leave this empty once 86fest's backlog
-// clears rather than leaving it applying to whatever category is next.
-const RANDOM_PICK_CATEGORIES = ['86fest'];
+// falling through to the next one) fixes that. Scoped to 86fest per Marc's
+// request (2026-09-07); extended to 130-showdown (2026-09-19) since the same
+// bot-pattern concern applies equally there — leave entries here only while
+// their backlog is still being actively worked through, not indefinitely.
+const RANDOM_PICK_CATEGORIES = ['86fest', '130-showdown'];
 
 // Reg plate is the only reliable "same physical car" signal we have (title/
 // caption text isn't — two different cars can share a colour + model name).
