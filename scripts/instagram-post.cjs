@@ -231,47 +231,15 @@ const PRIORITY_CATEGORIES = ['130-showdown', '86fest', 'retrostock', 'drift-game
 // array first — this list only pulls from already-pending photos, it
 // doesn't override posted-status by itself. Clear this list out once
 // everything in it has posted.
-const PRIORITY_FILENAMES = [
-  'DSC_6961-Enhanced-NR.jpg', 'DSC_6977-Enhanced-NR.jpg', 'DSC_6992-Enhanced-NR.jpg',
-  'DSC_7121-Enhanced-NR.jpg', 'DSC_7163-Enhanced-NR.jpg', 'DSC_7170-Enhanced-NR.jpg',
-  'DSC_7280-Enhanced-NR.jpg', 'DSC_7286-Enhanced-NR.jpg', 'DSC_7322-Enhanced-NR.jpg',
-  'DSC_7326-Enhanced-NR-2.jpg', 'DSC_7331-Enhanced-NR.jpg', 'DSC_7333-Enhanced-NR.jpg',
-  'DSC_7334-Enhanced-NR.jpg', 'DSC_7338-Enhanced-NR.jpg', 'DSC_7368-Enhanced-NR.jpg',
-  'DSC_7380-Enhanced-NR.jpg', 'DSC_7382-Enhanced-NR.jpg', 'DSC_7395-Enhanced-NR.jpg',
-  'DSC_7407-Enhanced-NR.jpg', 'DSC_7420-Enhanced-NR.jpg', 'DSC_7426-Enhanced-NR.jpg',
-  'DSC_7660-Enhanced-NR.jpg', 'DSC_7668-Enhanced-NR.jpg', 'DSC_7671-Enhanced-NR.jpg',
-  'DSC_7673-Enhanced-NR.jpg', 'DSC_7678-Enhanced-NR.jpg', 'DSC_7686-Enhanced-NR.jpg',
-  'DSC_7690-Enhanced-NR.jpg', 'DSC_7693-Enhanced-NR.jpg', 'DSC_7696-Enhanced-NR.jpg',
-  'DSC_7698-Enhanced-NR.jpg', 'DSC_7699-Enhanced-NR.jpg', 'DSC_7708-Enhanced-NR.jpg',
-  'DSC_7710-Enhanced-NR.jpg', 'DSC_7711-Enhanced-NR.jpg', 'DSC_7713-Enhanced-NR.jpg',
-  'DSC_7714-Enhanced-NR.jpg', 'DSC_7715-Enhanced-NR.jpg', 'DSC_7716-Enhanced-NR.jpg',
-  'DSC_7717-Enhanced-NR.jpg', 'DSC_7718-Enhanced-NR.jpg', 'DSC_7719-Enhanced-NR.jpg',
-  'DSC_7720-Enhanced-NR.jpg', 'DSC_7721-Enhanced-NR.jpg', 'DSC_7727-Enhanced-NR.jpg',
-  'DSC_7730-Enhanced-NR.jpg', 'DSC_7731-Enhanced-NR.jpg', 'DSC_7738-Enhanced-NR.jpg',
-  'DSC_7741-Enhanced-NR.jpg', 'DSC_7742-Enhanced-NR.jpg',
-  // Second rework batch (2026-09-14)
-  'DSC_6952-Enhanced-NR.jpg', 'DSC_7047-Enhanced-NR.jpg', 'DSC_7117-Enhanced-NR.jpg',
-  'DSC_7147-Enhanced-NR.jpg', 'DSC_7253-Enhanced-NR.jpg', 'DSC_7269-Enhanced-NR.jpg',
-  'DSC_7271-Enhanced-NR.jpg', 'DSC_7379-Enhanced-NR.jpg', 'DSC_7386-Enhanced-NR.jpg',
-  'DSC_7461-Enhanced-NR.jpg', 'DSC_7473-Enhanced-NR.jpg', 'DSC_7475-Enhanced-NR.jpg',
-  'DSC_7491-Enhanced-NR.jpg', 'DSC_7493-Enhanced-NR.jpg', 'DSC_7499-Enhanced-NR.jpg',
-  'DSC_7504-Enhanced-NR.jpg', 'DSC_7546-Enhanced-NR.jpg', 'DSC_7562-Enhanced-NR.jpg',
-  'DSC_7582-Enhanced-NR.jpg', 'DSC_7589-Enhanced-NR.jpg', 'DSC_7591-Enhanced-NR.jpg',
-  'DSC_7594-Enhanced-NR.jpg', 'DSC_7599-Enhanced-NR.jpg', 'DSC_7600-Enhanced-NR.jpg',
-  'DSC_7609-Enhanced-NR.jpg', 'DSC_7611-Enhanced-NR.jpg', 'DSC_7613-Enhanced-NR.jpg',
-  'DSC_7615-Enhanced-NR.jpg', 'DSC_7616-Enhanced-NR.jpg', 'DSC_7623-Enhanced-NR.jpg',
-  'DSC_7644-Enhanced-NR.jpg',
-  // Third rework batch (2026-09-14)
-  'DSC_7320-Enhanced-NR.jpg', 'DSC_7469-Enhanced-NR.jpg', 'DSC_7470-Enhanced-NR.jpg',
-  'DSC_8228-Enhanced-NR-2.jpg', 'DSC_8229-Enhanced-NR-2.jpg', 'DSC_8233-Enhanced-NR-2.jpg',
-  'DSC_8251-Enhanced-NR-3.jpg', 'DSC_8254-Enhanced-NR-3.jpg', 'DSC_8260-Enhanced-NR-3.jpg',
-  'DSC_8276-Enhanced-NR-3.jpg', 'DSC_8283-Enhanced-NR-3.jpg', 'DSC_8309-Enhanced-NR-3.jpg',
-  'DSC_8311-Enhanced-NR-3.jpg', 'DSC_8314-Enhanced-NR-3.jpg', 'DSC_8345-Enhanced-NR-2.jpg',
-  'DSC_8373-Enhanced-NR-2.jpg', 'DSC_8378-Enhanced-NR-2.jpg', 'DSC_8393-Enhanced-NR-2.jpg',
-  'DSC_8467-Enhanced-NR-3.jpg', 'DSC_8478-Enhanced-NR-3.jpg', 'DSC_8503-Enhanced-NR-3.jpg',
-  'DSC_8508-Enhanced-NR-3.jpg', 'DSC_8579-Enhanced-NR-2.jpg', 'DSC_8586-Enhanced-NR-2.jpg',
-  'DSC_8596-Enhanced-NR-2.jpg', 'DSC_8597-Enhanced-NR-2.jpg', 'DSC_8598-Enhanced-NR-2.jpg',
-];
+//
+// Cleared 2026-09-20: had 72 old drift-games rework filenames still
+// unposted, which were silently blocking 130-showdown from ever winning a
+// pick despite being first in PRIORITY_CATEGORIES below — this list is
+// checked before categories, with no exception. Marc asked to prioritize
+// 130-showdown specifically, so the old reworks lost their queue-jump and
+// drop back to posting via the normal drift-games category rotation
+// instead (they're not lost, just no longer ahead of a live event).
+const PRIORITY_FILENAMES = [];
 
 // Categories where the next pick is random among that category's pending
 // photos, instead of the default "lowest filename number first". Posting
