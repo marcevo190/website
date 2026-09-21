@@ -72,6 +72,7 @@ function loadDriverTags() {
     const lines = [];
     for (const d of data.drivers ?? []) lines.push(`- ${d.name} (${d.car}) -> ${d.handle}`);
     for (const t of data.teams ?? []) lines.push(`- ${t.name}${t.car ? ` (${t.car})` : ''} -> ${t.handle}`);
+    for (const e of data.events ?? []) lines.push(`- ${e.name} (event) -> ${e.handle}`);
     return lines.join('\n');
   } catch {
     return '';
@@ -79,10 +80,13 @@ function loadDriverTags() {
 }
 const DRIVER_TAGS = loadDriverTags();
 const DRIVER_TAGS_BLOCK = DRIVER_TAGS
-  ? `\nKnown drivers/teams -- if the car in THIS photo clearly matches one of these (same
-number, livery, or sponsor text visible), use their exact handle in "handles" below. Match
-on the car's actual visible features, not just similar colours -- do not guess a handle for
-a car that doesn't clearly match one of these:\n${DRIVER_TAGS}\n`
+  ? `\nKnown drivers/teams/events -- if the car in THIS photo clearly matches one of the
+driver/team entries below (same number, livery, or sponsor text visible), use their exact
+handle. Match on the car's actual visible features, not just similar colours -- do not guess
+a handle for a car that doesn't clearly match one of these. The "(event)" entries are
+different: always tag the current event's handle (this photo is from ${categoryLabel}) if one
+is listed below, regardless of which car is in the photo -- that's just tagging the event
+itself, not identifying anyone.\n${DRIVER_TAGS}\n`
   : '';
 
 const STYLE_PROMPT = `You are writing captions for TrackMarc, a professional Irish motorsport
@@ -124,9 +128,11 @@ one.
 ${DRIVER_TAGS_BLOCK}
 If (and only if) the car in this photo clearly matches one of the known drivers/teams above,
 use their exact @handle in place of their name in "igCaption" (e.g. "@jamesdeane130's Nissan
-Silvia" instead of "James Deane's Nissan Silvia"). Keep "title" and "caption" (website) using
-the plain name, never an @handle -- handles are an Instagram-only thing. Also return
-"handles": the @handle(s) used in igCaption, comma-separated, or an empty string if none.
+Silvia" instead of "James Deane's Nissan Silvia"). If a matching "(event)" entry is listed,
+also work its @handle naturally into "igCaption" (e.g. "at the @130showdown"). Keep "title"
+and "caption" (website) using plain names always, never an @handle -- handles are an
+Instagram-only thing. Also return "handles": every @handle used in igCaption (drivers, teams,
+and the event), comma-separated, or an empty string if none.
 
 Worked examples of the exact tone and format wanted:
 1. {"title": "Aston Martin Vantage GT3 #11 — Le Mans 2026", "caption": "The Aston Martin Vantage GT3, number 11, on track during the Le Mans 24 Hours. Green and yellow livery cutting through the grey.", "igCaption": "Green and yellow, cutting through the Le Mans grey. The Aston Martin Vantage GT3, car 11, mid-stint at this year's 24 Hours. What livery would you run on a GT3 car?", "plate": ""}

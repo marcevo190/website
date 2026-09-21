@@ -10,11 +10,15 @@
     { "name": "Conor Falvey", "handle": "@conorfalvey412", "car": "Nissan Silvia S15, blue and white, number 412" },
     { "name": "James Deane", "handle": "@jamesdeane130", "car": "Nissan Silvia S15, Worthouse livery, number 130" },
     { "name": "Conor Shanahan", "handle": "@conorshanahan79", "car": "Toyota GT86, number 79, Trinity Racing livery" },
-    { "name": "Mad Mike Whiddett", "handle": "@madmike.123", "car": "Mazda RX-7, Red Bull livery, number 130" }
+    { "name": "Mad Mike Whiddett", "handle": "@madmike.123", "car": "Mazda RX-7, Red Bull livery, number 130" },
+    { "name": "Kawabata TMR", "handle": "@kawabata_tmr", "car": "Nissan 180SX, blue" }
   ],
   "teams": [
     { "name": "Worthouse Drift Team", "handle": "@worthousedrift" },
     { "name": "Matt's Garage", "handle": "@matts_garage_port", "car": "BMW E36, green, number 168" },
     { "name": "Trinity Racing", "handle": "@trinity.racing.team" }
+  ],
+  "events": [
+    { "name": "130 Showdown", "handle": "@130showdown" }
   ]
 }
