@@ -61,6 +61,30 @@ const PROGRESS_PATH      = 'scripts/.caption-batch-progress.json';
 // batch — add more here as new free-tier models become available.
 const MODELS = ['gemini-3.5-flash', 'gemini-3.1-flash-lite'];
 
+// Confirmed driver/team Instagram handles (scripts/driver-tags.json) -- built up
+// from Marc manually tagging photos himself, never guessed. Injected below so
+// Gemini can auto-tag a NEW photo of a driver/car it already knows, without
+// re-confirming the handle from scratch each time. Only ever add entries here
+// once Marc has confirmed the handle -- a wrong guess tags a stranger.
+function loadDriverTags() {
+  try {
+    const data = JSON.parse(fs.readFileSync('scripts/driver-tags.json', 'utf8'));
+    const lines = [];
+    for (const d of data.drivers ?? []) lines.push(`- ${d.name} (${d.car}) -> ${d.handle}`);
+    for (const t of data.teams ?? []) lines.push(`- ${t.name}${t.car ? ` (${t.car})` : ''} -> ${t.handle}`);
+    return lines.join('\n');
+  } catch {
+    return '';
+  }
+}
+const DRIVER_TAGS = loadDriverTags();
+const DRIVER_TAGS_BLOCK = DRIVER_TAGS
+  ? `\nKnown drivers/teams -- if the car in THIS photo clearly matches one of these (same
+number, livery, or sponsor text visible), use their exact handle in "handles" below. Match
+on the car's actual visible features, not just similar colours -- do not guess a handle for
+a car that doesn't clearly match one of these:\n${DRIVER_TAGS}\n`
+  : '';
+
 const STYLE_PROMPT = `You are writing captions for TrackMarc, a professional Irish motorsport
 photography portfolio (trackmarc.com) run by Marc Ronan. Identify the car (make, model, number,
 livery/team if visible) from what is ACTUALLY VISIBLE in the photo — never guess, never invent
@@ -97,6 +121,12 @@ like "64" or "#21" is NOT a plate). If more than one car in the shot has a legib
 all of them as a single comma-separated string (e.g. "141-D-12345, WV05 APZ"). If there's no
 legible plate visible on any car, use an empty string — never guess or reconstruct a partial
 one.
+${DRIVER_TAGS_BLOCK}
+If (and only if) the car in this photo clearly matches one of the known drivers/teams above,
+use their exact @handle in place of their name in "igCaption" (e.g. "@jamesdeane130's Nissan
+Silvia" instead of "James Deane's Nissan Silvia"). Keep "title" and "caption" (website) using
+the plain name, never an @handle -- handles are an Instagram-only thing. Also return
+"handles": the @handle(s) used in igCaption, comma-separated, or an empty string if none.
 
 Worked examples of the exact tone and format wanted:
 1. {"title": "Aston Martin Vantage GT3 #11 — Le Mans 2026", "caption": "The Aston Martin Vantage GT3, number 11, on track during the Le Mans 24 Hours. Green and yellow livery cutting through the grey.", "igCaption": "Green and yellow, cutting through the Le Mans grey. The Aston Martin Vantage GT3, car 11, mid-stint at this year's 24 Hours. What livery would you run on a GT3 car?", "plate": ""}
@@ -104,8 +134,8 @@ Worked examples of the exact tone and format wanted:
 3. {"title": "Pink E30 drift car at Mondello", "caption": "A pink E30 sideways at Mondello Park, smoke off the rear tyres. One of the louder builds on show that day.", "igCaption": "Pink E30, sideways, smoke off both rear tyres. One of the loudest builds at Mondello Park that day, in every sense. Pink on a drift car, yes or no?", "plate": ""}
 
 Return ONLY a JSON object (no other text) in a \`\`\`json fenced code block, shaped exactly like
-the examples above: {"title": "...", "caption": "...", "igCaption": "...", "plate": "..."}. Title
-is short (like a photo credit line).`;
+the examples above plus "handles": {"title": "...", "caption": "...", "igCaption": "...",
+"plate": "...", "handles": "..."}. Title is short (like a photo credit line).`;
 
 function loadCaptionsJson() {
   try { return JSON.parse(fs.readFileSync(CAPTIONS_JSON_PATH, 'utf8')); } catch { return {}; }

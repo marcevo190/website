@@ -1,0 +1,20 @@
+{
+  "_comment": "Confirmed driver/team Instagram handles, keyed by identifying features visible on the car (door number, livery text, sponsor branding). Injected into caption-batch.mjs's Gemini prompt so new photos of these same cars/drivers get auto-tagged. Only add an entry once Marc has confirmed the handle himself -- guessing a wrong handle tags a stranger.",
+  "drivers": [
+    { "name": "Konstantyn Shchurenko", "handle": "@shchurenko_konstantyn", "car": "Toyota GT86, number 16, Trinity Racing livery" },
+    { "name": "Stephen Halferty", "handle": "@shalferty_117__", "car": "BMW E36 Touring, number 117" },
+    { "name": "Davan Leahy", "handle": "@davanleahydrifting", "car": "Toyota GT86, number 204" },
+    { "name": "Darragh Spencer", "handle": "@darragh_spencer", "car": "BMW E46, number 38" },
+    { "name": "Jack Caldwell", "handle": "@jackcaldwell76", "car": "Nissan Silvia S15, grey and blue, number 76" },
+    { "name": "Jacob Krzyszczak", "handle": "@jacobkrzyszczak720", "car": "Nissan Silvia S15, number 720" },
+    { "name": "Conor Falvey", "handle": "@conorfalvey412", "car": "Nissan Silvia S15, blue and white, number 412" },
+    { "name": "James Deane", "handle": "@jamesdeane130", "car": "Nissan Silvia S15, Worthouse livery, number 130" },
+    { "name": "Conor Shanahan", "handle": "@conorshanahan79", "car": "Toyota GT86, number 79, Trinity Racing livery" },
+    { "name": "Mad Mike Whiddett", "handle": "@madmike.123", "car": "Mazda RX-7, Red Bull livery, number 130" }
+  ],
+  "teams": [
+    { "name": "Worthouse Drift Team", "handle": "@worthousedrift" },
+    { "name": "Matt's Garage", "handle": "@matts_garage_port", "car": "BMW E36, green, number 168" },
+    { "name": "Trinity Racing", "handle": "@trinity.racing.team" }
+  ]
+}
