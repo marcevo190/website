@@ -261,15 +261,41 @@ function getPlate(filename, captions) {
   return (captions[filename]?.plate || '').trim();
 }
 
+// Most drift/show cars never have a plate on record (race number only, no
+// road reg), so plate-matching alone barely helps avoid posting the same car
+// twice in a row for those categories. A DSC frame number close to the last
+// posted photo's, within the SAME category, is a strong sign it's the same
+// burst/pass — i.e. the same car — even with no plate to compare (Marc's
+// request, 2026-09-22).
+function getFrameNumber(filename) {
+  const m = filename?.match(/(\d+)/);
+  return m ? parseInt(m[1], 10) : null;
+}
+const SEQUENTIAL_GAP_THRESHOLD = 15;
+
+function isSameCarAsLast(candidate, lastItem, captions) {
+  if (!lastItem) return false;
+  const lastPlate = getPlate(lastItem.filename, captions);
+  if (lastPlate && getPlate(candidate.filename, captions) === lastPlate) return true;
+  if (candidate.category === lastItem.category) {
+    const lastNum = getFrameNumber(lastItem.filename);
+    const candNum = getFrameNumber(candidate.filename);
+    if (lastNum !== null && candNum !== null && Math.abs(lastNum - candNum) < SEQUENTIAL_GAP_THRESHOLD) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // Filters out candidates that are the same car as the just-posted photo, so
 // the same physical car never appears twice in a row on the feed (Marc's
 // request, 2026-09-18) — but never returns an empty list if that would mean
 // skipping the pick entirely; if every remaining candidate is the same car
 // (e.g. near the tail end of that car's backlog), post it anyway rather than
 // stall.
-function avoidSameCarAsLast(candidates, lastPlate, captions) {
-  if (!lastPlate) return candidates;
-  const filtered = candidates.filter(c => getPlate(c.filename, captions) !== lastPlate);
+function avoidSameCarAsLast(candidates, lastItem, captions) {
+  if (!lastItem) return candidates;
+  const filtered = candidates.filter(c => !isSameCarAsLast(c, lastItem, captions));
   return filtered.length > 0 ? filtered : candidates;
 }
 
@@ -290,7 +316,7 @@ function pickNext(images, posted, captions) {
   const pending   = images.filter(img => !postedSet.has(img.filename));
   if (pending.length === 0) return null;
 
-  const lastPlate = getPlate(posted[posted.length - 1], captions);
+  const lastItem = images.find(i => i.filename === posted[posted.length - 1]) ?? null;
 
   // A priority category wins EVERY pick as long as it still has pending
   // photos, so a just-shot event keeps dominating the feed until its backlog
@@ -302,15 +328,15 @@ function pickNext(images, posted, captions) {
     // (bimmerfest) keeps taking the slot while it has pending photos; a
     // secondary priority category only gets a pick when that's exhausted.
     for (const cat of PRIORITY_CATEGORIES) {
-      const catCandidates = avoidSameCarAsLast(pending.filter(p => p.category === cat), lastPlate, captions);
+      const catCandidates = avoidSameCarAsLast(pending.filter(p => p.category === cat), lastItem, captions);
       const match = pickFromCategory(catCandidates, cat);
       if (match) return match;
     }
   }
 
-  const lastCat = images.find(i => i.filename === posted[posted.length - 1])?.category;
-  const different = avoidSameCarAsLast(pending.filter(i => i.category !== lastCat), lastPlate, captions);
-  return different.length > 0 ? different[0] : avoidSameCarAsLast(pending, lastPlate, captions)[0];
+  const lastCat = lastItem?.category;
+  const different = avoidSameCarAsLast(pending.filter(i => i.category !== lastCat), lastItem, captions);
+  return different.length > 0 ? different[0] : avoidSameCarAsLast(pending, lastItem, captions)[0];
 }
 
 // ── Fire Make.com webhook ────────────────────────────────────────────────────
@@ -388,12 +414,12 @@ async function main() {
   const igCaptions = loadInstagramCaptions();
   const allImages  = collectImages();
 
-  const lastPlate = getPlate(queue.posted[queue.posted.length - 1], captions);
+  const lastItem = allImages.find(i => i.filename === queue.posted[queue.posted.length - 1]) ?? null;
 
   let next = null;
   if (PRIORITY_FILENAMES.length) {
     const priorityCandidates = allImages.filter(i => PRIORITY_FILENAMES.includes(i.filename) && !queue.posted.includes(i.filename));
-    next = avoidSameCarAsLast(priorityCandidates, lastPlate, captions)[0] || null;
+    next = avoidSameCarAsLast(priorityCandidates, lastItem, captions)[0] || null;
   }
 
   if (next) {
@@ -405,7 +431,7 @@ async function main() {
         console.log(`No images found in category "${category}" — skipping to next in priority list.`);
         continue;
       }
-      const candidates = avoidSameCarAsLast(inCategory.filter(i => !queue.posted.includes(i.filename)), lastPlate, captions);
+      const candidates = avoidSameCarAsLast(inCategory.filter(i => !queue.posted.includes(i.filename)), lastItem, captions);
       next = pickFromCategory(candidates, category);
       if (next) break;
       console.log(`Category "${category}" exhausted — falling through to next in priority list.`);
