@@ -935,7 +935,15 @@ h1, h2, h3, h4 {
   .section-subtitle { font-size: 0.88rem; }
 
   /* ── Hero ── */
-  .hero { padding: 0 1.25rem 3rem; height: auto; min-height: 100svh; }
+  /* min-height used to be 100svh (near full screen). object-fit:cover on
+     .carousel-img then had to crop a wide landscape photo down to fit that
+     tall, narrow window — on a typical phone aspect ratio this cropped away
+     almost the entire left/right of the photo, leaving only a thin vertical
+     sliver visible ("looking through a door"). Shortening this to something
+     closer to the photos' own aspect ratio keeps the crop moderate instead
+     of severe; min-height (not a fixed height) still lets the section grow
+     if hero-content needs more room than this leaves. */
+  .hero { padding: 0 1.25rem 3rem; height: auto; min-height: 60vh; }
   .hero-content { width: 100%; }
   .hero h1 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
   .hero-desc { font-size: 0.9rem; margin-bottom: 1.5rem; }
