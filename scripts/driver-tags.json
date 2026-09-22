@@ -12,7 +12,8 @@
     { "name": "Conor Shanahan", "handle": "@conorshanahan79", "car": "Toyota GT86, number 79, Trinity Racing livery" },
     { "name": "Mad Mike Whiddett", "handle": "@madmike.123", "car": "Mazda RX-7, Red Bull livery, number 130" },
     { "name": "Kawabata TMR", "handle": "@kawabata_tmr", "car": "Nissan 180SX, blue" },
-    { "name": "Chelsea DeNofa", "handle": "@chelseadenofa", "car": "RTR team driver, yellow/black Pennzoil race suit -- CAUTION: teammate Vaughn Gittin Jr. wears similar RTR/Pennzoil gear, Gemini misidentified this photo as Gittin Jr. before Marc corrected it. Don't ID either RTR driver from suit/sponsor branding alone, need a face or name badge match." }
+    { "name": "Chelsea DeNofa", "handle": "@chelseadenofa", "car": "RTR team driver, yellow/black Pennzoil race suit -- CAUTION: teammate Vaughn Gittin Jr. wears similar RTR/Pennzoil gear, Gemini misidentified this photo as Gittin Jr. before Marc corrected it. Don't ID either RTR driver from suit/sponsor branding alone, need a face or name badge match." },
+    { "name": "Adam Kelly", "handle": "@adam_kelly54", "car": "Nissan Silvia S15, number 54, Precision Graphics branding" }
   ],
   "teams": [
     { "name": "Worthouse Drift Team", "handle": "@worthousedrift" },
