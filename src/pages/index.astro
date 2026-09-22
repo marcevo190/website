@@ -42,10 +42,11 @@ const slideEntries = Object.entries(galleryModules).map(([path, mod]) => {
 // Conor Shanahan) to ever surface reliably. FEATURED_SLIDE_FILENAMES is the
 // candidate pool; FEATURED_SLIDE_COUNT of them are guaranteed a slot each
 // build (randomly picked from the pool, so it's not the same few photos
-// every time), with the rest of the carousel still filling randomly from the
-// full library — this is a pool to draw from, not a takeover of the whole
-// carousel. Add/remove filenames here as Marc's pick of standout shots
-// changes.
+// every time). Set to the full 10-slide carousel per Marc's request
+// (2026-09-22, timed with the pending Red Bull Homerun accreditation
+// application) — the whole hero rotation is Red Bull-athlete photos only
+// until this is dialled back. Add/remove filenames here as Marc's pick of
+// standout shots changes.
 const FEATURED_SLIDE_FILENAMES = [
   // Mad Mike Whiddett's Red Bull Mazda RX-7, 130 Showdown
   'DSC_6498-Enhanced-NR.jpg',
@@ -69,7 +70,7 @@ const FEATURED_SLIDE_FILENAMES = [
   'DSC_6646-Enhanced-NR.jpg',
   'DSC_6639-Enhanced-NR.jpg',
 ];
-const FEATURED_SLIDE_COUNT = 3;
+const FEATURED_SLIDE_COUNT = 10;
 
 const featuredPool = slideEntries.filter(s => FEATURED_SLIDE_FILENAMES.includes(s.filename));
 // Fisher-Yates shuffle the featured pool, then take only FEATURED_SLIDE_COUNT
