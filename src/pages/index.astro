@@ -35,13 +35,67 @@ const slideEntries = Object.entries(galleryModules).map(([path, mod]) => {
   const filename = parts[parts.length - 1];
   return { src: mod.default, filename };
 });
-// Fisher-Yates shuffle
-for (let i = slideEntries.length - 1; i > 0; i--) {
+
+// A pure random shuffle across ~1,450+ photos gives any single photo under a
+// 1% chance of appearing in a given build's 10-slide rotation — too low for
+// specific standout shots (Marc's Red Bull-athlete photos: Mad Mike Whiddett,
+// Conor Shanahan) to ever surface reliably. FEATURED_SLIDE_FILENAMES is the
+// candidate pool; FEATURED_SLIDE_COUNT of them are guaranteed a slot each
+// build (randomly picked from the pool, so it's not the same few photos
+// every time), with the rest of the carousel still filling randomly from the
+// full library — this is a pool to draw from, not a takeover of the whole
+// carousel. Add/remove filenames here as Marc's pick of standout shots
+// changes.
+const FEATURED_SLIDE_FILENAMES = [
+  // Mad Mike Whiddett's Red Bull Mazda RX-7, 130 Showdown
+  'DSC_6498-Enhanced-NR.jpg',
+  'DSC_6503-Enhanced-NR.jpg',
+  'DSC_6630-Enhanced-NR.jpg',
+  'DSC_6763-Enhanced-NR.jpg',
+  'DSC_4414-Enhanced-NR.jpg',
+  'DSC_5810-Enhanced-NR.jpg',
+  'DSC_6614-Enhanced-NR.jpg',
+  'DSC_6619-Enhanced-NR-130sd.jpg',
+  'DSC_6625-Enhanced-NR.jpg',
+  'DSC_6628-Enhanced-NR-130sd.jpg',
+  // Conor Shanahan's Red Bull Toyota GT86, 130 Showdown
+  'DSC_6674-Enhanced-NR.jpg',
+  'DSC_6648-Enhanced-NR.jpg',
+  'DSC_6782-Enhanced-NR-130sd.jpg',
+  'DSC_6528.jpg',
+  'DSC_6689-Enhanced-NR.jpg',
+  'DSC_6680-Enhanced-NR.jpg',
+  'DSC_6675-Enhanced-NR.jpg',
+  'DSC_6646-Enhanced-NR.jpg',
+  'DSC_6639-Enhanced-NR.jpg',
+];
+const FEATURED_SLIDE_COUNT = 3;
+
+const featuredPool = slideEntries.filter(s => FEATURED_SLIDE_FILENAMES.includes(s.filename));
+// Fisher-Yates shuffle the featured pool, then take only FEATURED_SLIDE_COUNT
+for (let i = featuredPool.length - 1; i > 0; i--) {
   const j = Math.floor(Math.random() * (i + 1));
-  [slideEntries[i], slideEntries[j]] = [slideEntries[j], slideEntries[i]];
+  [featuredPool[i], featuredPool[j]] = [featuredPool[j], featuredPool[i]];
 }
-// Cap the hero carousel to rendering all ~135 photos; a handful is plenty.
-const slides = slideEntries.slice(0, 10);
+const chosenFeatured = featuredPool.slice(0, FEATURED_SLIDE_COUNT);
+const chosenFeaturedFilenames = new Set(chosenFeatured.map(s => s.filename));
+
+// Random fill from everything else (including featured-pool photos not
+// chosen this round — they're still real, good photos, just not guaranteed)
+const remainingSlides = slideEntries.filter(s => !chosenFeaturedFilenames.has(s.filename));
+for (let i = remainingSlides.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [remainingSlides[i], remainingSlides[j]] = [remainingSlides[j], remainingSlides[i]];
+}
+
+const combined = [...chosenFeatured, ...remainingSlides].slice(0, 10);
+// Shuffle the final order so featured slides don't always open the carousel
+// in the same position every load.
+for (let i = combined.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [combined[i], combined[j]] = [combined[j], combined[i]];
+}
+const slides = combined;
 ---
 
 <Layout title="TrackMarc — Irish Motorsport Photography | Marc Ronan">
