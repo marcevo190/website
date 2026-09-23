@@ -11,7 +11,14 @@ what's still outstanding plus a short recent-history tail.
 
 ## Defects
 
-_(none outstanding)_
+- [ ] **10 of 11 new 130-showdown photos still uncaptioned** (found 2026-09-23):
+  `caption-batch.mjs` hit a sustained Gemini outage -- gemini-3.1-flash-lite
+  returning 503 "high demand" on every attempt, gemini-3.5-flash quota
+  exhausted from earlier batches today. Files still needing a caption run:
+  Trackmarc-DSC_7939, 8601, 8602, 8609, 8610, 9669, 9729, 9734, 9739,
+  9740-Enhanced-NR.jpg (all already uploaded to R2, just need
+  `node scripts/caption-batch.mjs 130-showdown <review-dir>` re-run once
+  Gemini's free tier is behaving again -- try later today or tomorrow).
 
 ## Enhancements
 
