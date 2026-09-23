@@ -18,6 +18,28 @@ or a fix that needs Marc's confirmation first). Check it at the start of a sessi
 add to it instead of letting something noticed-but-not-actioned get lost. Remove an
 item once it's actually resolved rather than leaving it checked off indefinitely.
 
+## Working process
+
+Non-negotiable, not a style preference — added 2026-09-23 after a session that visibly
+lost the thread (skipped a direct question to chase adjacent work, guessed at a car ID
+twice instead of asking for a specifics, misread a carbon-fibre reflection as text
+without re-checking it, never touched `BACKLOG.md` despite it existing for exactly that).
+
+- **Triage the whole message before responding.** More than one question or ask in a
+  single message means answer/action each one explicitly — never silently drop one to
+  go chase something adjacent.
+- **Track any multi-thread exchange with TaskCreate/TaskUpdate**, not just large photo
+  batches. Two or more live threads at once (a DM, a caption fix, a bug) is the trigger.
+- **Write to `BACKLOG.md` the moment something is noticed but not actioned** — in the
+  moment, not retroactively when asked to reflect on the session.
+- **Never state a visual ID as fact without re-checking it once**, especially text read
+  off a reflective or glossy surface (carbon fibre, chrome, glass) — see the CRITICAL
+  RULE below on identifying cars.
+- **Consolidate status polling into one command** (a Bash loop with internal `sleep`),
+  not repeated narrated "still waiting" check-ins.
+- **Responses state facts and actions, not reasoning or reassurance.** What changed,
+  what's next — skip the reflection.
+
 ## Stack
 
 - **Framework:** Astro (static site generator)
