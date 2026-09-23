@@ -10,6 +10,14 @@ motorsport photographer based in Ireland whose goal is media accreditation, so t
 and its Instagram must look professional and authentic. Marc is non-technical — explain
 things plainly and do the technical work for him.
 
+## Backlog
+
+**`BACKLOG.md`** tracks defects and enhancement ideas noticed mid-task that weren't
+urgent enough to act on immediately (e.g. spotted while heads-down on something else,
+or a fix that needs Marc's confirmation first). Check it at the start of a session and
+add to it instead of letting something noticed-but-not-actioned get lost. Remove an
+item once it's actually resolved rather than leaving it checked off indefinitely.
+
 ## Stack
 
 - **Framework:** Astro (static site generator)
