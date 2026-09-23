@@ -40,12 +40,23 @@ function collectImages() {
   return images;
 }
 
+// Grassroots Irish drift/car-culture events -- privately-built cars, not
+// factory teams. Corporate brand mentions (@bmw, @toyotagazooracing) and
+// factory-team-implying hashtags (#BMWMotorsport, #ToyotaGazooRacing) are
+// wrong here: they imply a works racing connection these cars don't have,
+// and read as spam to the account being tagged. Flagged by Marc 2026-09-23
+// as "very poor quality" hashtags on a 130 Showdown post -- it had been
+// tagging @bmw and @toyotagazooracing on a privately-built GT86/E36 drift
+// battle with zero drift or event-specific hashtags at all.
+const DRIFT_CATEGORIES = new Set(['130-showdown', '86fest', 'drift-games', 'retrostock', 'bimmerfest']);
+
 // ── Generate hashtags + @mentions from caption content ───────────────────────
 function generateTagsAndMentions(title, caption, category) {
   const text = (title + ' ' + caption).toLowerCase();
-  const tags = new Set([
-    '#TrackMarc', '#MotorsportPhotography', '#Motorsport', '#RaceCarPhotography',
-  ]);
+  const isDriftScene = DRIFT_CATEGORIES.has(category);
+
+  const tags = new Set(['#TrackMarc', '#MotorsportPhotography', '#Motorsport']);
+  tags.add(isDriftScene ? '#DriftPhotography' : '#RaceCarPhotography');
 
   if (category === 'endurance') tags.add('#EnduranceRacing');
   if (category === 'car-shows') {
@@ -53,6 +64,25 @@ function generateTagsAndMentions(title, caption, category) {
   }
   if (category === 'iccr') {
     tags.add('#ICCR'); tags.add('#IrishMotorsport'); tags.add('#MondelloPark'); tags.add('#IrishRacing');
+  }
+  if (category === '130-showdown') {
+    tags.add('#130Showdown'); tags.add('#IrishDriftSeries'); tags.add('#DriftShowdown');
+  }
+  if (category === '86fest') {
+    tags.add('#86Fest'); tags.add('#Toyota86'); tags.add('#GT86'); tags.add('#Hachiroku');
+  }
+  if (category === 'drift-games') {
+    tags.add('#DriftGames'); tags.add('#IrishDrift');
+  }
+  if (category === 'retrostock') {
+    tags.add('#RetroStock'); tags.add('#ClassicJDM'); tags.add('#RetroCarMeet');
+  }
+  if (category === 'bimmerfest') {
+    tags.add('#Bimmerfest'); tags.add('#BMWMeet'); tags.add('#BMWCarMeet');
+  }
+  if (isDriftScene) {
+    tags.add('#Drift'); tags.add('#Drifting'); tags.add('#DriftCar');
+    tags.add('#JDM'); tags.add('#IrishMotorsport'); tags.add('#TyreSmoke');
   }
   if (category === 'formula' || category === 'instagram-only') {
     if (text.includes('f1') || text.includes('formula') || text.includes('grand prix')) {
@@ -97,7 +127,16 @@ function generateTagsAndMentions(title, caption, category) {
   };
 
   for (const [keyword, htags] of Object.entries(manufacturerMap)) {
-    if (text.includes(keyword)) htags.forEach(t => tags.add(t));
+    if (text.includes(keyword)) {
+      // Drift-scene cars are privately built -- only the plain brand tag
+      // (htags[0]) is factually true. The rest of each array implies a
+      // factory racing connection (e.g. #ToyotaGazooRacing, #BMWMotorsport)
+      // that doesn't apply to a grassroots drift build. Red Bull is the
+      // exception: Mad Mike Whiddett and Conor Shanahan are genuinely
+      // Red Bull-sponsored at 130 Showdown, so that tag is real either way.
+      if (isDriftScene && keyword !== 'red bull') tags.add(htags[0]);
+      else htags.forEach(t => tags.add(t));
+    }
   }
 
   // Model-specific hashtags
@@ -192,8 +231,14 @@ function generateTagsAndMentions(title, caption, category) {
     'mondello':         '@mondellopark',
   };
 
-  for (const [keyword, handle] of Object.entries(mentionMap)) {
-    if (text.includes(keyword)) mentions.add(handle);
+  // Corporate brand @mentions don't apply to privately-built drift cars --
+  // driver/team handles for these categories are already embedded in the
+  // caption text itself via driver-tags.json, so no separate mention pass
+  // is needed here.
+  if (!isDriftScene) {
+    for (const [keyword, handle] of Object.entries(mentionMap)) {
+      if (text.includes(keyword)) mentions.add(handle);
+    }
   }
 
   const hashtagStr = Array.from(tags).slice(0, 30).join(' ');
