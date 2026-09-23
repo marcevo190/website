@@ -11,14 +11,7 @@ what's still outstanding plus a short recent-history tail.
 
 ## Defects
 
-- [ ] **Duplicate photo in R2** (found 2026-09-23): `DSC_7342.jpg` and
-  `DSC_7342-Enhanced-NR.jpg` in the `130-showdown` category are the same
-  photo uploaded twice under two different filenames — a pre-existing
-  duplicate, unrelated to any recent batch. The `-Enhanced-NR` version has
-  already been updated with Marc's improved wider-crop re-edit; the plain
-  `DSC_7342.jpg` is the stale leftover. Needs Marc's confirmation before
-  deleting (removes an R2 object + its caption.json/instagram-captions.json
-  entries + checking post-queue.json first in case it already posted).
+_(none outstanding)_
 
 ## Enhancements
 
