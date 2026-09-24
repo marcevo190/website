@@ -75,6 +75,7 @@ const currentPath = Astro.url.pathname;
           </a>
           <ul class="nav-links">
             <li><a href="/" class:list={[{ active: currentPath === '/' }]}>Home</a></li>
+            <li><a href="/portfolio" class:list={[{ active: currentPath.startsWith('/portfolio') }]}>Portfolio</a></li>
             <li><a href="/gallery" class:list={[{ active: currentPath.startsWith('/gallery') }]}>Gallery</a></li>
             <li><a href="/events" class:list={[{ active: currentPath.startsWith('/events') }]}>Events</a></li>
             <li><a href="/coverage" class:list={[{ active: currentPath.startsWith('/coverage') }]}>Coverage</a></li>
@@ -90,6 +91,7 @@ const currentPath = Astro.url.pathname;
 
         <div class="mobile-menu" id="mobile-menu">
           <a href="/" onclick="closeMobileMenu()">Home</a>
+          <a href="/portfolio" onclick="closeMobileMenu()">Portfolio</a>
           <a href="/gallery" onclick="closeMobileMenu()">Gallery</a>
           <a href="/events" onclick="closeMobileMenu()">Events</a>
           <a href="/coverage" onclick="closeMobileMenu()">Coverage</a>
@@ -117,6 +119,7 @@ const currentPath = Astro.url.pathname;
           wrong, <a href="/contact" style="color:var(--accent);">let me know</a> and I'll fix it.
         </p>
         <div class="footer-links">
+          <a href="/portfolio">Portfolio</a>
           <a href="/gallery">Gallery</a>
           <a href="/about">About</a>
           <a href="/licensing">Licensing</a>

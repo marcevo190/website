@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { events } from '../data/events';
 import { getCaption, getPlateIndex } from '../data/captions';
+import featuredFilenames from '../data/featured-photos.json';
 
 const plates = getPlateIndex();
 
@@ -38,41 +39,14 @@ const slideEntries = Object.entries(galleryModules).map(([path, mod]) => {
 
 // A pure random shuffle across ~1,450+ photos gives any single photo under a
 // 1% chance of appearing in a given build's 10-slide rotation — too low for
-// specific standout shots (Marc's Red Bull-athlete photos: Mad Mike Whiddett,
-// Conor Shanahan) to ever surface reliably. FEATURED_SLIDE_FILENAMES is the
-// candidate pool; FEATURED_SLIDE_COUNT of them are guaranteed a slot each
-// build (randomly picked from the pool, so it's not the same few photos
-// every time). Set to the full 10-slide carousel per Marc's request
-// (2026-09-22, timed with the pending Red Bull Homerun accreditation
-// application) — the whole hero rotation is Red Bull-athlete photos only
-// until this is dialled back. Add/remove filenames here as Marc's pick of
-// standout shots changes.
-const FEATURED_SLIDE_FILENAMES = [
-  // Mad Mike Whiddett's Red Bull Mazda RX-7, 130 Showdown
-  'DSC_6498-Enhanced-NR.jpg',
-  'DSC_6503-Enhanced-NR.jpg',
-  'DSC_6630-Enhanced-NR.jpg',
-  'DSC_6763-Enhanced-NR.jpg',
-  'DSC_4414-Enhanced-NR.jpg',
-  'DSC_5810-Enhanced-NR.jpg',
-  'DSC_6614-Enhanced-NR.jpg',
-  'DSC_6619-Enhanced-NR-130sd.jpg',
-  'DSC_6625-Enhanced-NR.jpg',
-  'DSC_6628-Enhanced-NR-130sd.jpg',
-  // Conor Shanahan's Red Bull Toyota GT86, 130 Showdown
-  'DSC_6674-Enhanced-NR.jpg',
-  'DSC_6648-Enhanced-NR.jpg',
-  'DSC_6782-Enhanced-NR-130sd.jpg',
-  'DSC_6528.jpg',
-  'DSC_6689-Enhanced-NR.jpg',
-  'DSC_6680-Enhanced-NR.jpg',
-  'DSC_6675-Enhanced-NR.jpg',
-  'DSC_6646-Enhanced-NR.jpg',
-  'DSC_6639-Enhanced-NR.jpg',
-];
+// Marc's own best work (src/data/featured-photos.json, curated via
+// scripts/featured-review-server.mjs) to ever surface reliably. The whole
+// hero rotation draws only from that curated pool now (changed 2026-09-25 —
+// used to be a fixed Red Bull-athlete-only list for the accreditation push,
+// generalised into "best work" once the gallery-curation project started).
 const FEATURED_SLIDE_COUNT = 10;
 
-const featuredPool = slideEntries.filter(s => FEATURED_SLIDE_FILENAMES.includes(s.filename));
+const featuredPool = slideEntries.filter(s => (featuredFilenames as string[]).includes(s.filename));
 // Fisher-Yates shuffle the featured pool, then take only FEATURED_SLIDE_COUNT
 for (let i = featuredPool.length - 1; i > 0; i--) {
   const j = Math.floor(Math.random() * (i + 1));

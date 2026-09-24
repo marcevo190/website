@@ -151,6 +151,30 @@ BMW E46 miscaptioned two different colours across two events before Marc caught 
 ### Pages / styling
 - `src/pages/gallery.astro` — gallery; **must glob from `src/assets/watermarked/`** (NOT `images/`).
   If the gallery goes blank, check this first.
+- `src/pages/portfolio.astro` — **added 2026-09-25.** Marc's hand-picked "best work" showcase,
+  separate from the full `/gallery`. Started because the archive had grown large enough
+  (1500+ photos, spanning a big jump in Marc's own editing standard over time) that new
+  visitors' first impression was diluted by older/weaker shots — but the full gallery can't
+  just be pruned, since deep event archives are exactly what drives Buy Me a Coffee
+  tips/print sales (see the 86 Fest revenue note above). Resolution: add a curated layer on
+  top instead of cutting the archive. `/gallery`, `/events`, and plate search are completely
+  unaffected by this — same full photo set as always.
+
+### Featured portfolio (added 2026-09-25)
+- `src/data/featured-photos.json` — a flat array of filenames, Marc's curated "best work"
+  set (target ~50, but not a hard cap). This is the single source of truth two different
+  things read from: the homepage hero carousel (`src/pages/index.astro`) and `/portfolio`.
+  Order in the file is curation order (used by `/portfolio`'s sort), not upload order.
+- `scripts/featured-review-server.mjs` — the local-only tool Marc uses to pick them: a
+  click-to-toggle contact-sheet grid (not one-photo-at-a-time like `plate-review-server.mjs`,
+  since picking ~50 out of 1500+ is a selection task, not a per-photo correction task).
+  `node scripts/featured-review-server.mjs [category ...]`, then open `localhost:5200`.
+  Writes directly to `featured-photos.json` on every click, no separate save step.
+- The homepage hero used to guarantee 10 slides from a hardcoded Red Bull-athlete-only list
+  (built 2026-09-22 for the Red Bull Homerun accreditation push). Generalised 2026-09-25 to
+  draw from the full featured pool instead — same mechanism (guarantee a curated set instead
+  of a 1-in-1500 random shuffle chance), broader purpose. The original 19 Red Bull photos
+  were carried over as the initial seed of `featured-photos.json`, not lost.
 
 ### Watermarking
 - `scripts/watermark.mjs` — runs before `astro build` (see `package.json`).
