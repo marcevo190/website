@@ -325,6 +325,22 @@ Remove a filename from `post-queue.json` to re-post it.
 
 ## Posting strategy
 
-Currently posting daily to grow a new account. Once the account has ~50 posts and a follower
-base, consider dropping to 4–5/week. Bigger reach levers than frequency: Reels, Stories,
-tagging teams/brands in-post, and engaging with big motorsport accounts.
+**Automated posting paused 2026-09-24** (`instagram-post.yml` and `instagram-post-boost.yml`
+disabled via the GitHub Actions API, not deleted — `curl -X PUT .../workflows/{id}/disable`,
+re-enable with `/enable` the same way). Was running up to 7 posts/day (2x baseline + 5x
+130 Showdown boost); Marc judged that too aggressive once the account already had real
+traction (158+ followers, a 250k-view reel, an inbound sponsor DM from Ström Wheels) — high
+frequency was diluting per-post reach and reading as spammy rather than curated, working
+against the professional image the accreditation goal needs. Replaced with **manual,
+driver/team-focused posts, roughly 1/day**, each using Instagram's native Collab invite
+feature (puts the post on both grids — the automated pipeline can't send a collab invite,
+only a native app post can, see the Ström Wheels post for the pattern). Default to a photo
+or carousel for these, not a Reel — a Reel needs picking clips/music/editing per post, which
+doesn't scale daily for a solo operator; save Reels for occasional standout moments instead
+of trying to do one every day. `driver-tags.json` has confirmed handles ready to pull from
+for who to feature next.
+
+Old guidance, superseded by the above: was posting daily to grow a new account, with the plan
+to drop to 4–5/week once it had ~50 posts and a follower base. Bigger reach levers than
+frequency: Reels, Stories, tagging teams/brands in-post, and engaging with big motorsport
+accounts.

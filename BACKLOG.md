@@ -70,8 +70,8 @@ what's still outstanding plus a short recent-history tail.
   Now that `driver-tags.json` has his entry, worth a pass to retrofit
   `@diarmuidoconnell13b` onto the older ones (search captions.json for "#261"
   combined with "AE86" or "purple").
-- [ ] **130 Showdown Instagram backlog is large** (noted 2026-09-23): 23 of
-  322 captioned photos have posted so far, 299 still queued. At the current
-  `instagram-post-boost.yml` cadence (5x/day) that's on the order of months
-  to clear. Ask Marc if he wants the boost frequency increased while the
-  event is still fresh, or if the slow drip is fine.
+- [x] **130 Showdown Instagram backlog is large** (noted 2026-09-23, superseded
+  2026-09-24): automated posting is now paused entirely in favour of manual
+  driver/team-focused posts with Collab invites -- see "Posting strategy" in
+  CLAUDE.md. The backlog of unposted photos is no longer being drawn down
+  automatically; that's now an intentional choice, not a problem to fix.
