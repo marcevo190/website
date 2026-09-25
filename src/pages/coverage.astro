@@ -111,7 +111,15 @@ const locations = [
       dragging: !isNarrow,
       tap: false,
     });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    // CARTO started requiring an API key on basemap tiles in late August 2026
+    // (previously anonymous/free) -- without it every tile renders with an
+    // "API KEY REQUIRED" watermark burned in instead of failing outright,
+    // which is what Marc spotted 2026-09-25. This key is restricted to the
+    // trackmarc.com referrer on CARTO's side, so it's safe to have visible
+    // in client-side source -- that's how this type of key works, the
+    // security is the domain restriction, not secrecy (same as a Google
+    // Maps JS API key).
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_3y8y_1_78624caa877d1615a1d45e0a', {
       attribution: '&copy; OpenStreetMap &copy; CARTO',
       subdomains: 'abcd',
       maxZoom: 19,
