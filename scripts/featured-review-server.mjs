@@ -114,9 +114,11 @@ const HTML_PAGE = `<!doctype html>
   }
   .cell.on .badge { display: flex; }
   .cell .fname {
-    position: absolute; bottom: 0; left: 0; right: 0; font-size: 0.65rem; padding: 3px 5px;
-    background: rgba(0,0,0,0.65); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 3px 5px;
+    background: rgba(0,0,0,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .cell .fname .title { font-size: 0.7rem; display: block; }
+  .cell .fname .id { font-size: 0.6rem; opacity: 0.6; font-family: monospace; display: block; }
   .hint { font-size: 0.75rem; opacity: 0.5; }
 </style>
 </head>
@@ -159,7 +161,7 @@ function render() {
     <div class="cell \${it.featured ? 'on' : ''}" data-i="\${i}">
       <img src="/img/\${it.category}/\${encodeURIComponent(it.filename)}" loading="lazy">
       <div class="badge">\${it.featured ? '&#10003;' : ''}</div>
-      <div class="fname">\${it.filename}</div>
+      <div class="fname"><span class="title">\${it.title || '(no title)'}</span><span class="id">\${it.filename}</span></div>
     </div>
   \`).join('');
   grid.querySelectorAll('.cell').forEach(cell => {
