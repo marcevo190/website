@@ -501,12 +501,19 @@ h1, h2, h3, h4 {
   background: var(--accent-dim);
 }
 .gallery-masonry {
-  columns: 3;
-  column-gap: 0.75rem;
+  /* Denser than the old 3-column layout (Marc liked the fast-scan feel of
+     the featured-photo picker tool's contact-sheet grid) -- more, smaller
+     tiles per row, tighter gaps. Still true masonry though, not a hard
+     crop: each photo keeps its own aspect ratio (see .photo-card::before
+     override below), unlike the picker tool's uniform 3:2 boxes, which
+     only work there because it's an internal admin tool, not the public
+     showcase of the actual photography. */
+  columns: 5;
+  column-gap: 0.5rem;
 }
 .gallery-masonry .photo-card {
   break-inside: avoid;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 .gallery-masonry .photo-card::before { display: none; }
 .gallery-masonry .photo-card img {
@@ -917,7 +924,7 @@ h1, h2, h3, h4 {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
-  .gallery-masonry { columns: 2; }
+  .gallery-masonry { columns: 3; }
   .about-strip-inner { grid-template-columns: 1fr; gap: 3rem; }
   .featured-grid .photo-card:nth-child(1) { grid-column: span 12; }
   .featured-grid .photo-card:nth-child(2) { grid-column: span 6; }
