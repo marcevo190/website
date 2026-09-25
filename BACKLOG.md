@@ -54,9 +54,14 @@ what's still outstanding plus a short recent-history tail.
       still applies here), `DSC_7374-Enhanced-NR-2`, `Trackmarc-DSC_5715`,
       `Trackmarc-DSC_7743`, `Trackmarc-DSC_7747` (reject -- already
       confirmed this is the reflection misread, not real "JAMES DEANE"
-      text), `Trackmarc-DSC_7776`, `Trackmarc-DSC_7783` (likely reject --
-      QC cited "facial recognition and team roster confirmation", which
-      Gemini can't actually do, sounds hallucinated), `Trackmarc-DSC_8019`.
+      text), `Trackmarc-DSC_7776`, `Trackmarc-DSC_8019`.
+      **Correction (2026-09-25): `Trackmarc-DSC_7783` was NOT a false
+      positive** -- Marc confirmed directly it isn't James Deane, despite
+      the QC's oddly-phrased "facial recognition and team roster
+      confirmation" reasoning looking hallucinated. Fixed (softened to an
+      unattributed driver portrait). Lesson: a QC flag's stated reasoning
+      being weak/unverifiable doesn't mean the underlying flag is wrong --
+      still needs a real check, not a dismissal on vibes.
   - The other ~180 130-showdown captions that don't name anyone weren't
     checked at all (out of scope for this pass -- misattribution risk is
     low without a named driver/team/sponsor to get wrong).
