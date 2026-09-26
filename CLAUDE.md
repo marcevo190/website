@@ -211,6 +211,23 @@ BMW E46 miscaptioned two different colours across two events before Marc caught 
   "Deployment — CRITICAL" above. Without this workflow (or a manual `npm run deploy`),
   pushes to GitHub never go live.
 
+### Instagram analytics (added 2026-09-27)
+- `POST/GET /api/instagram-stats` in `src/worker.js` — a small KV-backed endpoint for a
+  Make.com scenario (not yet built as of this writing) to push daily Instagram numbers to,
+  since we don't call Meta's Graph API directly (see "Do NOT use the Meta Graph API
+  directly" below — that constraint applies here too, Make.com owns the Instagram auth).
+  Auth is a shared-secret Bearer token (`IG_STATS_TOKEN`, a Worker **secret**, set via the
+  Cloudflare dashboard, not `wrangler.json` — this repo is public, so no token lives in a
+  committed file). POST body is stored as-is, timestamped, appended to a rolling history
+  (last 400 entries, ~13 months of daily snapshots) in the `VISITS` KV namespace under key
+  `ig-stats-history` — reuses the existing binding rather than provisioning a new KV
+  namespace for one small feature. GET returns the full history, or just the latest entry
+  with `?latest=1`. Same auth required on GET as POST (no public read).
+- Nothing reads this data yet (no dashboard page) — the endpoint just accumulates history
+  until that's built. POST body shape is intentionally open (whatever JSON Make.com sends,
+  no fixed schema) so the exact fields can evolve once we see what Make.com's Instagram
+  Insights module actually returns.
+
 ### Events & photo pages
 - `src/data/events.ts` — event definitions; each event page at `/events/<slug>` pulls photos
   by category. New event = new entry here.
