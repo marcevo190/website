@@ -52,6 +52,11 @@ const photos = Object.entries(imageModules)
       .replace(/[-_]/g, ' ')
       .replace(/\b\w/g, c => c.toUpperCase());
     const cap = getCaption(filename);
+    // Same reference-number badge as events/[slug].astro — Marc's shorthand
+    // for telling me which photos to cull/fix later without typing the
+    // full filename. Filenames that don't match this camera's DSC_####
+    // pattern just don't get a badge.
+    const dscMatch = filename.match(/DSC_?0*(\d+)/i);
     return {
       src: mod.default,
       category: folder,
@@ -59,6 +64,7 @@ const photos = Object.entries(imageModules)
       caption: cap?.caption ?? '',
       filename,
       slug: filename.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      dscNumber: dscMatch ? dscMatch[1] : null,
     };
   })
   .filter(p => categories.includes(p.category))
@@ -100,6 +106,18 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
       </div>
 
       {hasPhotos && (
+        <div class="gallery-search">
+          <input
+            type="text"
+            id="gallery-search-input"
+            placeholder="Search by photo ID (e.g. 8631) or title..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+      )}
+
+      {hasPhotos && (
         <div class="gallery-filters" id="filters">
           {populatedCategories.map((cat) => (
             <button class="filter-btn" data-filter={cat}>
@@ -118,6 +136,7 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
               data-title={photo.title}
               data-caption={photo.caption}
               data-slug={photo.slug}
+              data-dscnumber={photo.dscNumber ?? ''}
             >
               <Image
                 src={photo.src}
@@ -125,6 +144,7 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
                 widths={[400, 800, 1200]}
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
+              {photo.dscNumber && <span class="photo-card-number">{photo.dscNumber}</span>}
               <div class="photo-card-overlay">
                 <div class="photo-card-meta">
                   <a class="photo-card-title" href={`/photo/${photo.slug}`} style="color:inherit;text-decoration:none;">{photo.title}</a>
@@ -179,9 +199,26 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
   </div>
 
   <script>
-    // Filter
+    // Filter (category chips + ID/title search, combined with AND)
     const filters = document.getElementById('filters');
     const cards = document.querySelectorAll<HTMLElement>('#gallery .photo-card');
+    const searchInput = document.getElementById('gallery-search-input') as HTMLInputElement | null;
+
+    let activeCategory: string | null = null;
+
+    function applyFilters() {
+      const term = (searchInput?.value ?? '').trim().toLowerCase();
+      cards.forEach(card => {
+        const matchesCategory = !activeCategory || card.dataset.category === activeCategory;
+        // Search matches the short DSC number badge (exact or partial, so
+        // typing "863" finds "8631") or the title text — covers both "I
+        // know the frame number" and "I remember roughly what it was of".
+        const matchesSearch = !term
+          || (card.dataset.dscnumber ?? '').toLowerCase().includes(term)
+          || (card.dataset.title ?? '').toLowerCase().includes(term);
+        card.style.display = matchesCategory && matchesSearch ? '' : 'none';
+      });
+    }
 
     filters?.addEventListener('click', (e) => {
       const btn = (e.target as HTMLElement).closest('.filter-btn') as HTMLElement | null;
@@ -190,13 +227,12 @@ const populatedCategories = categories.filter(cat => photos.some(p => p.category
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       // Clicking the already-active chip clears the filter (shows everything);
       // there's no separate "All" button — an unfiltered view is just no chip active.
-      const filter = wasActive ? null : btn.dataset.filter;
-      if (filter) btn.classList.add('active');
-      cards.forEach(card => {
-        const show = !filter || card.dataset.category === filter;
-        card.style.display = show ? '' : 'none';
-      });
+      activeCategory = wasActive ? null : (btn.dataset.filter ?? null);
+      if (activeCategory) btn.classList.add('active');
+      applyFilters();
     });
+
+    searchInput?.addEventListener('input', applyFilters);
 
     // Lightbox
     const lightbox = document.getElementById('lightbox');
