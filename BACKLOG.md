@@ -55,12 +55,12 @@ what's still outstanding plus a short recent-history tail.
       `Trackmarc-DSC_7743`, `Trackmarc-DSC_7747` (reject -- already
       confirmed this is the reflection misread, not real "JAMES DEANE"
       text), `Trackmarc-DSC_7776`, `Trackmarc-DSC_8019`.
-      **Correction (2026-09-25): `Trackmarc-DSC_7783` was NOT a false
-      positive** -- Marc confirmed directly it isn't James Deane, despite
-      the QC's oddly-phrased "facial recognition and team roster
-      confirmation" reasoning looking hallucinated. Fixed (softened to an
-      unattributed driver portrait). Lesson: a QC flag's stated reasoning
-      being weak/unverifiable doesn't mean the underlying flag is wrong --
+      **Resolved (2026-09-27): `Trackmarc-DSC_7783` is Dylan Garvey** --
+      confirmed not James Deane on 2026-09-25 (softened to unattributed at
+      the time), then Marc identified the actual driver on 2026-09-27 via
+      the official 130 Showdown lineup poster. Caption now credits Dylan
+      Garvey. Lesson: a QC flag's stated reasoning being weak/unverifiable
+      doesn't mean the underlying flag is wrong --
       still needs a real check, not a dismissal on vibes.
   - The other ~180 130-showdown captions that don't name anyone weren't
     checked at all (out of scope for this pass -- misattribution risk is
