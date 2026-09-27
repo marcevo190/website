@@ -1,6 +1,12 @@
+import { handlePrivateViewer } from './private-viewer.js';
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    if (url.pathname.startsWith('/private')) {
+      return handlePrivateViewer(request, url, env);
+    }
 
     if (url.pathname === '/api/visits') {
       if (request.method === 'POST') {

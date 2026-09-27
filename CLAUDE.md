@@ -228,6 +228,51 @@ BMW E46 miscaptioned two different colours across two events before Marc caught 
   no fixed schema) so the exact fields can evolve once we see what Make.com's Instagram
   Insights module actually returns.
 
+### Private RAW/photo viewer (added 2026-09-27)
+- `/private` (`src/private-viewer.js`, wired into `src/worker.js`) — password-gated browser
+  for two R2 buckets that aren't part of the public site: `trackmarc-raw-backup` (Marc's
+  camera RAW backup, see below) and `trackmarc-photos` (the site's own originals, browsable
+  here independent of the built/watermarked site pages). Bound directly to the Worker via
+  `r2_buckets` in `wrangler.json` (`RAW_BUCKET`, `PHOTOS_BUCKET`) — no S3 credentials needed
+  at runtime, unlike the upload scripts, since a Worker-to-R2 binding is authenticated by
+  Cloudflare itself.
+- Auth is a real server-side password check (`PRIVATE_VIEWER_PASSWORD`, a Worker secret) plus
+  an HMAC-signed session cookie (`SESSION_SECRET`, also a Worker secret) — both set via the
+  Cloudflare dashboard, never in `wrangler.json`, same reasoning as `IG_STATS_TOKEN` above:
+  this repo is public. The page's code being visible in the repo doesn't matter; only the
+  password does.
+- Thumbnails: the RAW bucket stores a generated preview JPEG alongside each `.NEF` (see below)
+  under a `previews/` prefix, which the viewer shows instead of the multi-ten-MB RAW itself.
+  The photos bucket has no separate thumbnail — the viewer just shows the full original
+  (acceptable for a single-user private tool over R2's zero-egress pricing, a real thumbnail
+  pipeline wasn't worth building for this).
+- "Download original" always streams the real full file (the actual `.NEF` or full-res JPEG),
+  never the preview.
+
+## RAW photo backup (added 2026-09-27)
+Separate from the site's own photo pipeline: Marc's camera RAW files (`.NEF`, Nikon) get backed
+up to a second, private R2 bucket (`trackmarc-raw-backup`) — pure disaster-insurance storage,
+not part of the site or its build.
+- **Lives outside this repo**, at `~/raw-backup/` on Marc's Mac — this is personal backup
+  tooling, not website code, and this repo is public. `~/raw-backup/run.sh <folder>` uploads
+  any folder inside `~/Pictures` (e.g. `~/Pictures/2024`), mirroring its path relative to
+  `~/Pictures` as the R2 key, skip-if-already-uploaded by matching size (safe to resume/re-run
+  or point at a folder repeatedly as new photos land in it). It explicitly refuses to touch
+  `Lightroom/` or `Photos Library.photoslibrary/` (app data, not camera originals).
+- For every `.NEF`, it also generates a preview JPEG using macOS's own `sips` (native Nikon RAW
+  decoding built into the OS, no extra tools needed) and uploads it to `previews/<same path>.jpg`
+  in the same bucket — this is what the private viewer above displays as a thumbnail.
+- Credentials: a separate Account API token scoped to only this bucket, in Keychain as
+  `trackmarc-rawr2-account-id` / `-access-key-id` / `-secret-access-key` / `-bucket` (parallel
+  to but distinct from the site's `trackmarc-r2-*` entries — different token, different bucket).
+- Reuses `~/website/node_modules` for `@aws-sdk/client-s3` via a symlinked `node_modules` inside
+  `~/raw-backup/` rather than a fresh `npm install` — note `NODE_PATH` does **not** work for ES
+  module imports (only CommonJS `require`), a symlinked `node_modules` next to the script is
+  what actually works.
+- **Marc decides which folder to back up and when** — he points at a specific folder himself as
+  he's ready, rather than a one-shot "upload everything." Don't default to running this against
+  all of `~/Pictures` without him naming a folder first.
+
 ### Events & photo pages
 - `src/data/events.ts` — event definitions; each event page at `/events/<slug>` pulls photos
   by category. New event = new entry here.
