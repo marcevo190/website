@@ -36,15 +36,19 @@ what's still outstanding plus a short recent-history tail.
       correction.** Marc confirmed this as Chelsea DeNofa earlier in the
       session; QC now says it's actually James Deane (Falken car, not
       RTR/Pennzoil). Needs Marc's direct input, not a guess either way.
-    - Unreviewed "Monster Energy GT86" pattern -- ~9 flags (`DSC_5773`,
+    - **Resolved (2026-09-29): the "Monster Energy GT86" is a real third
+      car, not a QC artifact.** Confirmed via `Trackmarc-DSC_9356` -- a
+      genuinely distinct black/yellow Toyota GT86 with Monster Energy,
+      Yuasa and ST branding, no Trinity Racing text anywhere, unrelated to
+      both Shchurenko's (#16) and Shanahan's (#79) cars. Gemini had wrongly
+      captioned it as Conor Shanahan's Trinity Racing #79 (fixed). Driver
+      not identified -- if the ~9 older flagged photos (`DSC_5773`,
       `DSC_6675`, `DSC_7101`, `Trackmarc-DSC_7627`, `Trackmarc-DSC_7684`,
-      `Trackmarc-DSC_7900`, `Trackmarc-DSC_7901`, `Trackmarc-DSC_7902`, and
-      possibly `Trackmarc-DSC_7690`/`Trackmarc-DSC_7743` re: GT86 vs GR86)
-      all claim a Monster Energy-liveried GT86 is being confused with
-      Shchurenko's (#16) and/or Shanahan's (#79) Trinity Racing cars --
-      could be a real third car nobody's caught, or another QC artifact
-      like the 926 cluster. Needs a fresh look at 2-3 of these images
-      before trusting or rejecting the pattern.
+      `Trackmarc-DSC_7900`, `Trackmarc-DSC_7901`, `Trackmarc-DSC_7902`,
+      `Trackmarc-DSC_7690`/`Trackmarc-DSC_7743`) haven't been fixed yet,
+      they likely have the same wrong Shanahan/Shchurenko attribution and
+      are worth a pass whenever there's time -- soften to unattributed
+      Monster Energy GT86 unless a driver name/number turns up.
     - Remaining ungrouped flags, not yet checked: `DSC_4516`, `DSC_4552`,
       `DSC_4904`, `DSC_5551` (new name "Ben Rogers" appears -- unconfirmed),
       `DSC_5735`, `DSC_5783`, `DSC_6352-Enhanced-NR-130sd`, `DSC_6625`,
