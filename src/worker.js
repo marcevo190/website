@@ -8,21 +8,6 @@ export default {
       return handlePrivateViewer(request, url, env);
     }
 
-    if (url.pathname === '/api/visits') {
-      if (request.method === 'POST') {
-        const current = parseInt((await env.VISITS.get('count')) ?? '0', 10);
-        const next = current + 1;
-        await env.VISITS.put('count', String(next));
-        return new Response(JSON.stringify({ count: next }), {
-          headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
-        });
-      }
-      const count = parseInt((await env.VISITS.get('count')) ?? '0', 10);
-      return new Response(JSON.stringify({ count }), {
-        headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
-      });
-    }
-
     if (url.pathname === '/api/instagram-stats') {
       // Fed by a Make.com scenario polling Instagram's Insights API on a
       // schedule (see CLAUDE.md — we don't call Meta's Graph API directly

@@ -241,20 +241,5 @@ const currentPath = Astro.url.pathname;
         document.addEventListener('touchmove', () => clearTimeout(pressTimer));
       }
     </script>
-
-    <script>
-      // Visit counting continues silently in the background (KV via /api/visits);
-      // the public odometer display was removed to keep the footer professional.
-      (async () => {
-        const today = new Date().toISOString().slice(0, 10);
-        if (localStorage.getItem('tm_visit_day') === today) return;
-        try {
-          await fetch('/api/visits', { method: 'POST' });
-          localStorage.setItem('tm_visit_day', today);
-        } catch {
-          // Ignore — counting is best-effort
-        }
-      })();
-    </script>
   </body>
 </html>
