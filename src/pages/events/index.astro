@@ -22,7 +22,12 @@ const cards = events.map(event => {
     if (filename === event.hero) cover = mod.default;
   }
   return { event, cover, count };
-});
+// Events get added ahead of the shoot sometimes (placeholder entry, no
+// photos uploaded yet) -- filter those out here rather than showing a
+// broken-looking card with no cover image and "0 photographs". The page
+// itself still builds fine at /events/<slug>, this just keeps it off the
+// public listing until there's something to show.
+}).filter(({ count }) => count > 0);
 ---
 
 <Layout

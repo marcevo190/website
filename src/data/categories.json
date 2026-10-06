@@ -1,7 +1,8 @@
 {
-  "website": ["130-showdown", "86fest", "endurance", "iccr", "drift-games", "retrostock", "bimmerfest", "car-shows", "formula", "rally", "gt"],
+  "website": ["130-showdown", "86fest", "endurance", "iccr", "drift-games", "retrostock", "bimmerfest", "car-shows", "formula", "rally", "gt", "red-bull-homerun"],
   "instagramOnly": ["instagram-only"],
   "labels": {
+    "red-bull-homerun": "Red Bull Homerun",
     "formula": "Formula",
     "endurance": "Endurance",
     "rally": "Rally",

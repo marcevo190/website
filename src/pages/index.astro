@@ -28,7 +28,9 @@ const eventCards = events.map(event => {
     if (filename === event.hero) cover = mod.default;
   }
   return { event, cover, count };
-});
+// Same reasoning as events/index.astro — a placeholder event added ahead of
+// the shoot (no photos yet) shouldn't show a broken-looking empty card here.
+}).filter(({ count }) => count > 0);
 
 // Keep a caption alongside each slide so hero <img> alt text stays meaningful
 const slideEntries = Object.entries(galleryModules).map(([path, mod]) => {
@@ -184,9 +186,9 @@ const slides = combined;
         <p class="section-eyebrow">Media Accreditation</p>
         <h3 class="press-cta-title">Covering Your Event?</h3>
         <p class="press-cta-desc">
-          Credentialed media at 86 Fest and James Deane's 130 Showdown, and building further
-          accreditation across FIA, ACO and national series events. If you're a press officer
-          or series coordinator, let's talk.
+          Credentialed media at 86 Fest, James Deane's 130 Showdown, and Conor Shanahan's Red
+          Bull Homerun, and building further accreditation across FIA, ACO and national series
+          events. If you're a press officer or series coordinator, let's talk.
         </p>
       </div>
       <a href="/contact" class="btn btn-primary press-cta-btn">Get in Touch &rarr;</a>
