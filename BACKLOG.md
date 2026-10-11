@@ -11,6 +11,12 @@ what's still outstanding plus a short recent-history tail.
 
 ## Defects
 
+- [ ] **4 Red Bull Homerun photos of a child held back pending parent consent**
+  (2026-10-11): `~/Desktop/Untitled Export/DSC_0630/0635/0636/0637.jpg` -- kid
+  looking at the F1 car. The mother contacted Marc for the photo. Don't upload
+  to R2/site/Instagram until Marc confirms she's said yes; then upload as
+  `red-bull-homerun` like any other batch.
+
 - [ ] **qc-captions.mjs report has ~34 unreviewed flags** (found 2026-09-24):
   Ran `scripts/qc-captions.mjs` against the 142 130-showdown captions that
   name a driver/team/sponsor -- full results in `scripts/qc-report.json`
