@@ -26,22 +26,16 @@ export interface EventDef {
 // so the strongest work leads. Update this order if his opinion changes.
 export const events: EventDef[] = [
   {
-    // Placeholder entry, added 2026-10-07 ahead of the event (10 Oct 2026) --
-    // no photos exist yet, so events/index.astro filters this out of the
-    // public listing until the `red-bull-homerun` category actually has
-    // photos in it (see the `count > 0` filter there). The page itself will
-    // still build fine once photos land -- just upload to this category and
-    // it appears automatically, same as any other event.
     slug: 'red-bull-homerun-2026',
     name: "Conor Shanahan's Red Bull Homerun",
     shortLabel: 'Red Bull Homerun',
     venue: 'South Mall, Cork, Ireland',
     season: 'October 2026',
     categories: ['red-bull-homerun'],
-    hero: 'placeholder.jpg',
+    hero: 'DSC_1556.jpg',
     intro: [
-      "Two-time Drift Masters champion Conor Shanahan's homecoming to Cork, with South Mall closed off for a major motorsport celebration in the heart of the city.",
-      "Shanahan is joined by the Formula One championship-winning Oracle Red Bull Racing RB7, plus special guests announced closer to the event.",
+      "Two-time Drift Masters champion Conor Shanahan's homecoming to Cork, with South Mall closed off on the night of 10 October 2026 for a motorsport celebration in the heart of the city.",
+      "Shanahan was joined on the streets by James Deane in his RTR Mustang, Jack Shanahan and Conor Falvey, while Patrick Friesacher took the Formula One championship-winning Red Bull Racing RB7 out under the lights.",
     ],
     classes: ['Drifting', 'F1 Showrun'],
     description: "Photo coverage of Conor Shanahan's Red Bull Homerun in Cork by Marc Ronan — a drift homecoming alongside the championship-winning Red Bull Racing RB7.",
