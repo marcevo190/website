@@ -51,6 +51,18 @@ import Layout from '../layouts/Layout.astro';
           </select>
         </div>
 
+        <div class="form-group" id="use-group" style="display:none;">
+          <label class="form-label" for="intended_use">Intended Use</label>
+          <select class="form-select" id="intended_use" name="intended_use">
+            <option value="">Select...</option>
+            <option value="personal">Personal — keep, print or share on my own social media</option>
+            <option value="team-driver">Team / driver social media</option>
+            <option value="sponsor-business">Sponsor, business or advertising</option>
+            <option value="media">Media / publication (magazine, website, news)</option>
+            <option value="other">Other (tell me in the message)</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label class="form-label" for="message">Message</label>
           <textarea class="form-textarea" id="message" name="message" required placeholder="Tell me about the event, series, or project..."></textarea>
@@ -98,6 +110,22 @@ import Layout from '../layouts/Layout.astro';
   </style>
 
   <script>
+    // High-res requests must say what the photo is for, so Marc can tell a
+    // personal keepsake (free) from team/sponsor/media use (licensing).
+    // The question only shows, and is only required, for "Get My Photo".
+    const typeSel = document.getElementById('type') as HTMLSelectElement | null;
+    const useGroup = document.getElementById('use-group');
+    const useSel = document.getElementById('intended_use') as HTMLSelectElement | null;
+    const syncUse = () => {
+      const isPhoto = typeSel?.value === 'photo';
+      if (useGroup) useGroup.style.display = isPhoto ? '' : 'none';
+      if (useSel) useSel.required = isPhoto;
+    };
+    typeSel?.addEventListener('change', syncUse);
+    syncUse();
+  </script>
+
+  <script>
     // Photo pages / the save-block popup link here as
     // /contact?photo=<reference> so a visitor asking for their photo
     // doesn't land on a blank form and doesn't have to explain which shot
@@ -121,7 +149,10 @@ import Layout from '../layouts/Layout.astro';
       const orgGroup = document.getElementById('organisation-group');
 
       if (hidden) hidden.value = ref;
-      if (typeSelect) typeSelect.value = 'photo';
+      if (typeSelect) {
+        typeSelect.value = 'photo';
+        typeSelect.dispatchEvent(new Event('change'));
+      }
       if (message && !message.value) {
         message.value = `Hi Marc, I'd like the high-res version of this photo please: ${prettyRef}`;
       }
