@@ -158,7 +158,11 @@ import Layout from '../layouts/Layout.astro';
       }
       if (eyebrow) eyebrow.textContent = 'Get Your Photo';
       if (title) title.textContent = 'Get The Full-Res Version';
-      if (subtitle) subtitle.textContent = "Send this and I'll get the clean, high-res file to you — free.";
+      if (subtitle) {
+        subtitle.innerHTML = "Send this and I'll get the clean, high-res file to you — <strong>free for personal use</strong>. " +
+          "If you'd like to say thanks, you can <a href=\"https://www.buymeacoffee.com/TrackMarc\" target=\"_blank\" rel=\"noopener\">buy me a coffee</a>. " +
+          "Using it for a team, sponsor, business or publication? Pick that below and I'll be in touch about licensing.";
+      }
       if (orgGroup) orgGroup.style.display = 'none';
       if (banner) {
         banner.style.display = 'block';
