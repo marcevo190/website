@@ -52,15 +52,8 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <div class="form-group" id="use-group" style="display:none;">
-          <label class="form-label" for="intended_use">Intended Use</label>
-          <select class="form-select" id="intended_use" name="intended_use">
-            <option value="">Select...</option>
-            <option value="personal">Personal — keep, print or share on my own social media</option>
-            <option value="team-driver">Team / driver social media</option>
-            <option value="sponsor-business">Sponsor, business or advertising</option>
-            <option value="media">Media / publication (magazine, website, news)</option>
-            <option value="other">Other (tell me in the message)</option>
-          </select>
+          <label class="form-label" for="intended_use">What will you use the photo for?</label>
+          <input class="form-input" type="text" id="intended_use" name="intended_use" placeholder="e.g. print for my garage wall, my car's Instagram, sponsor advert, magazine article" />
         </div>
 
         <div class="form-group">
@@ -115,7 +108,7 @@ import Layout from '../layouts/Layout.astro';
     // The question only shows, and is only required, for "Get My Photo".
     const typeSel = document.getElementById('type') as HTMLSelectElement | null;
     const useGroup = document.getElementById('use-group');
-    const useSel = document.getElementById('intended_use') as HTMLSelectElement | null;
+    const useSel = document.getElementById('intended_use') as HTMLInputElement | null;
     const syncUse = () => {
       const isPhoto = typeSel?.value === 'photo';
       if (useGroup) useGroup.style.display = isPhoto ? '' : 'none';
@@ -161,7 +154,7 @@ import Layout from '../layouts/Layout.astro';
       if (subtitle) {
         subtitle.innerHTML = "Send this and I'll get the clean, high-res file to you — <strong>free for personal use</strong>. " +
           "If you'd like to say thanks, you can <a href=\"https://www.buymeacoffee.com/TrackMarc\" target=\"_blank\" rel=\"noopener\">buy me a coffee</a>. " +
-          "Using it for a team, sponsor, business or publication? Pick that below and I'll be in touch about licensing.";
+          "Using it for a team, sponsor, business or publication? Let me know below and I'll be in touch about licensing.";
       }
       if (orgGroup) orgGroup.style.display = 'none';
       if (banner) {
