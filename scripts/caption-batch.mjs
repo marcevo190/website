@@ -93,6 +93,19 @@ on a car's bodywork or wheels, even if the driver/team isn't otherwise a known e
 can carry a known sponsor's branding without the car itself being on this list.\n${DRIVER_TAGS}\n`
   : '';
 
+// Optional per-category entry list (scripts/entry-lists/<category>.txt), e.g. a
+// race programme's number -> driver table. Lets Gemini name a driver from a
+// clearly legible race number instead of leaving every car unattributed.
+// Replace the file's contents when a new event's photos go into the category.
+const ENTRY_LIST_PATH = `scripts/entry-lists/${category}.txt`;
+const ENTRY_LIST = fs.existsSync(ENTRY_LIST_PATH) ? fs.readFileSync(ENTRY_LIST_PATH, 'utf8') : '';
+const ENTRY_LIST_BLOCK = ENTRY_LIST
+  ? `\nOfficial entry list for this event. Name a driver ONLY when the car's race number is
+clearly legible in the photo AND the car type matches that class (numbers repeat across
+classes, so a Mini #77 and a Fiesta #77 are different drivers). If the number isn't readable,
+or the car doesn't fit any class below, don't name anyone. Never guess from colour alone.\n${ENTRY_LIST}\n`
+  : '';
+
 const STYLE_PROMPT = `You are writing captions for TrackMarc, a professional Irish motorsport
 photography portfolio (trackmarc.com) run by Marc Ronan. Identify the car (make, model, number,
 livery/team if visible) from what is ACTUALLY VISIBLE in the photo — never guess, never invent
@@ -136,7 +149,7 @@ like "64" or "#21" is NOT a plate). If more than one car in the shot has a legib
 all of them as a single comma-separated string (e.g. "141-D-12345, WV05 APZ"). If there's no
 legible plate visible on any car, use an empty string — never guess or reconstruct a partial
 one.
-${DRIVER_TAGS_BLOCK}
+${DRIVER_TAGS_BLOCK}${ENTRY_LIST_BLOCK}
 If (and only if) the car in this photo clearly matches one of the known drivers/teams above,
 use their exact @handle in place of their name in "igCaption" (e.g. "@jamesdeane130's Nissan
 Silvia" instead of "James Deane's Nissan Silvia"). If a matching "(event)" entry is listed,
