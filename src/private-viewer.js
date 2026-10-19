@@ -78,6 +78,10 @@ header{position:sticky;top:0;background:#161b1e;padding:0.75rem 1rem;display:fle
 .folder{display:flex;align-items:center;justify-content:center;height:100px;font-size:2rem}
 .file img{width:100%;height:100px;object-fit:cover;display:block;background:#000}
 .name{font-size:0.68rem;padding:0.3rem;word-break:break-all;color:#ccc}
+.pid{font-size:0.9rem;font-weight:700;color:#fff;padding:0.35rem 0.4rem 0;letter-spacing:0.02em}
+.pdir{font-size:0.62rem;color:#888;padding:0 0.4rem 0.35rem;word-break:break-all}
+#search{flex:1;min-width:160px;max-width:280px;padding:0.5rem 0.7rem;border-radius:4px;border:1px solid #333;background:#0d1114;color:#eee;font-size:0.9rem}
+#lb-id{font-size:1.3rem;font-weight:700;color:#fff}
 #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
 #lightbox img{max-width:92vw;max-height:78vh;object-fit:contain}
 #lightbox a.dl{background:#00d2be;color:#0d1114;padding:0.6rem 1.2rem;border-radius:4px;text-decoration:none;font-weight:600}
@@ -87,12 +91,14 @@ header{position:sticky;top:0;background:#161b1e;padding:0.75rem 1rem;display:fle
 <header>
   <div class="tab active" data-bucket="raw">RAW Backup</div>
   <div class="tab" data-bucket="photos">Site Photos</div>
+  <input id="search" type="search" placeholder="Search photo ID, e.g. 0362" autocomplete="off">
   <a href="/private/logout" style="margin-left:auto;color:#888;font-size:0.8rem;">Log out</a>
 </header>
 <div id="path"><span id="crumbs"></span></div>
 <div id="grid"></div>
 <div id="lightbox">
   <span class="close">&#x2715;</span>
+  <div id="lb-id"></div>
   <img id="lb-img">
   <a id="lb-dl" class="dl" download>Download original</a>
 </div>
@@ -124,21 +130,59 @@ async function load() {
     nameEl.textContent = f.split('/').filter(Boolean).pop();
     el.appendChild(nameEl);
   }
-  for (const file of data.files) {
+  renderFiles(data.files, false);
+}
+
+function photoId(key) {
+  return key.split('/').pop().replace(/\.[^.]+$/, '');
+}
+
+function renderFiles(files, showFolder) {
+  const grid = document.getElementById('grid');
+  for (const file of files) {
     const el = document.createElement('div');
     el.className = 'file';
     const img = document.createElement('img');
     img.loading = 'lazy';
     img.src = '/private/api/thumb?bucket=' + bucket + '&key=' + encodeURIComponent(file.key);
     el.appendChild(img);
-    const nameEl = document.createElement('div');
-    nameEl.className = 'name';
-    nameEl.textContent = file.key.split('/').pop();
-    el.appendChild(nameEl);
+    const idEl = document.createElement('div');
+    idEl.className = 'pid';
+    idEl.textContent = photoId(file.key);
+    el.appendChild(idEl);
+    if (showFolder) {
+      const dirEl = document.createElement('div');
+      dirEl.className = 'pdir';
+      dirEl.textContent = file.key.split('/').slice(0, -1).join('/') || '/';
+      el.appendChild(dirEl);
+    }
+    el.title = file.key;
     el.onclick = () => openLightbox(file.key, img.src);
     grid.appendChild(el);
   }
 }
+
+let searchTimer = null;
+let searchSeq = 0;
+async function runSearch(q) {
+  const seq = ++searchSeq;
+  const grid = document.getElementById('grid');
+  document.getElementById('crumbs').textContent = 'Searching ' + bucket + ' for "' + q + '"…';
+  grid.innerHTML = '<div id="empty">Searching…</div>';
+  const res = await fetch('/private/api/search?bucket=' + bucket + '&q=' + encodeURIComponent(q));
+  const data = await res.json();
+  if (seq !== searchSeq) return;
+  document.getElementById('crumbs').textContent = data.files.length + (data.truncated ? '+' : '') + ' result(s) for "' + q + '" in ' + bucket;
+  grid.innerHTML = '';
+  if (!data.files.length) { grid.innerHTML = '<div id="empty">No photos match "' + q.replace(/[<>&]/g, '') + '".</div>'; return; }
+  renderFiles(data.files, true);
+}
+
+document.getElementById('search').addEventListener('input', (e) => {
+  clearTimeout(searchTimer);
+  const q = e.target.value.trim();
+  searchTimer = setTimeout(() => { q ? runSearch(q) : (searchSeq++, load()); }, 300);
+});
 
 function renderCrumbs() {
   const parts = prefix.split('/').filter(Boolean);
@@ -157,6 +201,7 @@ function renderCrumbs() {
 
 function openLightbox(key, thumbSrc) {
   document.getElementById('lb-img').src = thumbSrc;
+  document.getElementById('lb-id').textContent = photoId(key);
   const dl = document.getElementById('lb-dl');
   dl.href = '/private/api/download?bucket=' + bucket + '&key=' + encodeURIComponent(key);
   dl.setAttribute('download', key.split('/').pop());
@@ -172,7 +217,8 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     bucket = tab.dataset.bucket;
     prefix = '';
-    load();
+    const q = document.getElementById('search').value.trim();
+    q ? runSearch(q) : load();
   };
 });
 
@@ -230,6 +276,37 @@ export async function handlePrivateViewer(request, url, env) {
       .filter(o => o.key !== prefix)
       .map(o => ({ key: o.key, size: o.size, uploaded: o.uploaded }));
     return new Response(JSON.stringify({ folders, files }), {
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+    });
+  }
+
+  if (path === '/private/api/search') {
+    const bucketName = url.searchParams.get('bucket');
+    const bucket = bucketFor(env, bucketName);
+    if (!bucket) return new Response('Unknown bucket', { status: 400 });
+    // Match on the filename only, ignoring case and punctuation, so "0362",
+    // "dsc0362" and "DSC_0362" all find DSC_0362.jpg / .NEF.
+    const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const q = norm(url.searchParams.get('q') || '');
+    if (!q) return new Response(JSON.stringify({ files: [] }), { headers: { 'Content-Type': 'application/json' } });
+    const files = [];
+    const LIMIT = 200;
+    let cursor;
+    let truncated = false;
+    do {
+      const listed = await bucket.list({ cursor, limit: 1000 });
+      for (const o of listed.objects || []) {
+        if (bucketName === 'raw' && o.key.startsWith('previews/')) continue;
+        if (o.key.endsWith('/')) continue;
+        if (norm(o.key.split('/').pop()).includes(q)) {
+          if (files.length >= LIMIT) { truncated = true; break; }
+          files.push({ key: o.key, size: o.size, uploaded: o.uploaded });
+        }
+      }
+      cursor = listed.truncated && !truncated ? listed.cursor : undefined;
+    } while (cursor);
+    files.sort((a, b) => a.key.localeCompare(b.key));
+    return new Response(JSON.stringify({ files, truncated }), {
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
     });
   }
