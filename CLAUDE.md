@@ -160,6 +160,16 @@ BMW E46 miscaptioned two different colours across two events before Marc caught 
   top instead of cutting the archive. `/gallery`, `/events`, and plate search are completely
   unaffected by this — same full photo set as always.
 
+### Race programme entry lists (added 2026-10-19)
+- `scripts/entry-lists/<category>.txt` — optional number -> driver table (from the event's
+  official programme) that `caption-batch.mjs` injects into the Gemini prompt, so drivers get
+  named only when their race number is legible. Replace the file when a new event goes into
+  that category. Programme PDFs are often scanned images: OCR with macOS Vision (a small
+  Swift script) rather than reading pages as images.
+- Filenames are global across categories (captions.json is keyed by filename only) -- before
+  uploading, check new names don't already exist in another category; suffix clashes
+  (e.g. `-iccr`, `-130sd`).
+
 ### Featured portfolio (added 2026-09-25)
 - `src/data/featured-photos.json` — a flat array of filenames, Marc's curated "best work"
   set (target ~50, but not a hard cap). This is the single source of truth two different
