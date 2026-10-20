@@ -85,6 +85,7 @@ if (!objects.length) {
 
 let downloaded = 0, skipped = 0, placeholders = 0;
 
+const toDownload = [];
 for (const obj of objects) {
   const rel = obj.Key.slice(PREFIX.length); // "<category>/<filename>"
   const dest = path.join(IMAGES_BASE, rel);
@@ -102,13 +103,32 @@ for (const obj of objects) {
     skipped++;
     continue;
   }
-
-  const res = await s3.send(new GetObjectCommand({ Bucket: R2_BUCKET, Key: obj.Key }));
-  const bytes = await res.Body.transformToByteArray();
-  fs.writeFileSync(dest, bytes);
-  console.log(`[sync-from-r2] ✓ ${rel}`);
-  downloaded++;
+  toDownload.push({ obj, rel, dest });
 }
+
+// Download in parallel. One-at-a-time made a fresh CI checkout (which starts
+// with no photos) spend 7-13 minutes here -- most of every deploy, even for
+// a single new photo. A small pool of concurrent requests cuts that to about
+// a minute; R2 has no egress fees, so this costs nothing extra.
+const CONCURRENCY = 24;
+async function downloadOne({ obj, rel, dest }) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const res = await s3.send(new GetObjectCommand({ Bucket: R2_BUCKET, Key: obj.Key }));
+      const bytes = await res.Body.transformToByteArray();
+      fs.writeFileSync(dest, bytes);
+      downloaded++;
+      return;
+    } catch (err) {
+      if (attempt >= 4) throw new Error(`[sync-from-r2] failed to download ${rel}: ${err.message}`);
+      await new Promise(r => setTimeout(r, 1000 * attempt));
+    }
+  }
+}
+let next = 0;
+await Promise.all(Array.from({ length: Math.min(CONCURRENCY, toDownload.length) }, async () => {
+  while (next < toDownload.length) await downloadOne(toDownload[next++]);
+}));
 
 // R2's own LastModified is the real "date added" signal — it's set once
 // when an object is first uploaded and never changes on subsequent syncs
