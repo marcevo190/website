@@ -80,6 +80,7 @@ header{position:sticky;top:0;background:#161b1e;padding:0.75rem 1rem;display:fle
 .name{font-size:0.68rem;padding:0.3rem;word-break:break-all;color:#ccc}
 .pid{font-size:0.9rem;font-weight:700;color:#fff;padding:0.35rem 0.4rem 0;letter-spacing:0.02em}
 .pdir{font-size:0.62rem;color:#888;padding:0 0.4rem 0.35rem;word-break:break-all}
+#sort{padding:0.5rem;border-radius:4px;border:1px solid #333;background:#0d1114;color:#eee;font-size:0.85rem}
 #search{flex:1;min-width:160px;max-width:280px;padding:0.5rem 0.7rem;border-radius:4px;border:1px solid #333;background:#0d1114;color:#eee;font-size:0.9rem}
 #lb-id{font-size:1.3rem;font-weight:700;color:#fff}
 #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
@@ -92,6 +93,11 @@ header{position:sticky;top:0;background:#161b1e;padding:0.75rem 1rem;display:fle
   <div class="tab active" data-bucket="raw">RAW Backup</div>
   <div class="tab" data-bucket="photos">Site Photos</div>
   <input id="search" type="search" placeholder="Search photo ID, e.g. 0362" autocomplete="off">
+  <select id="sort" title="Sort photos">
+    <option value="newest">Newest added first</option>
+    <option value="oldest">Oldest added first</option>
+    <option value="name">By photo ID</option>
+  </select>
   <a href="/private/logout" style="margin-left:auto;color:#888;font-size:0.8rem;">Log out</a>
 </header>
 <div id="path"><span id="crumbs"></span></div>
@@ -137,7 +143,21 @@ function photoId(key) {
   return key.split('/').pop().replace(/\.[^.]+$/, '');
 }
 
+let sortMode = 'newest';
+try { sortMode = localStorage.getItem('pv-sort') || 'newest'; } catch (e) {}
+
+function sortFiles(files) {
+  const t = f => (f.uploaded ? Date.parse(f.uploaded) : 0);
+  const byName = (a, b) => a.key.localeCompare(b.key);
+  const out = files.slice();
+  if (sortMode === 'newest') out.sort((a, b) => t(b) - t(a) || byName(a, b));
+  else if (sortMode === 'oldest') out.sort((a, b) => t(a) - t(b) || byName(a, b));
+  else out.sort(byName);
+  return out;
+}
+
 function renderFiles(files, showFolder) {
+  files = sortFiles(files);
   const grid = document.getElementById('grid');
   for (const file of files) {
     const el = document.createElement('div');
@@ -177,6 +197,15 @@ async function runSearch(q) {
   if (!data.files.length) { grid.innerHTML = '<div id="empty">No photos match "' + q.replace(/[<>&]/g, '') + '".</div>'; return; }
   renderFiles(data.files, true);
 }
+
+const sortSel = document.getElementById('sort');
+sortSel.value = sortMode;
+sortSel.addEventListener('change', () => {
+  sortMode = sortSel.value;
+  try { localStorage.setItem('pv-sort', sortMode); } catch (e) {}
+  const q = document.getElementById('search').value.trim();
+  q ? runSearch(q) : load();
+});
 
 document.getElementById('search').addEventListener('input', (e) => {
   clearTimeout(searchTimer);
@@ -268,11 +297,21 @@ export async function handlePrivateViewer(request, url, env) {
     let prefix = url.searchParams.get('prefix') || '';
     // The raw-backup bucket keeps generated previews under previews/ --
     // an implementation detail, never a real browsable folder.
-    const listed = await bucket.list({ prefix, delimiter: '/' });
-    const folders = (listed.delimitedPrefixes || []).filter(
+    // R2 returns at most 1000 entries per call -- page through so big
+    // folders show everything (needed for "newest first" to be right).
+    const objects = [];
+    const prefixes = new Set();
+    let cursor;
+    do {
+      const listed = await bucket.list({ prefix, delimiter: '/', cursor, limit: 1000 });
+      objects.push(...(listed.objects || []));
+      for (const d of listed.delimitedPrefixes || []) prefixes.add(d);
+      cursor = listed.truncated ? listed.cursor : undefined;
+    } while (cursor);
+    const folders = [...prefixes].filter(
       f => !(bucketName === 'raw' && prefix === '' && f === 'previews/')
     );
-    const files = (listed.objects || [])
+    const files = objects
       .filter(o => o.key !== prefix)
       .map(o => ({ key: o.key, size: o.size, uploaded: o.uploaded }));
     return new Response(JSON.stringify({ folders, files }), {
