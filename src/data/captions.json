@@ -8089,8 +8089,8 @@
     "plate": "182-MO-1425"
   },
   "trackmarc-4751.jpg": {
-    "title": "Grey Audi A5 — Mondello Park",
-    "caption": "A grey Audi A5 coupe on track during a trackdays.ie open-pitlane day at Mondello Park, with a red hatchback following behind.",
+    "title": "Grey Audi RS5 — Mondello Park",
+    "caption": "A grey Audi RS5 on track during a trackdays.ie open-pitlane day at Mondello Park, with a red hatchback following behind.",
     "plate": "RS05 RAD"
   },
   "trackmarc-4778.jpg": {
@@ -8106,8 +8106,8 @@
     "caption": "A red BMW M3 G80 on track at a trackdays.ie open-pitlane day at Mondello Park."
   },
   "trackmarc-4811.jpg": {
-    "title": "Grey Audi A5 — Mondello Park",
-    "caption": "A grey Audi A5 coupe navigating a corner during an open-pitlane trackday at Mondello Park.",
+    "title": "Grey Audi RS5 — Mondello Park",
+    "caption": "A grey Audi RS5 navigating a corner during an open-pitlane trackday at Mondello Park.",
     "plate": "RS05 RAD"
   },
   "trackmarc-4815.jpg": {
@@ -8128,8 +8128,8 @@
     "caption": "A red BMW M3 on track during a trackdays.ie open-pitlane day at Mondello Park."
   },
   "trackmarc-4865.jpg": {
-    "title": "Audi A5 at Mondello Park",
-    "caption": "A grey Audi A5 coupe negotiating a corner at Mondello Park during a trackdays.ie event.",
+    "title": "Audi RS5 at Mondello Park",
+    "caption": "A grey Audi RS5 negotiating a corner at Mondello Park during a trackdays.ie event.",
     "plate": "RS05 RAD"
   },
   "trackmarc-4874.jpg": {
@@ -8338,5 +8338,18 @@
     "title": "Toyota Sprinter Trueno AE111 — Mondello Park",
     "caption": "A black Toyota Sprinter Trueno AE111 on track during a trackdays.ie event at Mondello Park. A classic piece of Japanese engineering in the wet.",
     "plate": "00-LK-8778"
+  },
+  "trackmarc-4666.jpg": {
+    "title": "Audi RS5 at Mondello Park",
+    "caption": "A grey Audi RS5 out on track during a trackdays.ie open-pitlane day at Mondello Park. The grey finish contrasts with the bright green grass."
+  },
+  "trackmarc-4668.jpg": {
+    "title": "Grey Audi RS5 — Mondello Park",
+    "caption": "A grey Audi RS5 tackling the track at a trackdays.ie event in Mondello Park."
+  },
+  "trackmarc-5040.jpg": {
+    "title": "Toyota Corolla at Mondello Park",
+    "caption": "A dark grey Toyota Corolla out on track during a trackdays.ie open-pitlane day at Mondello Park. A slightly unusual sight on the circuit compared to the usual performance machinery.",
+    "plate": "05-D-16668"
   }
 }
