@@ -156,7 +156,7 @@ export const events: EventDef[] = [
     hero: 'trackmarc-4761.jpg',
     intro: [
       'An open-pitlane trackday at Mondello Park run by trackdays.ie, with road and track cars sharing the circuit on an autumn day in Kildare.',
-      'The paddock ran from hot hatches like a Volkswagen up! GTI, Renault Clio and Toyota Yaris to a pair of E46 BMW M3s, a Mercedes C-Class, a Porsche 944 and a Caterham 7.',
+      'The paddock ran from hot hatches like a Volkswagen up! GTI, Renault Clio, Megane RS and Toyota Yaris to BMW M3s old and new, an Aston Martin V8 Vantage, a Porsche 944 and a classic Jaguar E-Type, plus a Caterham 7, an Ariel Nomad and a crosskart.',
     ],
     classes: ['Trackday'],
     description: 'Photo coverage of a trackdays.ie open-pitlane trackday at Mondello Park by Marc Ronan.',
