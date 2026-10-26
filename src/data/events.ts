@@ -146,6 +146,21 @@ export const events: EventDef[] = [
     classes: ['BMW M2', 'BMW M3', 'BMW M4', 'BMW M5', 'Hot Hatches', 'Trackday'],
     description: 'Photo coverage of the Bimmerfest 2026 trackday at Mondello Park by Marc Ronan — BMW M cars and a mixed open-pitlane paddock, run by trackdays.ie.',
   },
+  {
+    slug: 'trackdays-ie-mondello-2026',
+    name: 'Trackdays.ie at Mondello Park',
+    shortLabel: 'Trackdays.ie',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: '2026',
+    categories: ['trackdays-ie'],
+    // Placeholder until photos are uploaded -- set to a real filename then.
+    hero: '',
+    intro: [
+      'An open-pitlane trackday at Mondello Park run by trackdays.ie, with a mixed paddock of road and track cars sharing the circuit.',
+    ],
+    classes: ['Trackday'],
+    description: 'Photo coverage of a trackdays.ie open-pitlane trackday at Mondello Park by Marc Ronan.',
+  },
 ];
 
 export function getEvent(slug: string): EventDef | undefined {

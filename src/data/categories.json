@@ -1,8 +1,9 @@
 {
-  "website": ["130-showdown", "86fest", "endurance", "iccr", "drift-games", "retrostock", "bimmerfest", "car-shows", "formula", "rally", "gt", "red-bull-homerun"],
+  "website": ["130-showdown", "86fest", "endurance", "iccr", "drift-games", "retrostock", "bimmerfest", "car-shows", "formula", "rally", "gt", "red-bull-homerun", "trackdays-ie"],
   "instagramOnly": ["instagram-only"],
   "labels": {
     "red-bull-homerun": "Red Bull Homerun",
+    "trackdays-ie": "Trackdays.ie",
     "formula": "Formula",
     "endurance": "Endurance",
     "rally": "Rally",
