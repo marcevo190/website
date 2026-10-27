@@ -8214,8 +8214,8 @@
     "caption": "A blue Mini Cooper S in the pit garage at Mondello Park during a trackdays.ie event, with a gold roof, roll cage and bucket seats."
   },
   "trackmarc-5152.jpg": {
-    "title": "Mercedes-Benz C-Class Coupe — Mondello Park",
-    "caption": "A silver Mercedes-Benz C-Class Coupe with the bonnet open at a trackdays.ie open-pitlane day at Mondello Park.",
+    "title": "Mercedes-AMG C43 — Mondello Park",
+    "caption": "A silver Mercedes-AMG C43 Coupe with the bonnet open at a trackdays.ie open-pitlane day at Mondello Park.",
     "plate": "171-MH-6051"
   },
   "trackmarc-5155.jpg": {
@@ -8429,5 +8429,115 @@
     "title": "Volkswagen Polo GTI — Mondello Park Trackday",
     "caption": "A black Volkswagen Polo GTI on track during a trackdays.ie open-pitlane day at Mondello Park. A sharp street car taking full advantage of the circuit.",
     "plate": "192-D-11114"
+  },
+  "trackmarc-1799.jpg": {
+    "title": "Toyota Yaris #77 — Mondello Park",
+    "caption": "A blue Toyota Yaris #77 navigating a damp circuit during a trackday at Mondello Park."
+  },
+  "trackmarc-1864.jpg": {
+    "title": "Toyota Yaris #77 — Trackdays.ie at Mondello Park",
+    "caption": "A blue Toyota Yaris wearing number 77 clipping the kerb at Mondello Park during a trackdays.ie open pitlane session. Damp tarmac keeping line choice precise."
+  },
+  "trackmarc-1922.jpg": {
+    "title": "Volkswagen Golf GTI Clubsport at Mondello Park",
+    "caption": "A white Volkswagen Golf GTI Clubsport on track during an open pitlane event at Mondello Park. Wet conditions made for a greasy surface on the day.",
+    "plate": "162-KE-3748"
+  },
+  "trackmarc-1948.jpg": {
+    "title": "Toyota Yaris #77 — Mondello Park",
+    "caption": "A blue Toyota Yaris, number 77, on track at a trackdays.ie event in Mondello Park."
+  },
+  "trackmarc-2202.jpg": {
+    "title": "Toyota Yaris #77 — Mondello Park",
+    "caption": "A blue Toyota Yaris, number 77, on track at a trackdays.ie open-pitlane event at Mondello Park."
+  },
+  "trackmarc-2297.jpg": {
+    "title": "BMW M5 F90 — Mondello Park Trackday",
+    "caption": "A black BMW M5 navigating a damp track surface during a trackday at Mondello Park.",
+    "plate": "201-G-2467"
+  },
+  "trackmarc-2312.jpg": {
+    "title": "Blue Toyota Yaris #77 — Mondello Park",
+    "caption": "A blue Toyota Yaris, number 77, on track during a wet open-pitlane day at Mondello Park. Followed by a red hatchback through the corner."
+  },
+  "trackmarc-2323.jpg": {
+    "title": "Mercedes-AMG C43 — Mondello Park",
+    "caption": "A silver Mercedes-AMG C43 navigating a wet track at a trackdays.ie event in Mondello Park.",
+    "plate": "171-MH-6051"
+  },
+  "trackmarc-2988.jpg": {
+    "title": "BMW E36 #42 — Mondello Park",
+    "caption": "A BMW E36, number 42, running a Warsteiner livery at a trackdays.ie event at Mondello Park."
+  },
+  "trackmarc-3004.jpg": {
+    "title": "Sports prototype #19 — Mondello Park",
+    "caption": "A green and gold sports prototype, number 19, on track at Mondello Park during a trackdays.ie event."
+  },
+  "trackmarc-3158.jpg": {
+    "title": "Volkswagen Golf GTI at Mondello Park",
+    "caption": "A white Volkswagen Golf GTI with its bonnet up in the pit lane at Mondello Park. A common sight during a trackdays.ie open-pitlane day.",
+    "plate": "162-KE-3748"
+  },
+  "trackmarc-3207.jpg": {
+    "title": "Porsche 944, White — Mondello Park",
+    "caption": "A white Porsche 944 out on track at a trackdays.ie open-pitlane event in Mondello Park.",
+    "plate": "ZV 92203"
+  },
+  "trackmarc-3312.jpg": {
+    "title": "Nissan Skyline R33 on track — Mondello Park",
+    "caption": "A silver Nissan Skyline R33 on track during a trackdays.ie open-pitlane day at Mondello Park. The car carries the number 34 on the door.",
+    "plate": "97-KE-8016"
+  },
+  "trackmarc-3355.jpg": {
+    "title": "Ariel Nomad at Mondello Park",
+    "caption": "An Ariel Nomad on track during a trackdays.ie event at Mondello Park. The blue exoskeleton chassis is built for exactly this kind of surface."
+  },
+  "trackmarc-3413.jpg": {
+    "title": "Toyota Yaris #77 — Mondello Park",
+    "caption": "A Toyota Yaris, number 77, on track during a trackdays.ie open-pitlane event at Mondello Park. Blue and teal colour scheme on a wet day."
+  },
+  "trackmarc-3415.jpg": {
+    "title": "Toyota Yaris #77 at Mondello Park",
+    "caption": "A blue Toyota Yaris, number 77, on track at a trackdays.ie event in Mondello Park."
+  },
+  "trackmarc-3518.jpg": {
+    "title": "Volkswagen Golf GTI Clubsport and Ford Fiesta ST at Mondello Park",
+    "caption": "A white Volkswagen Golf GTI Clubsport and a yellow Ford Fiesta ST navigating the wet track during an open pitlane day at Mondello Park.",
+    "plate": "162-KE-3748, 23-KJD-6"
+  },
+  "trackmarc-3547.jpg": {
+    "title": "Ferrari F430 at Mondello Park",
+    "caption": "A grey Ferrari F430 lapping Mondello Park during a trackdays.ie open-pitlane day. The rear bumper is removed, showing the mechanicals beneath."
+  },
+  "trackmarc-3620.jpg": {
+    "title": "Volkswagen Golf GTI Clubsport at Mondello Park",
+    "caption": "A white Volkswagen Golf GTI Clubsport on track at Mondello Park. The car is seen here during an open pitlane event.",
+    "plate": "162-KE-3748"
+  },
+  "trackmarc-3622.jpg": {
+    "title": "Volkswagen Golf GTI Clubsport at Mondello Park",
+    "caption": "A white Volkswagen Golf GTI Clubsport cornering at a trackdays.ie event in Mondello Park.",
+    "plate": "162-KE-3748"
+  },
+  "trackmarc-3924.jpg": {
+    "title": "Ferrari F430 at Mondello Park",
+    "caption": "A grey Ferrari F430 seen on track at Mondello Park with its rear bumper removed. The exposed mechanicals give a raw look to the setup."
+  },
+  "trackmarc-3939.jpg": {
+    "title": "Toyota Yaris and BMW M5 at Mondello Park",
+    "caption": "A blue Toyota Yaris and a black BMW M5 on track at a trackdays.ie open-pitlane event at Mondello Park.",
+    "plate": "201-G-2467"
+  },
+  "trackmarc-4043.jpg": {
+    "title": "Ferrari F430 at Mondello Park",
+    "caption": "A grey Ferrari F430 on track at Mondello Park, minus its front bumper. A rare sight to see one being pushed hard during an open pitlane day."
+  },
+  "trackmarc-4077.jpg": {
+    "title": "Toyota Yaris #77 — Mondello Park",
+    "caption": "A blue Toyota Yaris, number 77, on track at a trackdays.ie event at Mondello Park."
+  },
+  "trackmarc-4700.jpg": {
+    "title": "Toyota Yaris at Mondello Park",
+    "caption": "A blue Toyota Yaris out on track during a trackdays.ie event at Mondello Park."
   }
 }
