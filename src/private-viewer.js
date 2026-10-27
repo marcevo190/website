@@ -88,6 +88,19 @@ header{position:sticky;top:0;background:#161b1e;padding:0.75rem 1rem;display:fle
 #lightbox a.dl{background:#00d2be;color:#0d1114;padding:0.6rem 1.2rem;border-radius:4px;text-decoration:none;font-weight:600}
 #lightbox .close{position:absolute;top:1rem;right:1.5rem;font-size:1.8rem;cursor:pointer;color:#fff}
 #empty{padding:2rem;color:#888;text-align:center}
+#selbtn{padding:0.5rem 0.9rem;border-radius:4px;border:1px solid #333;background:#0d1114;color:#eee;font-size:0.85rem;cursor:pointer}
+#selbtn.on{background:#00d2be;color:#0d1114;border-color:#00d2be;font-weight:600}
+.file .tick{display:none;position:absolute;top:6px;left:6px;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,0.45);color:#0d1114;font-weight:700;font-size:14px;line-height:18px;text-align:center}
+body.selecting .file .tick{display:block}
+.file.sel{outline:3px solid #00d2be;outline-offset:-3px}
+.file.sel .tick{background:#00d2be;border-color:#00d2be}
+#selbar{display:none;position:fixed;left:0;right:0;bottom:0;background:#161b1e;border-top:1px solid #333;padding:0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom, 0px));gap:0.6rem;align-items:center;flex-wrap:wrap;z-index:50}
+body.selecting #selbar{display:flex}
+body.selecting #grid{padding-bottom:5rem}
+#selbar button{padding:0.55rem 1rem;border-radius:4px;border:1px solid #333;background:#0d1114;color:#eee;font-size:0.85rem;cursor:pointer}
+#selbar button.primary{background:#00d2be;color:#0d1114;border-color:#00d2be;font-weight:600}
+#selbar button:disabled{opacity:0.45;cursor:default}
+#selcount{font-weight:600;margin-right:auto}
 </style></head><body>
 <header>
   <div class="tab active" data-bucket="raw">RAW Backup</div>
@@ -98,8 +111,15 @@ header{position:sticky;top:0;background:#161b1e;padding:0.75rem 1rem;display:fle
     <option value="oldest">Oldest added first</option>
     <option value="name">By photo ID</option>
   </select>
+  <button id="selbtn" type="button">Select</button>
   <a href="/private/logout" style="margin-left:auto;color:#888;font-size:0.8rem;">Log out</a>
 </header>
+<div id="selbar">
+  <span id="selcount">0 selected</span>
+  <button id="selall" type="button">Select all</button>
+  <button id="selnone" type="button">Clear</button>
+  <button id="seldl" class="primary" type="button" disabled>Download</button>
+</div>
 <div id="path"><span id="crumbs"></span></div>
 <div id="grid"></div>
 <div id="lightbox">
@@ -176,8 +196,15 @@ function renderFiles(files, showFolder) {
       dirEl.textContent = file.key.split('/').slice(0, -1).join('/') || '/';
       el.appendChild(dirEl);
     }
+    const tick = document.createElement('div');
+    tick.className = 'tick';
+    tick.textContent = '✓';
+    el.appendChild(tick);
+    el.dataset.key = file.key;
+    el.dataset.size = file.size || 0;
+    if (selected.has(file.key)) el.classList.add('sel');
     el.title = file.key;
-    el.onclick = () => openLightbox(file.key, img.src);
+    el.onclick = () => selecting ? toggleSel(el) : openLightbox(file.key, img.src);
     grid.appendChild(el);
   }
 }
@@ -246,10 +273,119 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     bucket = tab.dataset.bucket;
     prefix = '';
+    // Selection is per bucket -- downloads are fetched from the current bucket.
+    selected.clear(); updateSelBar();
     const q = document.getElementById('search').value.trim();
     q ? runSearch(q) : load();
   };
 });
+
+// ---- Multi-select + download as one zip ----
+// Selection is kept per bucket view; switching bucket/folder keeps it so photos
+// can be picked across folders or search results, then downloaded together.
+let selecting = false;
+const selected = new Map(); // key -> size
+function updateSelBar() {
+  const n = selected.size;
+  let bytes = 0; selected.forEach(v => { bytes += v; });
+  document.getElementById('selcount').textContent = n + ' selected' + (bytes ? ' (' + (bytes / 1048576).toFixed(0) + ' MB)' : '');
+  document.getElementById('seldl').disabled = n === 0 || zipping;
+}
+function toggleSel(el) {
+  const k = el.dataset.key;
+  if (selected.has(k)) { selected.delete(k); el.classList.remove('sel'); }
+  else { selected.set(k, Number(el.dataset.size) || 0); el.classList.add('sel'); }
+  updateSelBar();
+}
+document.getElementById('selbtn').onclick = () => {
+  selecting = !selecting;
+  document.body.classList.toggle('selecting', selecting);
+  document.getElementById('selbtn').classList.toggle('on', selecting);
+  document.getElementById('selbtn').textContent = selecting ? 'Done' : 'Select';
+  updateSelBar();
+};
+document.getElementById('selall').onclick = () => {
+  document.querySelectorAll('#grid .file').forEach(el => {
+    if (!selected.has(el.dataset.key)) { selected.set(el.dataset.key, Number(el.dataset.size) || 0); el.classList.add('sel'); }
+  });
+  updateSelBar();
+};
+document.getElementById('selnone').onclick = () => {
+  selected.clear();
+  document.querySelectorAll('#grid .file.sel').forEach(el => el.classList.remove('sel'));
+  updateSelBar();
+};
+
+// Minimal "stored" (uncompressed) zip writer -- photos/RAWs don't compress anyway,
+// and this avoids pulling in a library. Fine up to 4GB total (no zip64).
+const CRC_TABLE = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(buf) { let c = 0xFFFFFFFF; for (let i = 0; i < buf.length; i++) c = CRC_TABLE[(c ^ buf[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function makeZip(entries) { // entries: [{name, data: Uint8Array}]
+  const enc = new TextEncoder(); const parts = []; const central = []; let offset = 0;
+  const now = new Date();
+  const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
+  const dosDate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+  for (const e of entries) {
+    const name = enc.encode(e.name); const crc = crc32(e.data); const size = e.data.length;
+    const lh = new DataView(new ArrayBuffer(30));
+    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true);
+    lh.setUint16(10, dosTime, true); lh.setUint16(12, dosDate, true); lh.setUint32(14, crc, true);
+    lh.setUint32(18, size, true); lh.setUint32(22, size, true); lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
+    parts.push(lh.buffer, name, e.data);
+    const ch = new DataView(new ArrayBuffer(46));
+    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true);
+    ch.setUint16(12, dosTime, true); ch.setUint16(14, dosDate, true); ch.setUint32(16, crc, true);
+    ch.setUint32(20, size, true); ch.setUint32(24, size, true); ch.setUint16(28, name.length, true);
+    ch.setUint32(42, offset, true);
+    central.push(ch.buffer, name);
+    offset += 30 + name.length + size;
+  }
+  let csize = 0; central.forEach(b => { csize += b.byteLength; });
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true); end.setUint16(8, entries.length, true); end.setUint16(10, entries.length, true);
+  end.setUint32(12, csize, true); end.setUint32(16, offset, true);
+  return new Blob(parts.concat(central, [end.buffer]), { type: 'application/zip' });
+}
+function saveBlob(blob, name) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+}
+let zipping = false;
+document.getElementById('seldl').onclick = async () => {
+  if (!selected.size || zipping) return;
+  zipping = true; updateSelBar();
+  const btn = document.getElementById('seldl');
+  const keys = Array.from(selected.keys());
+  try {
+    if (keys.length === 1) {
+      btn.textContent = 'Downloading…';
+      const r = await fetch('/private/api/download?bucket=' + bucket + '&key=' + encodeURIComponent(keys[0]));
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      saveBlob(await r.blob(), keys[0].split('/').pop());
+    } else {
+      const entries = []; const used = new Set();
+      for (let i = 0; i < keys.length; i++) {
+        btn.textContent = 'Fetching ' + (i + 1) + ' of ' + keys.length + '…';
+        const r = await fetch('/private/api/download?bucket=' + bucket + '&key=' + encodeURIComponent(keys[i]));
+        if (!r.ok) throw new Error(keys[i] + ': HTTP ' + r.status);
+        let name = keys[i].split('/').pop();
+        if (used.has(name)) name = keys[i].split('/').join('_');
+        used.add(name);
+        entries.push({ name, data: new Uint8Array(await r.arrayBuffer()) });
+      }
+      btn.textContent = 'Zipping…';
+      const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '');
+      saveBlob(makeZip(entries), 'trackmarc-' + bucket + '-' + keys.length + '-photos-' + stamp + '.zip');
+    }
+    btn.textContent = 'Download';
+  } catch (err) {
+    btn.textContent = 'Download';
+    document.getElementById('selcount').textContent = 'Download failed: ' + err.message;
+    zipping = false; return;
+  }
+  zipping = false; updateSelBar();
+};
 
 load();
 </script>
