@@ -161,6 +161,20 @@ export const events: EventDef[] = [
     classes: ['Trackday'],
     description: 'Photo coverage of a trackdays.ie open-pitlane trackday at Mondello Park by Marc Ronan.',
   },
+  {
+    slug: 'irish-drift-series-mondello-2026',
+    name: 'Irish Drift Series at Mondello Park',
+    shortLabel: 'Irish Drift Series',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: '2026',
+    categories: ['irish-drift-series'],
+    hero: 'trackmarc-9966.jpg',
+    intro: [
+      'Irish Drift Series action at Mondello Park, with the field laying down smoke through the corners in solo runs and tandem battles.',
+    ],
+    classes: ['Drifting', 'Tandem Battles'],
+    description: 'Photo coverage of the Irish Drift Series at Mondello Park by Marc Ronan.',
+  },
 ];
 
 export function getEvent(slug: string): EventDef | undefined {
