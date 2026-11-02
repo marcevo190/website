@@ -163,17 +163,18 @@ export const events: EventDef[] = [
   },
   {
     slug: 'irish-drift-series-mondello-2026',
-    name: 'Irish Drift Series at Mondello Park',
+    name: 'Irish Drift Series 2026, Round 5',
     shortLabel: 'Irish Drift Series',
     venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
-    season: '2026',
+    season: 'November 2026',
     categories: ['irish-drift-series'],
     hero: 'trackmarc-9966.jpg',
     intro: [
-      'Irish Drift Series action at Mondello Park, with the field laying down smoke through the corners in solo runs and tandem battles.',
+      'Round 5 of the 2026 Irish Drift Series at Mondello Park on 1 November, with the Pro and Pro 2 fields in action and the battles running on into the dark under the lights.',
+      'The Pro field included Jack Caldwell, Jacob Krzyszczak, David and Dylan Garvey, Gary Dunne, Ben Rogers and Mateusz Dereń, with Conor Shanahan bringing his Red Bull Toyota GT86 out alongside a trials bike stunt show.',
     ],
     classes: ['Drifting', 'Tandem Battles'],
-    description: 'Photo coverage of the Irish Drift Series at Mondello Park by Marc Ronan.',
+    description: 'Photo coverage of Round 5 of the 2026 Irish Drift Series at Mondello Park by Marc Ronan.',
   },
 ];
 
