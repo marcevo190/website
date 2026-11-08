@@ -176,6 +176,20 @@ export const events: EventDef[] = [
     classes: ['Drifting', 'Tandem Battles'],
     description: 'Photo coverage of Round 5 of the 2026 Irish Drift Series at Mondello Park by Marc Ronan.',
   },
+  {
+    slug: 'jdm-classics-drift-mondello-2026',
+    name: 'JDM Classics Drift 2026',
+    shortLabel: 'JDM Classics',
+    venue: 'Mondello Park, Naas, Co. Kildare, Ireland',
+    season: 'November 2026',
+    categories: ['jdm-classics'],
+    hero: 'trackmarc-5367.jpg',
+    intro: [
+      'JDM Classics Drift at Mondello Park on Sunday 8 November 2026, a day on track for Japanese performance cars from the 80s, 90s and early 2000s.',
+    ],
+    classes: ['Drifting', 'JDM'],
+    description: 'Photo coverage of JDM Classics Drift at Mondello Park, November 2026, by Marc Ronan.',
+  },
 ];
 
 export function getEvent(slug: string): EventDef | undefined {
