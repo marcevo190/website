@@ -10314,7 +10314,7 @@
   "trackmarc-6192.jpg": {
     "title": "Peugeot 205 GTI #800 — JDM Classics",
     "caption": "A red Peugeot 205 GTI, number 800, out on track at JDM Classics. The car features a bold black and white geometric livery.",
-    "plate": "J655 UNF"
+    "plate": "J355 ONF"
   },
   "trackmarc-6200.jpg": {
     "title": "Toyota Corolla #101 — JDM Classics",
@@ -10366,5 +10366,46 @@
   "trackmarc-3910.jpg": {
     "title": "Blue BMW M2 — JDM Classics",
     "caption": "A blue BMW M2 in motion at the JDM Classics event. Low and balanced through the corner."
+  },
+  "trackmarc-1632.jpg": {
+    "title": "Mazda MX-5 NA — JDM Classics",
+    "caption": "A white Mazda MX-5 NA out on track at JDM Classics. Simple, clean, and classic."
+  },
+  "trackmarc-1638.jpg": {
+    "title": "Peugeot 205 GTI — JDM Classics",
+    "caption": "A red Peugeot 205 GTI out on track at JDM Classics. Always good to see these classic hot hatches being driven hard.",
+    "plate": "J355 ONF"
+  },
+  "trackmarc-1646.jpg": {
+    "title": "Subaru Impreza WRX at JDM Classics",
+    "caption": "A silver Subaru Impreza WRX on track at JDM Classics. Clean styling paired with gold wheels and PIAA spotlights.",
+    "plate": "94-WX-11077"
+  },
+  "trackmarc-1648-jdm.jpg": {
+    "title": "Subaru Impreza WRX — JDM Classics",
+    "caption": "A silver Subaru Impreza WRX navigating the track at JDM Classics. The gold wheels and PIAA fog lights give it a classic rally aesthetic.",
+    "plate": "94-WX-11077"
+  },
+  "trackmarc-2847.jpg": {
+    "title": "Peugeot 205 GTI #800 — JDM Classics",
+    "caption": "A red Peugeot 205 GTI, number 800, on track at JDM Classics. The Flanagan Motorsport car looks right at home on the tarmac.",
+    "plate": "J355 ONF"
+  },
+  "trackmarc-2854.jpg": {
+    "title": "Mazda MX-5 NA — JDM Classics",
+    "caption": "A white Mazda MX-5 NA on track at JDM Classics. Simple, clean, and perfectly suited for the circuit.",
+    "plate": "94-D-50592"
+  },
+  "trackmarc-1288.jpg": {
+    "title": "Toyota Corolla AE86 sedan at JDM Classics",
+    "caption": "A tan Toyota Corolla AE86 sedan mid-corner at the JDM Classics event. The car features fender mirrors and period-correct Racing Gear branding."
+  },
+  "trackmarc-1355.jpg": {
+    "title": "BMW E46 at JDM Classics",
+    "caption": "A black BMW E46 captured mid-corner during the JDM Classics event. The panning shot keeps the focus sharp as it tracks through the circuit."
+  },
+  "trackmarc-1582.jpg": {
+    "title": "Toyota AE86 — JDM Classics",
+    "caption": "A blue Toyota AE86 on track at JDM Classics. The clean coupe body style really stands out in this light."
   }
 }
